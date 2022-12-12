@@ -24,13 +24,30 @@ const newPost = (req, res) => {
 };
 
 const getPost = (req, res) => {
-    //placeholder per database shit
-    res.json({message: "GET post"});
+    console.log("Listing all Posts...");
+    //gets all posts
+    Post.find({}, (err, data) => {
+        if(err) {
+            return res.json({ Error: err});
+        }
+        return res.json(data);
+    });
 };
 
 const deletePost = (req, res) => {
-    //placeholder per database shit
-    res.json({message: "DELETE post"});
+    console.log(req.params);
+    let postTitle = req.params.title;
+    var query = { title: postTitle};
+    console.log(`Deleting post ${postTitle}...`);
+
+    Post.deleteOne(query, (err, collection) => {
+        if(err) {
+            throw err;
+        } else {
+            console.log(`Post ${postTitle} deleted succesfully.`);
+            res.json({ message: "DELETE Post"});
+        }
+    });
 };
 
 module.exports = {newPost, getPost, deletePost};
