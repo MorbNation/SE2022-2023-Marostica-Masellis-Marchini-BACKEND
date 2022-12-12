@@ -1,14 +1,15 @@
 const Post = require('../models/post');
 
 const newPost = (req, res) => {
+    console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
-    Post.findOne({ title: req.body.name }, (err, data) => {
+    Post.findOne({ title: req.body.title }, (err, data) => {
         if(!data){
             const newPost = new Post({
-                title: "prova",
-                description: "post di test",
-                author: "Jesosky",
-                upvotes: 0
+                title: req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                upvotes: req.body.upvotes
             });
 
             newPost.save((err, data) => {
