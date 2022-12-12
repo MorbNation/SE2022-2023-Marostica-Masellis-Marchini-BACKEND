@@ -1,1 +1,23 @@
-{}
+{
+  "name": "epiopera-backend",
+  "description": "Progetto di Ingegneria del Software 2022/2023 creato e sviluppato da Alessandro Marostica, Nicolò Masellis, Nicolò Marchini Repository di Back-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SE2022-2023-groupT18/SE2022-2023-Marostica-Masellis-Marchini-BACKEND.git"
+  },
+  "keywords": [
+    "epiopera",
+    "redditclone"
+  ],
+  "author": "t18",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SE2022-2023-groupT18/SE2022-2023-Marostica-Masellis-Marchini-BACKEND/issues"
+  },
+  "homepage": "https://github.com/SE2022-2023-groupT18/SE2022-2023-Marostica-Masellis-Marchini-BACKEND#readme"
+}
