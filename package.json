@@ -23,6 +23,7 @@
   "homepage": "https://github.com/SE2022-2023-groupT18/SE2022-2023-Marostica-Masellis-Marchini-BACKEND#readme",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongoose": "^6.8.0"
   }
 }
