@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
     res.send(req.headers, req.originalUrl, req.method, req.body);
 });
 
-app.listen(8080, () => {
-    console.log(`App listening on port 8080`);
+app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}`);
 });
 
 const routes = require('./routes/post');
