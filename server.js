@@ -17,9 +17,11 @@ app.get("/", (req, res) => {
     res.send(req.headers, req.originalUrl, req.method, req.body);
 });
 
-app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+    console.log(`App listening on port ${process.env.PORT}`);
 });
 
-const routes = require('./routes/post');
-app.use('/', routes);
+//Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
+const routesPost = require('./routes/post');
+const routesUser = require('./routes/user');
+app.use('/', routesPost, routesUser);

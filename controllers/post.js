@@ -18,7 +18,7 @@ const newPost = (req, res) => {
             });
         } else {
             if (err) return res.json(`Something went wrong. ${err}`);
-            return res.json({ message: "Post already exists" });
+            return res.json({ message: "Post already exists." });
         }
     });
 };
