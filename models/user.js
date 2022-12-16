@@ -10,9 +10,9 @@ const UserSchema = new mongoose.Schema({
     banner: String, //placeholder for media
     nsfwBannerFlag: Boolean,
     userscore: Number,
-    lingua: {type: String, enum: ["italiano", "inglese"]},
+    lingua: { type: String, enum: ["italiano", "inglese"] },
     isAdmin: Boolean,
-    nsfwSetting: {type: String, enum: ["no", "blur", "yes"]},
+    nsfwSetting: { type: String, enum: ["no", "blur", "yes"] },
     theme: String,
     followed_users: [String], //forse dovremmo mettere una lista di User
     favourites: [String],
