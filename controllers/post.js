@@ -6,10 +6,17 @@ const newPost = (req, res) => {
     Post.findOne({ title: req.body.title }, (err, data) => {
         if (!data) {
             const newPost = new Post({
+                id: req.body.id,
                 title: req.body.title,
-                description: req.body.description,
-                author: req.body.author,
-                upvotes: req.body.upvotes
+                date: req.body.req,
+                text: req.body.text,
+                media: req.body.media,
+                tag: req.body.tag,
+                punteggio_post: req.body.punteggio_post,
+                segnalato: req.body.segnalato,
+                numero_commenti: req.body.numero_commenti,
+                associato_a_contest: req.body.associato_a_contest,
+                creatore_post: req.body.creatore_post
             });
 
             newPost.save((err, data) => {

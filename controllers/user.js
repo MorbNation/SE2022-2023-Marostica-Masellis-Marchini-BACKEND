@@ -1,9 +1,10 @@
+const { collection } = require('../models/user');
 const User = require('../models/user');
 
 const newUser = (req, res) => {
     console.log(req.body);
     console.log("Trying to register new user...");
-    User.findOne({ title: req.body.usernane }, (err, data) => {
+    User.findOne({ _id: req.body._id }, (err, data) => {
         if (!data) {
             const newUser = new User({
                 username: req.body.username,
@@ -36,4 +37,31 @@ const newUser = (req, res) => {
     });
 };
 
-module.exports = { newUser };
+const getUser = (req, res) => {
+    console.log("Listing all users...");
+    User.find({}, (err, data) => {
+        if (err) {
+            return res.json({ Error: err });
+        } else {
+            return res.json(data);
+        }
+    });
+};
+
+const deleteUser = (req, res) => {
+    console.log(req.params);
+    let userName = req.params.username;
+    var query = { username: userName };
+    console.log(`Deleting user ${userName}`);
+
+    User.deleteOne(query, (err, collection) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(`User ${userName} deleted succesfully.`);
+            res.json({ message: "DELETE User" });
+        }
+    });
+};
+
+module.exports = { newUser, getUser, deleteUser };
