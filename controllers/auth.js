@@ -5,7 +5,7 @@ require('dotenv').config();
 const generateToken = async (req, res) => {
     await console.log(req.body);
 
-    let user = await User.findOne({ email: req.body.email }).exec();
+    const user = await User.findOne({ email: req.body.email }).exec();
 
     await console.log(user);
 
@@ -27,6 +27,10 @@ const generateToken = async (req, res) => {
     };
 
     var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
+
+    //Non so se queste due cose sono necessarie, non explained
+    user.token = token;
+    await user.save();
 
     res.json({
         success: true,
