@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
+const tokenChecker = require('./tokenChecker');
 
 mongoose.connect(
     process.env.DB_TOKEN,
@@ -22,6 +23,7 @@ app.listen(process.env.PORT, () => {
 });
 
 //Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
-const routesPost = require('./routes/post');
+const routesPost = require('./routes/post', tokenChecker);
 const routesUser = require('./routes/user');
-app.use('/', routesPost, routesUser);
+const routesAuth = require('./routes/auth');
+app.use('/', routesPost, routesUser, routesAuth);
