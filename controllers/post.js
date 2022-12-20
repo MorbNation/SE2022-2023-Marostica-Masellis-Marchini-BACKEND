@@ -3,7 +3,7 @@ const Post = require('../models/post');
 const newPost = (req, res) => {
     console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
-    Post.findOne({ title: req.body.title }, (err, data) => {
+    Post.findOne({ where: { title: req.body._id } }, (err, data) => {
         if (!data) {
             const newPost = new Post({
                 id: req.body.id,

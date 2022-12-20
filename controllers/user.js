@@ -4,7 +4,8 @@ const User = require('../models/user');
 const newUser = (req, res) => {
     console.log(req.body);
     console.log("Trying to register new user...");
-    User.findOne({ _id: req.body._id }, (err, data) => {
+    User.findOne({ where: { username: req.body.usernane } }, (err, data) => {
+        console.log(data);
         if (!data) {
             const newUser = new User({
                 username: req.body.username,
