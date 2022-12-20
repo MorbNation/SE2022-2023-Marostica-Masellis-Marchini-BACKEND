@@ -26,4 +26,5 @@ app.listen(process.env.PORT, () => {
 const routesPost = require('./routes/post', tokenChecker);
 const routesUser = require('./routes/user');
 const routesAuth = require('./routes/auth');
-app.use('/', routesPost, routesUser, routesAuth);
+const routesComment = require('./routes/comment');
+app.use('/', routesPost, routesUser, routesAuth, routesComment);
