@@ -4,6 +4,8 @@ const User = require('../models/user');
 const newUser = async (req, res) => {
     console.log(req.body);
     console.log("Trying to register new user...");
+
+    //I don't know why, I don't want to know why but for some reason mongodb will not return a valid body to compare
     // User.findOne({ where: { "username": req.body.username } }, (err, data) => {
     //     if (!data) {
     //         const newUser = new User({
