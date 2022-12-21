@@ -32,7 +32,32 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/users"
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Post a new user",
+                "requestBody": {
+                    "description": "Request body",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
                         }
                     }
                 }
@@ -41,13 +66,46 @@
     },
 
     "definitions": {
-        "users": {
+        "User": {
             "required": [
                 "username"
             ],
             "properties": {
                 "username": {
                     "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "user@something.domain"
+                },
+                "psw": {
+                    "type": "string"
+                },
+                "nsfwIconFlag": {
+                    "type": "boolean"
+                },
+                "nsfwBannerFlag": {
+                    "type": "boolean"
+                },
+                "lingua": {
+                    "type":"string",
+                    "enum": ["italiano", "inglese"]
+                },
+                "nsfwSetting": {
+                    "type":"string",
+                    "enum":["no", "blur", "yes"]
+                },
+                "followed_users": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "favourites": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
                 }
             }
         }
