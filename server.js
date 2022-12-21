@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
 const tokenChecker = require('./tokenChecker');
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 mongoose.connect(
     process.env.DB_TOKEN,
@@ -28,3 +30,4 @@ const routesUser = require('./routes/user');
 const routesAuth = require('./routes/auth');
 const routesComment = require('./routes/comment');
 app.use('/', routesPost, routesUser, routesAuth, routesComment);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
