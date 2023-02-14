@@ -17,10 +17,15 @@
             "description": "API for users int the system"
         }
     ],
-    "schemes": ["http"],
-    "consumes": ["application/json"],
-    "produces": ["application/json"],
-
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
     "paths": {
         "/user": {
             "get": {
@@ -42,29 +47,34 @@
                     "Users"
                 ],
                 "summary": "Post a new user",
-                "requestBody": {
-                    "description": "Request body",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/definitions/User"
-                            }
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body of post",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
                         }
-                    },
-                    "required": true
-                },
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         }
     },
-
     "definitions": {
         "User": {
             "required": [
@@ -88,12 +98,19 @@
                     "type": "boolean"
                 },
                 "lingua": {
-                    "type":"string",
-                    "enum": ["italiano", "inglese"]
+                    "type": "string",
+                    "enum": [
+                        "italiano",
+                        "inglese"
+                    ]
                 },
                 "nsfwSetting": {
-                    "type":"string",
-                    "enum":["no", "blur", "yes"]
+                    "type": "string",
+                    "enum": [
+                        "no",
+                        "blur",
+                        "yes"
+                    ]
                 },
                 "followed_users": {
                     "type": "array",
