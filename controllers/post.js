@@ -69,15 +69,15 @@ const getPost = (req, res) => {
 
 const deletePost = (req, res) => {
     console.log(req.params);
-    let postTitle = req.params.title;
-    var query = { title: postTitle };
-    console.log(`Deleting post ${postTitle}...`);
+    let postId = req.params.id;
+    var query = { id: postId };
+    console.log(`Deleting post ${postId}...`);
 
     Post.deleteOne(query, (err, collection) => {
         if (err) {
             throw err;
         } else {
-            console.log(`Post ${postTitle} deleted succesfully.`);
+            console.log(`Post ${postId} deleted succesfully.`);
             res.json({ message: "DELETE Post" });
         }
     });

@@ -11,12 +11,6 @@
     },
     "host": "localhost:8080",
     "basepath": "/",
-    "tags": [
-        {
-            "name": "Users",
-            "description": "API for users int the system"
-        }
-    ],
     "schemes": [
         "http"
     ],
@@ -51,7 +45,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Body of post",
+                        "description": "Body of user post API",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/User"
@@ -79,7 +73,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Deletes a user by ID",
+                "summary": "Deletes a user by username",
                 "parameters": [
                     {
                         "name": "username",
@@ -97,6 +91,80 @@
                     },
                     "404": {
                         "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/post": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get all posts in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Post"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Post a new user",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body of post post API",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Post"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/post/{id}": {
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Deletes a post bi id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of post to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid username"
+                    },
+                    "404": {
+                        "description": "Post not found"
                     }
                 }
             }
@@ -150,6 +218,52 @@
                     "items": {
                         "type": "number"
                     }
+                }
+            }
+        },
+        "Post": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "media": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "punteggio_post": {
+                    "type": "number"
+                },
+                "segnalato": {
+                    "type": "boolean"
+                },
+                "numero_commenti": {
+                    "type": "number"
+                },
+                "associato_a_contest": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "creatore_post": {
+                    "type": "string"
                 }
             }
         }
