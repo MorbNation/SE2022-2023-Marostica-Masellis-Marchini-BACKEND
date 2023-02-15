@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 const tokenChecker = require('./tokenChecker');
 const swaggerUI = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./swagger.yaml'); //json or yaml depending on the wanted file
 
 mongoose.connect(
     process.env.DB_TOKEN,
