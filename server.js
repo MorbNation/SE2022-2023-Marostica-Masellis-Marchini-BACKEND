@@ -1,11 +1,14 @@
 require('dotenv').config();
+import YAML from 'yamljs';
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-app.use(express.json());
 const tokenChecker = require('./tokenChecker');
 const swaggerUI = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.yaml'); //json or yaml depending on the wanted file
+//const swaggerDocument = require('./swagger.json');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+app.use(express.json());
 
 mongoose.connect(
     process.env.DB_TOKEN,

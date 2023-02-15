@@ -11,9 +11,9 @@ basepath: /
 schemes:
   - http
 consumes:
-  - application/json
+  - application/yaml
 produces:
-  - application/json
+  - application/yaml
 paths:
   /user:
     get:
