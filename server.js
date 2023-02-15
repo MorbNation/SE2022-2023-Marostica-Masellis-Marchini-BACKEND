@@ -31,6 +31,6 @@ app.listen(process.env.PORT, () => {
 const routesPost = require('./routes/post', tokenChecker);
 const routesUser = require('./routes/utente');
 const routesAuth = require('./routes/auth');
-const routesComment = require('./routes/comment');
+const routesComment = require('./routes/commento_post');
 app.use('/', routesPost, routesUser, routesAuth, routesComment);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
