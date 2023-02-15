@@ -35,9 +35,9 @@ const newPost = async (req, res) => {
     if (!post) {
         const newPost = new Post({
             id: req.body.id,
-            title: req.body.title,
-            date: req.body.req,
-            text: req.body.text,
+            titolo: req.body.titolo,
+            data: req.body.req,
+            testo: req.body.testo,
             media: req.body.media,
             tag: req.body.tag,
             punteggio_post: req.body.punteggio_post,

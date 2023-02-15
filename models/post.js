@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
     id: Number,
-    title: String,
-    date: String,
-    text: String,
+    titolo: String,
+    data: String,
+    testo: String,
     media: String, //placeholder
     tag: [String],
     punteggio_post: Number,
