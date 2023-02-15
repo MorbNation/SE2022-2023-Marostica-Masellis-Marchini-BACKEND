@@ -73,6 +73,33 @@
                     }
                 }
             }
+        },
+        "/user/{username}": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Deletes a user by ID",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "Username of user to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid User Id"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
         }
     },
     "definitions": {
