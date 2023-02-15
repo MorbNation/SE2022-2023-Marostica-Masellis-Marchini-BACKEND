@@ -87,7 +87,7 @@
                 ],
                 "responses": {
                     "400": {
-                        "description": "Invalid User Id"
+                        "description": "Invalid username"
                     },
                     "404": {
                         "description": "User not found"
@@ -147,7 +147,7 @@
                 "tags": [
                     "Posts"
                 ],
-                "summary": "Deletes a post bi id",
+                "summary": "Deletes a post by id",
                 "parameters": [
                     {
                         "name": "id",
@@ -161,10 +161,97 @@
                 ],
                 "responses": {
                     "400": {
-                        "description": "Invalid username"
+                        "description": "Invalid post id"
                     },
                     "404": {
                         "description": "Post not found"
+                    }
+                }
+            }
+        },
+        "/comment": {
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Post a new comment",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body of comment post API",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/comment/{assoc_id}": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Get comments by association Id",
+                "parameters": [
+                    {
+                        "name": "assoc_id",
+                        "in": "path",
+                        "description": "Association Id of comment to get",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid association id"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                }
+            }
+        },
+        "/comment/{id}": {
+            "delete": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Deletes a comment by id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of comment to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid comment id"
+                    },
+                    "404": {
+                        "description": "Comment not found"
                     }
                 }
             }
@@ -187,10 +274,12 @@
                     "type": "string"
                 },
                 "nsfwIconFlag": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "nsfwBannerFlag": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "lingua": {
                     "type": "string",
@@ -248,13 +337,16 @@
                     }
                 },
                 "punteggio_post": {
-                    "type": "number"
+                    "type": "number",
+                    "default": 0
                 },
                 "segnalato": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": 0
                 },
                 "numero_commenti": {
-                    "type": "number"
+                    "type": "number",
+                    "default": 0
                 },
                 "associato_a_contest": {
                     "type": "array",
@@ -263,6 +355,36 @@
                     }
                 },
                 "creatore_post": {
+                    "type": "string"
+                }
+            }
+        },
+        "Comment": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "number"
+                },
+                "assoc_id": {
+                    "type": "number"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "punteggio": {
+                    "type": "number",
+                    "default": 0
+                },
+                "segnalato": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "creatore_commento": {
                     "type": "string"
                 }
             }
