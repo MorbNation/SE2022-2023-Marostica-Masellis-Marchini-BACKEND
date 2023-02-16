@@ -45,7 +45,7 @@ const deleteCommento_Post = (req, res) => {
 
     //delete è stupida e a quanto pare non ritorna se la cosa che si prova ad eliminare non esiste, bisognerebbe
     //fare una retireve di support ma chi ha voglia
-    Commento_Post.deleteOne(query, (err, collection) => {
+    Commento_Post.deleteMany(query, (err, collection) => {
         if (err) {
             throw err;
         } else {

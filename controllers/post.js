@@ -73,7 +73,7 @@ const deletePost = (req, res) => {
     var query = { id: postId };
     console.log(`Deleting post ${postId}...`);
 
-    Post.deleteOne(query, (err, collection) => {
+    Post.deleteMany(query, (err, collection) => {
         if (err) {
             throw err;
         } else {

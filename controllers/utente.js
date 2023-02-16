@@ -87,7 +87,7 @@ const deleteUtente = (req, res) => {
     var query = { username: userName };
     console.log(`Deleting user ${userName}`);
 
-    Utente.deleteOne(query, (err, collection) => {
+    Utente.deleteMany(query, (err, collection) => {
         if (err) {
             throw err;
         } else {

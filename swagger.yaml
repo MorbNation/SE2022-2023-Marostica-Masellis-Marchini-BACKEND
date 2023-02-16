@@ -18,16 +18,16 @@ paths:
   /user:
     get:
       tags:
-        - Users
+        - Utenti
       summary: Get all users in system
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Utente'
     post:
       tags:
-        - Users
+        - Utenti
       summary: Post a new user
       parameters:
         - name: body
@@ -35,12 +35,12 @@ paths:
           description: Body of user post API
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Utente'
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Utente'
         '400':
           description: Invalid input
         '500':
@@ -48,7 +48,7 @@ paths:
   /user/{username}:
     delete:
       tags:
-        - Users
+        - Utenti
       summary: Deletes a user by username
       parameters:
         - name: username
@@ -65,7 +65,7 @@ paths:
   /post:
     get:
       tags:
-        - Posts
+        - Post
       summary: Get all posts in system
       responses:
         '200':
@@ -74,7 +74,7 @@ paths:
             $ref: '#/definitions/Post'
     post:
       tags:
-        - Posts
+        - Post
       summary: Post a new user
       parameters:
         - name: body
@@ -95,7 +95,7 @@ paths:
   /post/{id}:
     delete:
       tags:
-        - Posts
+        - Post
       summary: Deletes a post by id
       parameters:
         - name: id
@@ -112,7 +112,7 @@ paths:
   /comment:
     post:
       tags:
-        - Comments
+        - Commenti
       summary: Post a new comment
       parameters:
         - name: body
@@ -120,23 +120,23 @@ paths:
           description: Body of comment post API
           required: true
           schema:
-            $ref: '#/definitions/Comment'
+            $ref: '#/definitions/Commento_Post'
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/Comment'
+            $ref: '#/definitions/Commento_Post'
         '400':
           description: Invalid input
         '500':
           description: Internal server error
-  /comment/{assoc_id}:
+  /comment/{id_post}:
     get:
       tags:
-        - Comments
+        - Commenti
       summary: Get comments by association Id
       parameters:
-        - name: assoc_id
+        - name: id_post
           in: path
           description: Association Id of comment to get
           required: true
@@ -150,7 +150,7 @@ paths:
   /comment/{id}:
     delete:
       tags:
-        - Comments
+        - Commenti
       summary: Deletes a comment by id
       parameters:
         - name: id
@@ -165,7 +165,7 @@ paths:
         '404':
           description: Comment not found
 definitions:
-  User:
+  Utente:
     required:
       - username
     properties:
@@ -174,12 +174,12 @@ definitions:
       email:
         type: string
         example: user@something.domain
-      psw:
+      password:
         type: string
-      nsfwIconFlag:
+      iconaNSFW:
         type: boolean
         default: false
-      nsfwBannerFlag:
+      bannerNSFW:
         type: boolean
         default: false
       lingua:
@@ -187,17 +187,17 @@ definitions:
         enum:
           - italiano
           - inglese
-      nsfwSetting:
+      nsfw:
         type: string
         enum:
           - 'no'
           - blur
           - 'yes'
-      followed_users:
+      utenti_seguiti:
         type: array
         items:
           type: number
-      favourites:
+      post_favoriti:
         type: array
         items:
           type: number
@@ -207,11 +207,11 @@ definitions:
     properties:
       id:
         type: number
-      title:
+      titolo:
         type: string
-      date:
+      data:
         type: string
-      text:
+      testo:
         type: string
       media:
         type: string
@@ -234,19 +234,19 @@ definitions:
           type: number
       creatore_post:
         type: string
-  Comment:
+  Commento_Post:
     required:
       - id
     properties:
       id:
         type: number
-      assoc_id:
+      id_post:
         type: number
       data:
         type: string
-      text:
+      testo:
         type: string
-      punteggio:
+      punteggio_commento:
         type: number
         default: 0
       segnalato:
