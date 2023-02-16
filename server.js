@@ -29,8 +29,10 @@ app.listen(process.env.PORT, () => {
 
 //Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
 const routesPost = require('./routes/post', tokenChecker);
-const routesUser = require('./routes/utente');
+const routesUtente = require('./routes/utente');
 const routesAuth = require('./routes/auth');
-const routesComment = require('./routes/commento_post');
-app.use('/', routesPost, routesUser, routesAuth, routesComment);
+const routesCommento_Post = require('./routes/commento_post');
+const routesCommento_Profilo = require('./routes/commento_profilo');
+
+app.use('/', routesPost, routesUtente, routesAuth, routesCommento_Post, routesCommento_Profilo);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
