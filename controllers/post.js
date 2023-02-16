@@ -56,7 +56,7 @@ const newPost = async (req, res) => {
     }
 };
 
-const getPost = (req, res) => {
+const getPosts = (req, res) => {
     console.log("Listing all Posts...");
     //gets all posts
     Post.find({}, (err, data) => {
@@ -66,6 +66,39 @@ const getPost = (req, res) => {
         return res.json(data);
     });
 };
+
+const getPostById = (req, res) => {
+    let postId = req.params.id;
+    var query = { id: postId };
+    console.log("Getting post by id...");
+
+    Post.find(query, (err,data) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+        return res.json(data);
+    });
+}
+
+const segnalaPost = (req, res) => {
+    postId = req.params.id;
+    var query = { id: postId };
+
+    console.log(`Flagging post with id ${postId}...`);
+
+    Post.find(query, (err,data) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+        
+        data.forEach(element => {
+            element.segnalato = !element.segnalato;
+            element.save();
+        });
+
+        return res.json(data);
+    });
+}
 
 const deletePost = (req, res) => {
     console.log(req.params);
@@ -83,4 +116,4 @@ const deletePost = (req, res) => {
     });
 };
 
-module.exports = { newPost, getPost, deletePost };
+module.exports = { newPost, getPosts, getPostById, segnalaPost, deletePost };
