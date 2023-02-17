@@ -4,11 +4,14 @@ const router = express.Router();
 const postController = require("../controllers/post");
 
 router.get('/posts', postController.getPosts);
-router.get('/post/:id', postController.getPostById)
+router.get('/post/id/:id', postController.getPostById);
+router.get('/post/user/:username', postController.getPostByUser)
 
 router.post('/post', postController.newPost);
 
 router.put('/post/segnala/:id', postController.segnalaPost);
+router.put('/post/valuta', postController.valutaPost);
+router.put('/post/modifica', postController.modificaPost);
 
 router.delete('/post/:id', postController.deletePost);
 

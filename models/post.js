@@ -11,7 +11,12 @@ const PostSchema = new mongoose.Schema({
     segnalato: Boolean,
     numero_commenti: Number,
     associato_a_contest: [Number],
-    creatore_post: String
+    creatore_post: String,
+    valutazioni: {
+        type: Map,
+        of: Number,
+        default: {}
+    }
 });
 
 const Post = mongoose.model('Post', PostSchema);

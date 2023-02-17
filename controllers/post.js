@@ -1,5 +1,10 @@
 const Post = require('../models/post');
+const Utente = require('../models/utente');
+
 const newPost = async (req, res) => {
+
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
     console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
 
@@ -72,6 +77,19 @@ const getPostById = (req, res) => {
     var query = { id: postId };
     console.log("Getting post by id...");
 
+    Post.findOne(query, (err,data) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+        return res.json(data);
+    });
+}
+
+const getPostByUser = (req, res) => {
+    let postUser = req.params.username;
+    var query = { creatore_post: postUser };
+    console.log("Getting post by username...");
+
     Post.find(query, (err,data) => {
         if (err) {
             return res.json({ Error: err });
@@ -81,6 +99,9 @@ const getPostById = (req, res) => {
 }
 
 const segnalaPost = (req, res) => {
+
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
     postId = req.params.id;
     var query = { id: postId };
 
@@ -100,9 +121,86 @@ const segnalaPost = (req, res) => {
     });
 }
 
+const valutaPost = (req, res) => {
+
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
+    const postId = req.body.id;
+    const username = req.body.username;
+    const valutazione = req.body.valutazione;
+    const query = { id: postId };
+
+    Post.findOne(query, (err,data) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+        if (valutazione != -1 && valutazione != 0 && valutazione != 1) {
+            return res.json({ Error: "Valutazione non valida."})
+        }
+
+        var valutazionePrecedente = data.valutazioni.get(username);
+        if (isNaN(valutazionePrecedente)) valutazionePrecedente = 0;
+
+        data.valutazioni.set(username, valutazione);
+        const cambioPunteggio = valutazione - valutazionePrecedente;
+        data.punteggio_post += cambioPunteggio
+
+        Utente.findOne(query, (err, utente) => {
+            if (err) {
+                return res.json({ Error: err });
+            }
+            if (res == null) {
+                return res.json({ Error: "Creatore del post non trovato."})
+            }
+
+            utente.userscore += cambioPunteggio;
+            
+            utente.save();
+            data.save();
+
+            return res.json({ Result: "Valutazione effettuata con successo", punteggio_post: data.punteggio_post});
+        })
+    })
+}
+
+const modificaPost = (req, res) => {
+
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
+    const postId = req.body.id;
+    const username = req.body.username;
+    const titolo = req.body.titolo;
+    const testo = req.body.testo;
+    const media = req.body.media;
+    const tag = req.body.tag;
+
+    const query = { id: postId };
+
+    Post.findOne(query, (err, post) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+        if (post.creatore_post != username){
+            return res.json({ Error: "L'utente che ha effettuato la richiesta non é il creatore del post." })
+        }
+
+        post.titolo = titolo;
+        post.testo = testo;
+        post.media = media;
+        post.tag = tag;
+
+        post.save();
+
+        return res.json({ Result: "Modifica effettuata con successo." });
+    })
+}
+
 const deletePost = (req, res) => {
+
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
     console.log(req.params);
-    let postId = req.params.id;
+    var postId = req.params.id;
     var query = { id: postId };
     console.log(`Deleting post ${postId}...`);
 
@@ -116,4 +214,4 @@ const deletePost = (req, res) => {
     });
 };
 
-module.exports = { newPost, getPosts, getPostById, segnalaPost, deletePost };
+module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, deletePost };
