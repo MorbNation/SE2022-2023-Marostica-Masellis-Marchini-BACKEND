@@ -128,7 +128,7 @@ const valutaPost = (req, res) => {
     const postId = req.body.id;
     const username = req.body.username;
     const valutazione = req.body.valutazione;
-    const query = { id: postId };
+    var query = { id: postId };
 
     Post.findOne(query, (err,data) => {
         if (err) {
@@ -143,13 +143,15 @@ const valutaPost = (req, res) => {
 
         data.valutazioni.set(username, valutazione);
         const cambioPunteggio = valutazione - valutazionePrecedente;
-        data.punteggio_post += cambioPunteggio
+        data.punteggio_post += cambioPunteggio;
+
+        query = { username: data.creatore_post };
 
         Utente.findOne(query, (err, utente) => {
             if (err) {
                 return res.json({ Error: err });
             }
-            if (res == null) {
+            if (utente == null) {
                 return res.json({ Error: "Creatore del post non trovato."})
             }
 

@@ -5,10 +5,18 @@ const Commento_PostSchema = new mongoose.Schema({
     id_post: Number,
     data: String,
     testo: String,
-    punteggio_commento: Number,
+    punteggio_commento:{
+        type: Number,
+        default: 0
+    },
     segnalato: Boolean,
-    creatore_commento: String
+    creatore_commento: String,
+    valutazioni: {
+        type: Map,
+        of: Number,
+        default: {}
+    }
 });
 
-const  Commento_Post = mongoose.model(' Commento_Post',  Commento_PostSchema);
+const  Commento_Post = mongoose.model('Commento_Post',  Commento_PostSchema);
 module.exports =  Commento_Post;
