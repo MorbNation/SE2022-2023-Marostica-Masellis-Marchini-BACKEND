@@ -12,6 +12,7 @@ router.post('/post', postController.newPost);
 router.put('/post/segnala/:id', postController.segnalaPost);
 router.put('/post/valuta', postController.valutaPost);
 router.put('/post/modifica', postController.modificaPost);
+router.put('/post/salvaNeiFavoriti', postController.salvaNeiFavoriti);
 
 router.delete('/post/:id', postController.deletePost);
 

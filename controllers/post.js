@@ -195,6 +195,32 @@ const modificaPost = (req, res) => {
     })
 }
 
+const visualizzaProfilo = (req, res) => {
+    // TODO
+}
+
+const salvaNeiFavoriti = (req, res) => {
+    
+    //TODO: CONFERMARE UTENTE CON TOKEN
+
+    const postId = req.body.id;
+    const username = req.body.username;
+
+    const query = { username: username };
+
+    Utente.findOne(query, (err, utente) => {
+        if (err) {
+            return res.json({ Error: err });
+        }
+
+        // Se un post é giá favorito dall'utente, allora non succede nulla.
+        if (!utente.post_favoriti.includes(postId)) utente.post_favoriti.push(postId);
+        utente.save();
+
+        return res.json(utente);
+    })
+}
+
 const deletePost = (req, res) => {
 
     //TODO: CONFERMARE UTENTE CON TOKEN
@@ -214,4 +240,4 @@ const deletePost = (req, res) => {
     });
 };
 
-module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, deletePost };
+module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, salvaNeiFavoriti, deletePost };
