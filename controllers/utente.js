@@ -1,5 +1,8 @@
+require('dotenv').config();
 const { collection } = require('../models/utente');
 const Utente = require('../models/utente');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const newUtente = async (req, res) => {
     console.log(req.body);
@@ -41,10 +44,13 @@ const newUtente = async (req, res) => {
     let utente = await Utente.findOne({ username: req.body.username }).exec();
 
     if (!utente) {
+
+        const encPsw = await bcrypt.hash(req.body.password, 10);
+
         const newUtente = new Utente({
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: encPsw,
             descrizione: "Write a description here.",
             icona_profilo: "placeholder icon path",
             iconaNSFW: req.body.iconaNSFW,
@@ -58,13 +64,17 @@ const newUtente = async (req, res) => {
             utenti_seguiti: req.body.utenti_seguiti,
             post_favoriti: req.body.post_favoriti,
             timer: 0,
-            token: "Ciao"
         });
+
+        const token = jwt.sign({ user_id: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+
+        newUtente.token = token;
 
         newUtente.save((err, data) => {
             if (err) return res.json({ Error: err });
             return res.json(data);
         });
+
     } else {
         return res.json({ message: "User already exists", req: req.body });
     }
@@ -97,4 +107,30 @@ const deleteUtente = (req, res) => {
     });
 };
 
-module.exports = { newUtente: newUtente, getUtente, deleteUtente };
+const login = async (req, res) => {
+
+    var username = req.body.username;
+    var psw = req.body.password;
+
+    var query = { username: username };
+
+    Utente.find(query, (err, data) => {
+        if(err) {
+            return res.json({ Error: err });
+        }
+
+        console.log(data);
+
+        data.forEach(async element => {
+            if(await bcrypt.compare(psw, element.password)) {
+                element.token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+                console.log(element.token);
+                element.save();
+            }
+        });
+
+        return res.json(data);
+    })
+};
+
+module.exports = { newUtente: newUtente, getUtente, deleteUtente, login };

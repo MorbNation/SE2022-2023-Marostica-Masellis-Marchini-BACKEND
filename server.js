@@ -27,7 +27,7 @@ app.listen(process.env.PORT, () => {
 });
 
 //Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
-const routesPost = require('./routes/post', tokenChecker);
+const routesPost = require('./routes/post');
 const routesUtente = require('./routes/utente');
 const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
