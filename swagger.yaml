@@ -124,7 +124,13 @@ paths:
           description: Body of a post put API
           required: true
           schema:
-            $ref: '#/definitions/Valutazione'
+            properties:
+              id: 
+                type: number
+              username: 
+                type: string
+              valutazione:
+                type: number
       responses:
         '200':
           description: OK
@@ -145,7 +151,21 @@ paths:
           description: Body of a post put API
           required: true
           schema:
-            $ref: '#/definitions/Post'
+            properties: 
+              id: 
+                type: number
+              username:
+                type: string
+              titolo:
+                type: string
+              testo:
+                type: string
+              media:
+                type: string
+              tag:
+                type: array
+                items:
+                  type: string
       responses:
         '200':
           description: OK
@@ -166,7 +186,11 @@ paths:
           description: Body of a post put API
           required: true
           schema:
-            $ref: '#/definitions/Post'
+            properties:
+              id: 
+                type: number
+              username: 
+                type: string
       responses:
         '200':
           description: OK
