@@ -3,7 +3,6 @@ const YAML = require('yamljs');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const tokenChecker = require('./tokenChecker');
 const swaggerUI = require('swagger-ui-express');
 //const swaggerDocument = require('./swagger.json');
 const swaggerDocument = YAML.load('./swagger.yaml');
@@ -30,9 +29,8 @@ app.listen(process.env.PORT, () => {
 //Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
 const routesPost = require('./routes/post', tokenChecker);
 const routesUtente = require('./routes/utente');
-const routesAuth = require('./routes/auth');
 const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
 
-app.use('/', routesPost, routesUtente, routesAuth, routesCommento_Post, routesCommento_Profilo);
+app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
