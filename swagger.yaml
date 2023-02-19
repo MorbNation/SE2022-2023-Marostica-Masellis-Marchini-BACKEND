@@ -1,3 +1,4 @@
+#OH GOD SI POSSONO METTERE I COMMENTI SU YAML
 swagger: '2.0'
 info:
   version: 1.0.0
@@ -14,8 +15,15 @@ consumes:
   - application/json
 produces:
   - application/json
+
+##APIs begin
+
 paths:
+
+#Utente APIs begin
+
   /user:
+
     get:
       tags:
         - Utenti
@@ -25,6 +33,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Utente'
+
     post:
       tags:
         - Utenti
@@ -45,7 +54,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /user/{username}:
+
     delete:
       tags:
         - Utenti
@@ -62,7 +73,13 @@ paths:
           description: Invalid username
         '404':
           description: User not found
+
+#Utente APIs end
+
+#Post APIs begin
+
   /posts:
+
     get:
       tags:
         - Post
@@ -72,7 +89,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+
   /post/id/{id}:
+
     get:
       tags: 
         - Post
@@ -82,7 +101,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+
   /post/user/{username}:
+
     get: 
       tags:
         - Post
@@ -92,7 +113,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+
   /post/segnala/{id}:
+
     put:
       tags:
         - Post
@@ -113,7 +136,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /post/valuta: 
+
     put:
       tags:
         - Post
@@ -140,7 +165,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /post/modifica:
+
     put:
       tags:
         - Post
@@ -175,7 +202,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /post/salvaNeiFavoriti:
+
     put:
       tags:
         - Post
@@ -200,7 +229,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /post:
+
     post:
       tags:
         - Post
@@ -221,7 +252,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /post/{id}:
+
     delete:
       tags:
         - Post
@@ -238,7 +271,13 @@ paths:
           description: Invalid post id
         '404':
           description: Post not found
+
+#Post APIs end
+
+#Commento_Post APIs begin
+
   /commento_post:
+
     post:
       tags:
         - Commenti Post
@@ -259,7 +298,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /commento_post/{id_post}:
+
     get:
       tags:
         - Commenti Post
@@ -276,7 +317,9 @@ paths:
           description: Invalid association id
         '404':
           description: Comment not found
+
   /commento_post/{id}:
+
     delete:
       tags:
         - Commenti Post
@@ -293,7 +336,13 @@ paths:
           description: Invalid comment id
         '404':
           description: Comment not found
+
+#Commento_Post APIs end
+
+#Commento_Profilo APIs begin
+
   /commento_profilo:
+
     post: 
       tags:
         - Commenti Profilo
@@ -314,7 +363,9 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
+
   /commento_profilo/{profilo_commentato}:
+
     get:
       tags:
         - Commenti Profilo
@@ -331,7 +382,9 @@ paths:
           description: Invalid profile name
         '404':
           description: Profile not found
+
   /commento_profilo/{id}:
+
     delete:
       tags:
         - Commenti Profilo
@@ -348,6 +401,12 @@ paths:
           description: Invalid comment Id
         '404': 
           description: Comment not found
+
+#Commento_Profilo APIs end
+
+##APIs end
+
+##Definitions begin
 
 definitions:
   Utente:
@@ -386,6 +445,7 @@ definitions:
         type: array
         items:
           type: number
+
   Post:
     required:
       - id
@@ -419,6 +479,7 @@ definitions:
           type: number
       creatore_post:
         type: string
+
   Commento_Post:
     required:
       - id
@@ -439,6 +500,7 @@ definitions:
         default: false
       creatore_commento:
         type: string
+
   Commento_Profilo:
     required:
       - id
@@ -461,6 +523,7 @@ definitions:
         default: false
       creatore_commento:  
         type: string
+
   Valutazione:
     required:
       - id
@@ -473,3 +536,5 @@ definitions:
         type: string
       valutazione:
         type: number
+
+##Definitions end
