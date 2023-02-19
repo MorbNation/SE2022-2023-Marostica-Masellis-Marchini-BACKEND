@@ -16,6 +16,18 @@ consumes:
 produces:
   - application/json
 
+##Tags
+
+tags: 
+  - name: Utenti
+    description: APIs for the Utente class
+  - name: Post
+    description: APIs for the Post class
+  - name: Commenti Post
+    description: APIs for the Commento_Post class
+  - name: Commenti Profilo
+    description: APIs for the Commento_Profilo class
+
 ##APIs begin
 
 paths:
@@ -27,7 +39,7 @@ paths:
     get:
       tags:
         - Utenti
-      summary: Get all users in system
+      summary: Retrieves all users registered on the database
       responses:
         '200':
           description: OK
@@ -37,11 +49,11 @@ paths:
     post:
       tags:
         - Utenti
-      summary: Post a new user
+      summary: Register a new user in the database
       parameters:
         - name: body
           in: body
-          description: Body of user post API
+          description: Attributes of the new user to be registered
           required: true
           schema:
             $ref: '#/definitions/Utente'
@@ -60,11 +72,11 @@ paths:
     delete:
       tags:
         - Utenti
-      summary: Deletes a user by username
+      summary: Deletes a user from the database by username
       parameters:
         - name: username
           in: path
-          description: Username of user to delete
+          description: The username of the user to delete
           required: true
           schema:
             type: string
@@ -83,7 +95,7 @@ paths:
     get:
       tags:
         - Post
-      summary: Get all posts in system
+      summary: Retrives all posts in the database
       responses:
         '200':
           description: OK
@@ -95,7 +107,7 @@ paths:
     get:
       tags: 
         - Post
-      summary: Get post by id
+      summary: Retrieves a post by its Id
       responses:
         '200':
           description: OK
@@ -107,7 +119,7 @@ paths:
     get: 
       tags:
         - Post
-      summary: Get posts by user
+      summary: Retrieves all posts posted by a user
       responses:
         '200':
           description: OK
@@ -119,11 +131,11 @@ paths:
     put:
       tags:
         - Post
-      summary: Flag a post by Id
+      summary: Flags a post
       parameters:
         - name: id
           in: path
-          description: Id of post to flag
+          description: The id of post to flag
           required: true
           schema:
             type: number
@@ -142,11 +154,12 @@ paths:
     put:
       tags:
         - Post
-      summary: Evaluate a post
+      summary: Increments or decrements a post's score
+      description: The function requires the id of the post to be evaluated, the username of the user evaluating the post and the vote (-1, 0, 1)
       parameters:
         - name: body
           in: body
-          description: Body of a post put API
+          description: Attributes of the evaluation function
           required: true
           schema:
             properties:
@@ -171,11 +184,11 @@ paths:
     put:
       tags:
         - Post
-      summary: Edit a post
+      summary: Edits a post
       parameters:
         - name: body
           in: body
-          description: Body of a post put API
+          description: Modifiable attributes of a post
           required: true
           schema:
             properties: 
@@ -208,11 +221,12 @@ paths:
     put:
       tags:
         - Post
-      summary: Save a post
+      summary: Saves a post in a user's favourites
+      description: A post's editable attributes are the username of the poster, the title, the text, the media and tags
       parameters:
         - name: body
           in: body
-          description: Body of a post put API
+          description: Atrributes of the function
           required: true
           schema:
             properties:
@@ -235,11 +249,11 @@ paths:
     post:
       tags:
         - Post
-      summary: Post a new user
+      summary: Uploads a new post to the database 
       parameters:
         - name: body
           in: body
-          description: Body of post post API
+          description: Attributes of the new post to be uploaded
           required: true
           schema:
             $ref: '#/definitions/Post'
@@ -258,11 +272,11 @@ paths:
     delete:
       tags:
         - Post
-      summary: Deletes a post by id
+      summary: Deletes a post by its id
       parameters:
         - name: id
           in: path
-          description: Id of post to delete
+          description: The id of post to delete
           required: true
           schema:
             type: string
@@ -346,19 +360,19 @@ paths:
     post: 
       tags:
         - Commenti Profilo
-      summary: Post a new profile comment
+      summary: Uploads a new post comment on the database
       parameters:
         - name: body
           in: body
-          description: Body of a profile comment post API
+          description: Attributes of the new post comment to be uploaded
           required: true
           schema:
-            $ref: '#definitions/Commento_Profilo'
+            $ref: '#/definitions/Commento_Profilo'
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#definitions/Commento_Profilo'
+            $ref: '#/definitions/Commento_Profilo'
         '400':
           description: Invalid input
         '500':
@@ -369,11 +383,11 @@ paths:
     get:
       tags:
         - Commenti Profilo
-      summary: Get profile comments by name of commented profile
+      summary: Retrieves all comments on the database relating to a specific profile
       parameters:
         - name: profilo_commentato
           in: path
-          description: Name of commented profile
+          description: The name of commented profile
           required: true
           schema:
             type: string
@@ -388,11 +402,11 @@ paths:
     delete:
       tags:
         - Commenti Profilo
-      summary: Deletes a profile comment by Id
+      summary: Deletes a profile comment by its id
       parameters:
         - name: id
           in: path
-          description: Id of profile comment to delete
+          description: The id of the profile comment to be deleted
           required: true
           schema:
             type: number
