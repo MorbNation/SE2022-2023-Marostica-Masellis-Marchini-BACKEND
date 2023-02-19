@@ -62,7 +62,7 @@ paths:
           description: Invalid username
         '404':
           description: User not found
-  /post:
+  /posts:
     get:
       tags:
         - Post
@@ -72,6 +72,111 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+  /post/id/{id}:
+    get:
+      tags: 
+        - Post
+      summary: Get post by id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+  /post/user/{username}:
+    get: 
+      tags:
+        - Post
+      summary: Get posts by user
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+  /post/segnala/{id}:
+    put:
+      tags:
+        - Post
+      summary: Flag a post by Id
+      parameters:
+        - name: id
+          in: path
+          description: Id of post to flag
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+          schema: 
+            $ref: '#/definitions/Post'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /post/valuta: 
+    put:
+      tags:
+        - Post
+      summary: Evaluate a post
+      parameters:
+        - name: body
+          in: body
+          description: Body of a post put API
+          required: true
+          schema:
+            $ref: '#/definitions/Valutazione'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /post/modifica:
+    put:
+      tags:
+        - Post
+      summary: Edit a post
+      parameters:
+        - name: body
+          in: body
+          description: Body of a post put API
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /post/salvaNeiFavoriti:
+    put:
+      tags:
+        - Post
+      summary: Save a post
+      parameters:
+        - name: body
+          in: body
+          description: Body of a post put API
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /post:
     post:
       tags:
         - Post
@@ -332,3 +437,15 @@ definitions:
         default: false
       creatore_commento:  
         type: string
+  Valutazione:
+    required:
+      - id
+        username
+        valutazione
+    properties:
+      id:
+        type: number
+      username:
+        type: string
+      valutazione:
+        type: number

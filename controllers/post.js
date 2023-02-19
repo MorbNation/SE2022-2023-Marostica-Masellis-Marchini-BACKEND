@@ -41,7 +41,7 @@ const newPost = async (req, res) => {
         const newPost = new Post({
             id: req.body.id,
             titolo: req.body.titolo,
-            data: req.body.req,
+            data: req.body.data,
             testo: req.body.testo,
             media: req.body.media,
             tag: req.body.tag,
@@ -102,8 +102,10 @@ const segnalaPost = (req, res) => {
 
     //TODO: CONFERMARE UTENTE CON TOKEN
 
-    postId = req.params.id;
+    var postId = req.params.id;
     var query = { id: postId };
+
+    console.log(postId);
 
     console.log(`Flagging post with id ${postId}...`);
 
@@ -111,9 +113,12 @@ const segnalaPost = (req, res) => {
         if (err) {
             return res.json({ Error: err });
         }
+
+        console.log(data);
         
         data.forEach(element => {
-            element.segnalato = !element.segnalato;
+            //element.segnalato = !element.segnalato; Così continua a switchare
+            element.segnalato = true;
             element.save();
         });
 
