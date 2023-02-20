@@ -49,7 +49,7 @@ const newPost = async (req, res) => {
             segnalato: req.body.segnalato,
             numero_commenti: req.body.numero_commenti,
             associato_a_contest: req.body.associato_a_contest,
-            creatore_post: req.body.creatore_post
+            creatore_post: req.body.username
         });
 
         newPost.save((err, data) => {
@@ -150,7 +150,7 @@ const valutaPost = (req, res) => {
         const cambioPunteggio = valutazione - valutazionePrecedente;
         data.punteggio_post += cambioPunteggio;
 
-        query = { username: data.creatore_post };
+        query = { username: data.username };
 
         Utente.findOne(query, (err, utente) => {
             if (err) {

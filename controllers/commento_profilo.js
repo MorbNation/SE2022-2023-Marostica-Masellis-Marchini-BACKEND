@@ -13,7 +13,7 @@ const newCommento_Profilo = async (req, res) => {
         testo: req.body.testo,
         punteggio: 0,
         segnalato: false,
-        creatore_commento: req.body.creatore_commento
+        creatore_commento: req.body.username
     });
 
     newCommento_Profilo.save((err, data) => {

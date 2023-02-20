@@ -92,6 +92,9 @@ const getUtente = (req, res) => {
 };
 
 const deleteUtente = (req, res) => {
+
+    // TODO: REWORKARE LA LOGICA PER IL TOKEN
+
     console.log(req.params);
     let userName = req.params.username;
     var query = { username: userName };

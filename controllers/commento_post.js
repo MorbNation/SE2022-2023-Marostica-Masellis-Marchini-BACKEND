@@ -14,7 +14,7 @@ const newCommento_Post = async (req, res) => {
         testo: req.body.testo,
         punteggio: 0,
         segnalato: false,
-        creatore_commento: req.body.creatore_commento
+        creatore_commento: req.body.username
     });
 
     Post.findOne({ id: req.body.id_post }, (err, post) => {
@@ -117,7 +117,7 @@ const valutaCommento_Post = (req, res) => {
         const cambioPunteggio = valutazione - valutazionePrecedente;
         data.punteggio_commento += cambioPunteggio
 
-        query = { username: data.creatore_commento };
+        query = { username: data.username };
 
         Utente.findOne(query, (err, utente) => {
             if (err) {
