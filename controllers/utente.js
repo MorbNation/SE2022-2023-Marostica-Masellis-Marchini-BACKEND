@@ -66,9 +66,12 @@ const newUtente = async (req, res) => {
             timer: 0,
         });
 
-        const token = jwt.sign({ user_id: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+        const token = jwt.sign({ username: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "15min" });
 
         newUtente.token = token;
+
+        // Il cookie dura 15 min, come il token di JWT
+        res.cookie('tokenEpiOpera', token, {maxAge: 900000})
 
         newUtente.save((err, data) => {
             if (err) return res.json({ Error: err });
@@ -117,20 +120,31 @@ const login = async (req, res) => {
 
     var query = { username: username };
 
-    Utente.find(query, (err, data) => {
+    Utente.findOne(query, (err, data) => {
         if(err) {
             return res.json({ Error: err });
         }
 
         console.log(data);
 
+        if(bcrypt.compare(psw, data.password)){
+            var token = jwt.sign({ username: data.username }, process.env.TOKEN_KEY, { expiresIn: "15m" });
+            data.token = token;
+            console.log(data.token);
+            data.save();
+            res.cookie('tokenEpiOpera', token, {maxAge: 900000});
+        }
+
+        /*
         data.forEach(async element => {
             if(await bcrypt.compare(psw, element.password)) {
-                element.token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2s" });
+                var token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+                element.token = token;
                 console.log(element.token);
                 element.save();
             }
         });
+        */
 
         return res.json(data);
     })
