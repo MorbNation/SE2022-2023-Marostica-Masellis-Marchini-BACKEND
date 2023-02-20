@@ -86,7 +86,8 @@ const segnalaCommento_Post = (req, res) => {
             return res.json({ Error: err });
         }
         
-        data.segnalato = !data.segnalato;
+        //data.segnalato = !data.segnalato;
+        data.segnalato = true;
         data.save();
 
         return res.json(data);
@@ -117,7 +118,7 @@ const valutaCommento_Post = (req, res) => {
         const cambioPunteggio = valutazione - valutazionePrecedente;
         data.punteggio_commento += cambioPunteggio
 
-        query = { username: data.username };
+        query = { username: data.creatore_commento };
 
         Utente.findOne(query, (err, utente) => {
             if (err) {
