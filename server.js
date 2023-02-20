@@ -31,6 +31,7 @@ const routesPost = require('./routes/post');
 const routesUtente = require('./routes/utente');
 const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
+const routesAuth = require('./routes/welcome');
 
-app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo);
+app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesAuth);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
