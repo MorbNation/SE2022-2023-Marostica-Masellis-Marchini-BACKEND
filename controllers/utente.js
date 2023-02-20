@@ -126,7 +126,7 @@ const login = async (req, res) => {
 
         data.forEach(async element => {
             if(await bcrypt.compare(psw, element.password)) {
-                element.token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+                element.token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2s" });
                 console.log(element.token);
                 element.save();
             }
