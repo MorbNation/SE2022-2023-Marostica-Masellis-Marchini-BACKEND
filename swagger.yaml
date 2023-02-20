@@ -27,6 +27,8 @@ tags:
     description: APIs for the Commento_Post class
   - name: Commenti Profilo
     description: APIs for the Commento_Profilo class
+  - name: Demo
+    description: Demo APIs
 
 ##APIs begin
 
@@ -34,7 +36,7 @@ paths:
 
 #Utente APIs begin
 
-  /user:
+  /utente:
 
     get:
       tags:
@@ -67,7 +69,7 @@ paths:
         '500':
           description: Internal server error
 
-  /user/{username}:
+  /utente/{username}:
 
     delete:
       tags:
@@ -80,9 +82,17 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '400':
           description: Invalid username
+        '403':
+          description: Forbidden
         '404':
           description: User not found
 
@@ -108,6 +118,12 @@ paths:
       tags: 
         - Post
       summary: Retrieves a post by its Id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the post to retrieve
+          schema:
+            type: number
       responses:
         '200':
           description: OK
@@ -120,6 +136,12 @@ paths:
       tags:
         - Post
       summary: Retrieves all posts posted by a user
+      parameters: 
+        - name: username
+          in: path
+          description: The username of the post's author
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -139,6 +161,12 @@ paths:
           required: true
           schema:
             type: number
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -146,6 +174,8 @@ paths:
             $ref: '#/definitions/Post'
         '400':
           description: Invalid input
+        '403': 
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -169,6 +199,12 @@ paths:
                 type: string
               valutazione:
                 type: number
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -176,6 +212,8 @@ paths:
             $ref: '#/definitions/Post'
         '400':
           description: Invalid input
+        '403': 
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -206,6 +244,12 @@ paths:
                 type: array
                 items:
                   type: string
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -213,6 +257,8 @@ paths:
             $ref: '#/definitions/Post'
         '400':
           description: Invalid input
+        '403':
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -234,6 +280,12 @@ paths:
                 type: number
               username: 
                 type: string
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -241,6 +293,8 @@ paths:
             $ref: '#/definitions/Post'
         '400':
           description: Invalid input
+        '403':
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -257,6 +311,12 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Post'
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -264,6 +324,8 @@ paths:
             $ref: '#/definitions/Post'
         '400':
           description: Invalid input
+        '403':
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -280,9 +342,17 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '400':
           description: Invalid post id
+        '403':
+          description: Forbidden
         '404':
           description: Post not found
 
@@ -303,6 +373,12 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Commento_Post'
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -310,6 +386,8 @@ paths:
             $ref: '#/definitions/Commento_Post'
         '400':
           description: Invalid input
+        '403': 
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -345,11 +423,86 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '400':
           description: Invalid comment id
+        '403':
+          description: Forbidden
         '404':
           description: Comment not found
+
+  /commento_post/segnala/{id}:
+    put:  
+      tags: 
+        - Commenti Post
+      summary: Flags a post comment
+      parameters: 
+        - name: id
+          in: path
+          description: The id of the post comment to flag
+          required: true
+          schema:
+            type: number
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: OK
+          schema: 
+            $ref: '#/definitions/Commento_Post'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+  /commento_post/valuta:
+    put:
+      tags:
+        - Commenti Post
+      summary: Increments or decrements a post comment's score
+      description: The function requires the id of the comment to be evaluated, the username of the user evaluating the comment and the vote (-1, 0, 1)
+      parameters:
+        - name: body
+          in: body
+          description: Attributes of the evaluation function
+          required: true
+          schema:
+            properties:
+              id: 
+                type: number
+              username: 
+                type: string
+              valutazione:
+                type: number
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Commento_Post'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
 
 #Commento_Post APIs end
 
@@ -368,6 +521,12 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Commento_Profilo'
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: OK
@@ -375,6 +534,8 @@ paths:
             $ref: '#/definitions/Commento_Profilo'
         '400':
           description: Invalid input
+        '403':
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -410,9 +571,17 @@ paths:
           required: true
           schema:
             type: number
+        - name: x-access-token
+          in: header
+          description: The authentication token
+          required: true
+          schema: 
+            type: string
       responses:
         '400':
           description: Invalid comment Id
+        '403':
+          description: Frobidden
         '404': 
           description: Comment not found
 
@@ -483,7 +652,7 @@ definitions:
         default: 0
       segnalato:
         type: boolean
-        default: 0
+        default: false
       numero_commenti:
         type: number
         default: 0
