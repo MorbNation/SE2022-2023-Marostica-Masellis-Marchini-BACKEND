@@ -58,7 +58,7 @@ const newUtente = async (req, res) => {
             bannerNSFW: req.body.bannerNSFW,
             userscore: 0,
             lingua: req.body.lingua,
-            isAmministratore: false,
+            isAmministratore: req.body.isAmministratore || false,
             nsfw: req.body.nsfw,
             nome_tema_selezionato: "black",
             utenti_seguiti: req.body.utenti_seguiti,

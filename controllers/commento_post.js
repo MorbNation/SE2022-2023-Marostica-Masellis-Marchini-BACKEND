@@ -40,8 +40,10 @@ const newCommento_Post = async (req, res) => {
 
 const getCommento_Post = (req, res) => {
     console.log(req.params);
-    let commentAssoc = req.params.id_post;
-    var query = { id_post: commentAssoc };
+
+    const commentAssoc = req.params.id_post;
+    const query = { id_post: commentAssoc };
+
     console.log(`Getting comment with association id ${commentAssoc}...`);
 
     Commento_Post.find(query, (err, collection) => {
@@ -55,21 +57,40 @@ const getCommento_Post = (req, res) => {
 };
 
 const deleteCommento_Post = (req, res) => {
-    console.log(req.params);
-    let commentId = req.params.id;
-    var query = { id: commentId };
+    const commentId = req.body.id;
+
     console.log(`Deleting comment with id ${commentId}...`);
 
-    //delete è stupida e a quanto pare non ritorna se la cosa che si prova ad eliminare non esiste, bisognerebbe
-    //fare una retireve di support ma chi ha voglia
-    Commento_Post.deleteMany(query, (err, collection) => {
-        if (err) {
-            throw err;
+    const username = req.body.username;
+    const query = { username: username };
+
+    Utente.findOne(query, (err, utente) => {
+        if (err){
+            throw err
         } else {
-            console.log(`Comment with id ${commentId} deleted succesfully.`);
-            res.json({ message: "DELETE Comment" });
+            const query = { id: commentId };
+
+            Commento_Post.findOne(query, (err, commento) => {
+                if (err){
+                    throw err
+                } else {
+                    // Se l'utente che fa la richiesta non é né l'autore del commento né un amministratore, esce dalla funzione
+                    if(!utente.isAmministratore && utente.username != commento.creatore_commento){
+                        return res.status(401).send("Utente non autorizzato.");
+                    }
+                    
+                    Commento_Post.deleteOne(query, (err, data) => {
+                        if (err){
+                            throw err
+                        } else {
+                            console.log(`Comment with id ${commentId} deleted succesfully.`);
+                            res.json({ message: "DELETE Comment" });
+                        }
+                    })
+                }
+            })
         }
-    });
+    })
 };
 
 const segnalaCommento_Post = (req, res) => {

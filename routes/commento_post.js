@@ -12,6 +12,6 @@ router.post('/commento_post', refreshToken, auth, commentController.newCommento_
 router.put('/commento_post/segnala/:id', refreshToken, auth, commentController.segnalaCommento_Post);
 router.put('/commento_post/valuta', refreshToken, auth, commentController.valutaCommento_Post);
 
-router.delete('/commento_post/:id', refreshToken, auth, commentController.deleteCommento_Post);
+router.delete('/commento_post/', refreshToken, auth, commentController.deleteCommento_Post);
 
 module.exports = router;
