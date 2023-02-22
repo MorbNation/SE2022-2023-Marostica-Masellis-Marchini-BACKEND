@@ -1,56 +1,23 @@
 require('dotenv').config();
-const { collection } = require('../models/utente');
 const Utente = require('../models/utente');
+const Post = require('../models/post');
+const Commento_Post = require('../models/commento_post');
+const Commento_Profilo = require('../models/commento_profilo');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const newUtente = async (req, res) => {
+
     console.log(req.body);
     console.log("Trying to register new user...");
-
-    //I don't know why, I don't want to know why but for some reason mongodb will not return a valid body to compare
-    // User.findOne({ where: { "username": req.body.username } }, (err, data) => {
-    //     if (!data) {
-    //         const newUser = new User({
-    //             username: req.body.username,
-    //             email: req.body.email,
-    //             psw: req.body.psw,
-    //             description: "Write a description here.",
-    //             proIcon: "placeholder icon path",
-    //             nsfwIconFlag: req.body.nsfwIconFlag,
-    //             banner: "placeholder banner path",
-    //             nsfwBannerFlag: req.body.nsfwBannerFlag,
-    //             userscore: 0,
-    //             lingua: req.body.lingua,
-    //             isAdmin: false,
-    //             nsfwSetting: req.body.nsfwSetting,
-    //             theme: "black",
-    //             followed_users: req.body.followed_users,
-    //             favourites: req.body.favourites,
-    //             timer: 0,
-    //             token: "Ciao"
-    //         });
-
-    //         newUser.save((err, data) => {
-    //             if (err) return res.json({ Error: err });
-    //             return res.json(data);
-    //         });
-    //     } else {
-    //         if (err) return res.json(`Something went wrong. ${err}`);
-    //         return res.json({ message: "User already exists.", req: req.body })
-    //     }
-    // });
 
     let utente = await Utente.findOne({ username: req.body.username }).exec();
 
     if (!utente) {
-
-        const encPsw = await bcrypt.hash(req.body.password, 10);
-
         const newUtente = new Utente({
             username: req.body.username,
             email: req.body.email,
-            password: encPsw,
+            password: req.body.password,
             descrizione: "Write a description here.",
             icona_profilo: "placeholder icon path",
             iconaNSFW: req.body.iconaNSFW,
@@ -68,8 +35,6 @@ const newUtente = async (req, res) => {
 
         const token = jwt.sign({ username: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "15min" });
 
-        newUtente.token = token;
-
         // Il cookie dura 15 min, come il token di JWT
         res.cookie('tokenEpiOpera', token, {maxAge: 900000})
 
@@ -84,8 +49,27 @@ const newUtente = async (req, res) => {
 };
 
 const getUtente = (req, res) => {
+
+    const username = req.body.username_utente;
+
+    const query = { username: username };
+
+    Utente.find(query, (err, utente) => {
+
+        if (err) {
+            return res.json({ Error: err });
+        } else {
+            return res.json(utente);
+        }
+    });
+};
+
+const getUtenti = (req, res) => {
+
     console.log("Listing all users...");
+    
     Utente.find({}, (err, data) => {
+
         if (err) {
             return res.json({ Error: err });
         } else {
@@ -94,23 +78,29 @@ const getUtente = (req, res) => {
     });
 };
 
-const deleteUtente = (req, res) => {
+const deleteUtente = async (req, res) => {
 
-    // TODO: REWORKARE LA LOGICA PER IL TOKEN
+    const username_utente = req.body.username_utente;
+    const username = req.body.username;
 
-    console.log(req.params);
-    let userName = req.params.username;
-    var query = { username: userName };
-    console.log(`Deleting user ${userName}`);
+    var query = { username: username };
+    const utente = await Utente.findOne(query).exec();
 
-    Utente.deleteMany(query, (err, collection) => {
-        if (err) {
-            throw err;
-        } else {
-            console.log(`User ${userName} deleted succesfully.`);
-            res.json({ message: "DELETE User" });
-        }
-    });
+    if(!utente.isAmministratore && utente.username != username_utente){
+        res.status(401).send("Utente non autorizzato.");
+    }
+
+    query = { username: username_utente };
+    Utente.deleteMany(query).exec();
+
+    query = { creatore_post: username_utente };
+    Post.deleteMany(query).exec();
+
+    query = { creatore_commento: username_utente };
+    Commento_Post.deleteMany(query).exec();
+    Commento_Profilo.deleteMany(query).exec();
+
+    res.status(200).send("Utente eliminato con successo.");
 };
 
 const login = async (req, res) => {
@@ -150,4 +140,4 @@ const login = async (req, res) => {
     })
 };
 
-module.exports = { newUtente: newUtente, getUtente, deleteUtente, login };
+module.exports = { newUtente: newUtente, getUtente, getUtenti, deleteUtente, login };

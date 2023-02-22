@@ -16,8 +16,7 @@ const UtenteSchema = new mongoose.Schema({
     nome_tema_selezionato: String,
     utenti_seguiti: [String], //forse dovremmo mettere una lista di User
     post_favoriti: [String],
-    timer: Number,
-    token: String
+    timer: Number
 });
 
 const Utente = mongoose.model('Utente', UtenteSchema);
