@@ -4,6 +4,7 @@ const Utente = require("../models/utente");
 const Post = require("../models/post");
 
 const newCommento_Post = async (req, res) => {
+
     console.log(req.body);
     console.log('Trying to add new comment...');
 
@@ -18,6 +19,7 @@ const newCommento_Post = async (req, res) => {
     });
 
     Post.findOne({ id: req.body.id_post }, (err, post) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -39,14 +41,14 @@ const newCommento_Post = async (req, res) => {
 };
 
 const getCommento_Post = (req, res) => {
-    console.log(req.params);
 
-    const commentAssoc = req.params.id_post;
+    const commentAssoc = req.body.id;
     const query = { id_post: commentAssoc };
 
     console.log(`Getting comment with association id ${commentAssoc}...`);
 
     Commento_Post.find(query, (err, collection) => {
+
         if (err) {
             throw err;
         } else {
@@ -57,6 +59,7 @@ const getCommento_Post = (req, res) => {
 };
 
 const deleteCommento_Post = (req, res) => {
+
     const commentId = req.body.id;
 
     console.log(`Deleting comment with id ${commentId}...`);
@@ -65,12 +68,14 @@ const deleteCommento_Post = (req, res) => {
     const query = { username: username };
 
     Utente.findOne(query, (err, utente) => {
+
         if (err){
             throw err
         } else {
             const query = { id: commentId };
 
             Commento_Post.findOne(query, (err, commento) => {
+
                 if (err){
                     throw err
                 } else {
@@ -80,11 +85,25 @@ const deleteCommento_Post = (req, res) => {
                     }
                     
                     Commento_Post.deleteOne(query, (err, data) => {
+
                         if (err){
                             throw err
                         } else {
                             console.log(`Comment with id ${commentId} deleted succesfully.`);
-                            res.json({ message: "DELETE Comment" });
+
+                            utente.userscore -= commento.punteggio_commento;
+                            utente.save();
+
+                            Post.findOne({ id: commento.id_post }, (err, post) => {
+
+                                if (err) {
+                                    console.log(err);
+                                }
+                                post.numero_commenti -= 1;
+                                post.save();
+                            })
+
+                            return res.json({ message: "DELETE Comment" });
                         }
                     })
                 }
@@ -95,14 +114,13 @@ const deleteCommento_Post = (req, res) => {
 
 const segnalaCommento_Post = (req, res) => {
 
-    //TODO: CONFERMARE UTENTE CON TOKEN
-
-    commentId = req.params.id;
+    commentId = req.body.id;
     var query = { id: commentId };
 
     console.log(`Flagging comment with id ${commentId}...`);
 
     Commento_Post.findOne(query, (err,data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -115,9 +133,41 @@ const segnalaCommento_Post = (req, res) => {
     });
 }
 
-const valutaCommento_Post = (req, res) => {
+const modificaCommento_Post = (req, res) => {
+    
+    const commentId = req.body.id;
+    const testo = req.body.testo;
+    const username = req.body.username;
 
-    //TODO: CONFERMARE UTENTE CON TOKEN
+    var query = { id: commentId };
+
+    Commento_Post.findOne(query, (err, commento) => {
+        
+        if (err) {
+            return res.json({ Error: err });
+        }
+
+        query = { username: username };
+
+        Utente.findOne(query, (err, utente) => {
+
+            if (err) {
+                return res.json({ Error: err });
+            }
+    
+            if(!utente.isAmministratore && utente.username != commento.creatore_commento){
+                return res.status(401).send("Utente non autorizzato.");
+            }
+
+            commento.testo = testo;
+            commento.save();
+
+            return res.status(201).send("Modifica commento effettuata con successo.")
+        })
+    })
+}
+
+const valutaCommento_Post = (req, res) => {
 
     const commentId = req.body.id;
     const username = req.body.username;
@@ -125,9 +175,11 @@ const valutaCommento_Post = (req, res) => {
     var query = { id: commentId };
 
     Commento_Post.findOne(query, (err,data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
+
         if (valutazione != -1 && valutazione != 0 && valutazione != 1) {
             return res.json({ Error: "Valutazione non valida."})
         }
@@ -142,9 +194,11 @@ const valutaCommento_Post = (req, res) => {
         query = { username: data.creatore_commento };
 
         Utente.findOne(query, (err, utente) => {
+
             if (err) {
                 return res.json({ Error: err });
             }
+
             if (utente == null) {
                 return res.json({ Error: "Creatore del commento non trovato."})
             }
@@ -159,4 +213,4 @@ const valutaCommento_Post = (req, res) => {
     })
 }
 
-module.exports = { newCommento_Post, getCommento_Post, segnalaCommento_Post, valutaCommento_Post, deleteCommento_Post };
+module.exports = { newCommento_Post, getCommento_Post, segnalaCommento_Post, valutaCommento_Post, modificaCommento_Post, deleteCommento_Post };
