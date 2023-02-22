@@ -3,37 +3,8 @@ const Utente = require('../models/utente');
 
 const newPost = async (req, res) => {
 
-    //TODO: CONFERMARE UTENTE CON TOKEN
-
     console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
-
-    //I don't know why, I don't want to know why but for some reason mongodb will not return a valid body to compare
-    // Post.findOne({ where: { id: req.body.id } }, (err, data) => {
-    //     if (!data) {
-    //         const newPost = new Post({
-    //             id: req.body.id,
-    //             title: req.body.title,
-    //             date: req.body.req,
-    //             text: req.body.text,
-    //             media: req.body.media,
-    //             tag: req.body.tag,
-    //             punteggio_post: req.body.punteggio_post,
-    //             segnalato: req.body.segnalato,
-    //             numero_commenti: req.body.numero_commenti,
-    //             associato_a_contest: req.body.associato_a_contest,
-    //             creatore_post: req.body.creatore_post
-    //         });
-
-    //         newPost.save((err, data) => {
-    //             if (err) return res.json({ Error: err });
-    //             return res.json(data);
-    //         });
-    //     } else {
-    //         if (err) return res.json(`Something went wrong. ${err}`);
-    //         return res.json({ message: "Post already exists." });
-    //     }
-    // });
 
     let post = await Post.findOne({ id: req.body.id }).exec();
 
@@ -62,9 +33,11 @@ const newPost = async (req, res) => {
 };
 
 const getPosts = (req, res) => {
+
     console.log("Listing all Posts...");
-    //gets all posts
+
     Post.find({}, (err, data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -73,11 +46,14 @@ const getPosts = (req, res) => {
 };
 
 const getPostById = (req, res) => {
-    let postId = req.params.id;
+
+    let postId = req.body.id;
     var query = { id: postId };
+
     console.log("Getting post by id...");
 
     Post.findOne(query, (err,data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -86,11 +62,13 @@ const getPostById = (req, res) => {
 }
 
 const getPostByUser = (req, res) => {
-    let postUser = req.params.username;
+
+    let postUser = req.body.creatore_post;
     var query = { creatore_post: postUser };
     console.log("Getting post by username...");
 
     Post.find(query, (err,data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -100,9 +78,7 @@ const getPostByUser = (req, res) => {
 
 const segnalaPost = (req, res) => {
 
-    //TODO: CONFERMARE UTENTE CON TOKEN
-
-    var postId = req.params.id;
+    var postId = req.body.id;
     var query = { id: postId };
 
     console.log(postId);
@@ -110,6 +86,7 @@ const segnalaPost = (req, res) => {
     console.log(`Flagging post with id ${postId}...`);
 
     Post.find(query, (err,data) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -117,7 +94,6 @@ const segnalaPost = (req, res) => {
         console.log(data);
         
         data.forEach(element => {
-            //element.segnalato = !element.segnalato; Così continua a switchare
             element.segnalato = true;
             element.save();
         });
@@ -127,8 +103,6 @@ const segnalaPost = (req, res) => {
 }
 
 const valutaPost = (req, res) => {
-
-    //TODO: CONFERMARE UTENTE CON TOKEN
 
     const postId = req.body.id;
     const username = req.body.username;
@@ -150,7 +124,7 @@ const valutaPost = (req, res) => {
         const cambioPunteggio = valutazione - valutazionePrecedente;
         data.punteggio_post += cambioPunteggio;
 
-        query = { username: data.username };
+        query = { username: data.creatore_post };
 
         Utente.findOne(query, (err, utente) => {
             if (err) {
@@ -171,8 +145,6 @@ const valutaPost = (req, res) => {
 }
 
 const modificaPost = (req, res) => {
-
-    //TODO: CONFERMARE UTENTE CON TOKEN
 
     const postId = req.body.id;
     const username = req.body.username;
@@ -207,8 +179,6 @@ const visualizzaProfilo = (req, res) => {
 }
 
 const salvaNeiFavoriti = (req, res) => {
-    
-    //TODO: CONFERMARE UTENTE CON TOKEN
 
     const postId = req.body.id;
     const username = req.body.username;
@@ -216,6 +186,7 @@ const salvaNeiFavoriti = (req, res) => {
     const query = { username: username };
 
     Utente.findOne(query, (err, utente) => {
+
         if (err) {
             return res.json({ Error: err });
         }
@@ -228,23 +199,32 @@ const salvaNeiFavoriti = (req, res) => {
     })
 }
 
-const deletePost = (req, res) => {
+const deletePost = async (req, res) => {
 
-    //TODO: CONFERMARE UTENTE CON TOKEN
+    const postId = req.body.id;
+    const username = req.body.username;
 
-    console.log(req.params);
-    var postId = req.params.id;
     var query = { id: postId };
-    console.log(`Deleting post ${postId}...`);
+    const post = await Post.findOne(query).exec();
 
-    Post.deleteMany(query, (err, collection) => {
-        if (err) {
-            throw err;
-        } else {
-            console.log(`Post ${postId} deleted succesfully.`);
-            res.json({ message: "DELETE Post" });
-        }
-    });
+    query = { username: username };
+    const utente = await Utente.findOne(query).exec();
+
+    if(!utente.isAmministratore && utente.username != post.creatore_post){
+        return res.status(401).send("Utente non autorizzato.");
+    }
+
+    query = { username: post.creatore_post };
+    const creatore_post = await Utente.findOne(query).exec();
+
+    query = { id: postId };
+    Post.deleteOne(query).exec();
+
+    creatore_post.userscore -= post.punteggio_post;
+    
+    creatore_post.save();
+
+    return res.status(200).send("Post eliminato con successo.");
 };
 
 module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, salvaNeiFavoriti, deletePost };
