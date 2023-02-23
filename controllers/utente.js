@@ -13,11 +13,13 @@ const newUtente = async (req, res) => {
 
     let utente = await Utente.findOne({ username: req.body.username }).exec();
 
+    const encPsw = await bcrypt.hash(req.body.password, 10);
+
     if (!utente) {
         const newUtente = new Utente({
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: encPsw,
             descrizione: "Write a description here.",
             icona_profilo: "placeholder icon path",
             iconaNSFW: req.body.iconaNSFW,
@@ -111,6 +113,7 @@ const login = async (req, res) => {
     var query = { username: username };
 
     Utente.findOne(query, (err, data) => {
+
         if(err) {
             return res.json({ Error: err });
         }
