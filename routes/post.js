@@ -5,17 +5,21 @@ const refreshToken = require('../middleware/refreshToken');
 const router = express.Router();
 const postController = require("../controllers/post");
 
-router.get('/posts', refreshToken, postController.getPosts);
-router.get('/post/id', refreshToken, postController.getPostById);
-router.get('/post/user', refreshToken, postController.getPostByUser)
+//VIEWS
 
-router.post('/post', refreshToken, auth, postController.newPost);
+//API
 
-router.put('/post/segnala/:id', refreshToken, auth, postController.segnalaPost);
-router.put('/post/valuta', refreshToken, auth, postController.valutaPost);
-router.put('/post/modifica', refreshToken, auth, postController.modificaPost);
-router.put('/post/salvaNeiFavoriti', refreshToken, auth, postController.salvaNeiFavoriti);
+router.get('/api/posts', refreshToken, postController.getPosts);
+router.get('/api/post/id', refreshToken, postController.getPostById);
+router.get('/api/post/user', refreshToken, postController.getPostByUser)
 
-router.delete('/post', refreshToken, auth, postController.deletePost);
+router.post('/api/post', refreshToken, auth, postController.newPost);
+
+router.put('/api/post/segnala', refreshToken, auth, postController.segnalaPost);
+router.put('/api/post/valuta', refreshToken, auth, postController.valutaPost);
+router.put('/api/post/modifica', refreshToken, auth, postController.modificaPost);
+router.put('/api/post/salvaNeiFavoriti', refreshToken, auth, postController.salvaNeiFavoriti);
+
+router.delete('/api/post', refreshToken, auth, postController.deletePost);
 
 module.exports = router;

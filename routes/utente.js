@@ -5,13 +5,17 @@ const refreshToken = require('../middleware/refreshToken');
 const router = express.Router();
 const userController = require("../controllers/utente");
 
-router.get('/utente', refreshToken, userController.getUtente);
-router.get('/utente/all', refreshToken, userController.getUtenti);
+//VIEWS
 
-router.post('/utente', refreshToken, userController.newUtente);
+//API
 
-router.put('/utente/login', refreshToken, userController.login);
+router.get('/api/utente', refreshToken, userController.getUtente);
+router.get('/api/utente/all', refreshToken, userController.getUtenti);
 
-router.delete('/utente', refreshToken, auth, userController.deleteUtente);
+router.post('/api/utente', refreshToken, userController.newUtente);
+
+router.put('//apiutente/login', refreshToken, userController.login);
+
+router.delete('/api/utente', refreshToken, auth, userController.deleteUtente);
 
 module.exports = router;

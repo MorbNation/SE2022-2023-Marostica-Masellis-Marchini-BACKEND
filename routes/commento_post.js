@@ -5,14 +5,18 @@ const refreshToken = require('../middleware/refreshToken');
 const router = express.Router();
 const commentController = require("../controllers/commento_post");
 
-router.get('/commento_post/', refreshToken, commentController.getCommento_Post);
+//VIEWS
 
-router.post('/commento_post', refreshToken, auth, commentController.newCommento_Post);
+//API
 
-router.put('/commento_post/segnala/', refreshToken, auth, commentController.segnalaCommento_Post);
-router.put('/commento_post/valuta', refreshToken, auth, commentController.valutaCommento_Post);
-router.put('/commento_post/modifica', refreshToken, auth, commentController.modificaCommento_Post);
+router.get('/api/commento_post/', refreshToken, commentController.getCommento_Post);
 
-router.delete('/commento_post/', refreshToken, auth, commentController.deleteCommento_Post);
+router.post('/api/commento_post', refreshToken, auth, commentController.newCommento_Post);
+
+router.put('/api/commento_post/segnala/', refreshToken, auth, commentController.segnalaCommento_Post);
+router.put('/api/commento_post/valuta', refreshToken, auth, commentController.valutaCommento_Post);
+router.put('/api/commento_post/modifica', refreshToken, auth, commentController.modificaCommento_Post);
+
+router.delete('/api/commento_post/', refreshToken, auth, commentController.deleteCommento_Post);
 
 module.exports = router;

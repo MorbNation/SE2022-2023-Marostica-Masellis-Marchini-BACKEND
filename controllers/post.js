@@ -175,7 +175,9 @@ const modificaPost = (req, res) => {
 }
 
 const visualizzaProfilo = (req, res) => {
-    // TODO
+
+    // É una roba che dovrebbe fare il front end, dobbiamo spostarla e vedere come organizzarci
+
 }
 
 const salvaNeiFavoriti = (req, res) => {
