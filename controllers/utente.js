@@ -75,6 +75,24 @@ const getUtenti = (req, res) => {
     });
 };
 
+const seguiUtente = async (req, res) => {
+
+    const username = req.body.username;
+    const utenteDaSeguire = req.body.utenteDaSeguire;
+
+    const query = { username: username };
+    var utente = await Utente.findOne(query).exec();
+
+    if (!utente) return res.status(404).send("Utente da seguire non trovato.");
+
+    if (!utente.utenti_seguiti.includes(utenteDaSeguire)) utente.utenti_seguiti.push(utenteDaSeguire);
+    else utente.utenti_seguiti = utente.utenti_seguiti.filter(entry => entry != utenteDaSeguire);
+
+    utente.save();
+
+    return res.status(200).send("Utente seguito correttamente.");
+}
+
 const deleteUtente = async (req, res) => {
 
     const username_utente = req.body.username_utente;
@@ -115,6 +133,10 @@ const login = async (req, res) => {
 
         console.log(data);
 
+        if(!data) {
+            return res.status(404).send("Utente non trovato.");
+        }
+
         if(bcrypt.compare(psw, data.password)){
             var token = jwt.sign({ username: data.username }, process.env.TOKEN_KEY, { expiresIn: "15m" });
             data.token = token;
@@ -138,4 +160,4 @@ const login = async (req, res) => {
     })
 };
 
-module.exports = { newUtente: newUtente, getUtente, getUtenti, deleteUtente, login };
+module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login };

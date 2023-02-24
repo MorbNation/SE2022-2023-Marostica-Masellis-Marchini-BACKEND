@@ -14,7 +14,8 @@ router.get('/api/utente/all', refreshToken, userController.getUtenti);
 
 router.post('/api/utente', refreshToken, userController.newUtente);
 
-router.put('//apiutente/login', refreshToken, userController.login);
+router.put('/api/utente/login', refreshToken, userController.login);
+router.put('/api/utente/segui', refreshToken, auth, userController.seguiUtente);
 
 router.delete('/api/utente', refreshToken, auth, userController.deleteUtente);
 
