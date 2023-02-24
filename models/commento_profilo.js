@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Commento_ProfiloSchema = new mongoose.Schema({
     id: {
-        type: Number,
+        type: String,
         unique: true
     },
     profilo_commentato: String,

@@ -2,6 +2,7 @@ const { collection } = require("../models/commento_post");
 const Commento_Post = require("../models/commento_post");
 const Utente = require("../models/utente");
 const Post = require("../models/post");
+const { v4: uuidv4 } = require('uuid');
 
 const newCommento_Post = async (req, res) => {
 
@@ -9,7 +10,7 @@ const newCommento_Post = async (req, res) => {
     console.log('Trying to add new comment...');
 
     const newCommento_Post = new Commento_Post({
-        id: req.body.id,
+        id: uuidv4(),
         id_post: req.body.id_post,
         data: Date.now(),
         testo: req.body.testo,

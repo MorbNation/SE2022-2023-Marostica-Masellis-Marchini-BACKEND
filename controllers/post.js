@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const Utente = require('../models/utente');
+const { v4: uuidv4 } = require('uuid');
 
 const newPost = async (req, res) => {
 
@@ -10,7 +11,7 @@ const newPost = async (req, res) => {
 
     if (!post) {
         const newPost = new Post({
-            id: req.body.id,
+            id: uuidv4(),
             titolo: req.body.titolo,
             data: Date.now(),
             testo: req.body.testo,
