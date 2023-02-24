@@ -12,7 +12,7 @@ const newCommento_Profilo = async (req, res) => {
         id: req.body.id,
         profilo_commentato: req.body.profilo_commentato,
         titolo: req.body.titolo,
-        data: req.body.data,
+        data: Date.now(),
         testo: req.body.testo,
         punteggio: 0,
         segnalato: false,

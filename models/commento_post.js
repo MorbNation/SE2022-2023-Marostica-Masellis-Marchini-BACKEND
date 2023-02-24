@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Commento_PostSchema = new mongoose.Schema({
     id: Number,
     id_post: Number,
-    data: String,
+    data: Number,
     testo: String,
     punteggio_commento:{
         type: Number,

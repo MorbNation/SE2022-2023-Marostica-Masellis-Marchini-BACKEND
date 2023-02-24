@@ -4,7 +4,7 @@ const Commento_ProfiloSchema = new mongoose.Schema({
     id: Number,
     profilo_commentato: String,
     titolo: String,
-    data: String,
+    data: Number,
     testo: String,
     punteggio_commento: Number,
     punteggio_commento:{

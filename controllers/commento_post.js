@@ -11,7 +11,7 @@ const newCommento_Post = async (req, res) => {
     const newCommento_Post = new Commento_Post({
         id: req.body.id,
         id_post: req.body.id_post,
-        data: req.body.data,
+        data: Date.now(),
         testo: req.body.testo,
         punteggio: 0,
         segnalato: false,

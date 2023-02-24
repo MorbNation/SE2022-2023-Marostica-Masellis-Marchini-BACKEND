@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     id: Number,
     titolo: String,
-    data: String,
+    data: Number,
     testo: String,
     media: String, //placeholder
     tag: [String],

@@ -12,7 +12,7 @@ const newPost = async (req, res) => {
         const newPost = new Post({
             id: req.body.id,
             titolo: req.body.titolo,
-            data: req.body.data,
+            data: Date.now(),
             testo: req.body.testo,
             media: req.body.media,
             tag: req.body.tag,
