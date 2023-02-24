@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const Commento_ProfiloSchema = new mongoose.Schema({
-    id: Number,
+    id: {
+        type: Number,
+        unique: true
+    },
     profilo_commentato: String,
     titolo: String,
     data: Number,

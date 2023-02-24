@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const Commento_PostSchema = new mongoose.Schema({
-    id: Number,
+    id: {
+        type: Number,
+        unique: true
+    },
     id_post: Number,
     data: Number,
     testo: String,
