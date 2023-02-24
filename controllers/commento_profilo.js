@@ -15,8 +15,6 @@ const newCommento_Profilo = async (req, res) => {
         titolo: req.body.titolo,
         data: Date.now(),
         testo: req.body.testo,
-        punteggio: 0,
-        segnalato: false,
         creatore_commento: req.body.username
     });
 

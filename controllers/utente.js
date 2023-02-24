@@ -20,19 +20,14 @@ const newUtente = async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: encPsw,
-            descrizione: "Write a description here.",
-            icona_profilo: "placeholder icon path",
+            icona_profilo: req.body.icona_profilo,
             iconaNSFW: req.body.iconaNSFW,
-            banner: "placeholder banner path",
+            banner: req.body.banner,
             bannerNSFW: req.body.bannerNSFW,
-            userscore: 0,
             lingua: req.body.lingua,
-            isAmministratore: req.body.isAmministratore || false,
+            isAmministratore: req.body.isAmministratore,
             nsfw: req.body.nsfw,
-            nome_tema_selezionato: "black",
-            utenti_seguiti: req.body.utenti_seguiti,
-            post_favoriti: req.body.post_favoriti,
-            timer: 0,
+            nome_tema_selezionato: req.body.nome_tema_selezionato
         });
 
         const token = jwt.sign({ username: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "15min" });

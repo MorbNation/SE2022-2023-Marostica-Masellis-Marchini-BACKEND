@@ -17,9 +17,6 @@ const newPost = async (req, res) => {
             testo: req.body.testo,
             media: req.body.media,
             tag: req.body.tag,
-            punteggio_post: req.body.punteggio_post,
-            segnalato: req.body.segnalato,
-            numero_commenti: req.body.numero_commenti,
             associato_a_contest: req.body.associato_a_contest,
             creatore_post: req.body.username
         });

@@ -1,26 +1,20 @@
 const mongoose = require('mongoose');
 
 const UtenteSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        unique: true
-    },
-    email: {
-        type: String,
-        unique: true
-    },
-    password: String,
-    descrizione: String,
-    icona_profilo: String, //placeholder for media
-    iconaNSFW: Boolean,
-    banner: String, //placeholder for media
-    bannerNSFW: Boolean,
-    userscore: Number,
-    lingua: { type: String, enum: ["italiano", "inglese"] },
-    isAmministratore: Boolean,
-    nsfw: { type: String, enum: ["no", "blur", "yes"] },
-    nome_tema_selezionato: String,
-    utenti_seguiti: [String], //forse dovremmo mettere una lista di User
+    username: { type: String, unique: true, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    descrizione: { type: String, default: "Ciao!" },
+    icona_profilo: { type: String, default: "DefaultPathPfp" }, //placeholder for media
+    iconaNSFW: { type: Boolean, default: false },
+    banner: { type: String, default: "DefaultPathBanner" }, //placeholder for media
+    bannerNSFW: { type: Boolean, default: false },
+    userscore: { type: Number, default: 0 },
+    lingua: { type: String, enum: ["italiano", "inglese"] , default: "italiano" },
+    isAmministratore: { type: Boolean, default: false },
+    nsfw: { type: String, enum: ["no", "blur", "yes"] , default: "no" },
+    nome_tema_selezionato: { type: String, default: "default" },
+    utenti_seguiti: [String],
     post_favoriti: [String]
 });
 

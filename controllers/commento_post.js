@@ -14,8 +14,6 @@ const newCommento_Post = async (req, res) => {
         id_post: req.body.id_post,
         data: Date.now(),
         testo: req.body.testo,
-        punteggio: 0,
-        segnalato: false,
         creatore_commento: req.body.username
     });
 
