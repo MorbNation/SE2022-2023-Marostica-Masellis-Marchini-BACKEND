@@ -125,39 +125,33 @@ const login = async (req, res) => {
 
     var query = { username: username };
 
-    Utente.findOne(query, (err, data) => {
+    Utente.findOne(query, (err, utente) => {
 
         if(err) {
             return res.json({ Error: err });
         }
 
-        console.log(data);
+        console.log(utente);
 
-        if(!data) {
+        if(!utente) {
             return res.status(404).send("Utente non trovato.");
         }
 
-        if(bcrypt.compare(psw, data.password)){
-            var token = jwt.sign({ username: data.username }, process.env.TOKEN_KEY, { expiresIn: "15m" });
-            data.token = token;
-            console.log(data.token);
-            data.save();
+        if(bcrypt.compare(psw, utente.password)){
+            var token = jwt.sign({ username: utente.username }, process.env.TOKEN_KEY, { expiresIn: "15m" });
+            console.log(utente.token);
             res.cookie('tokenEpiOpera', token, {maxAge: 900000});
         }
 
-        /*
-        data.forEach(async element => {
-            if(await bcrypt.compare(psw, element.password)) {
-                var token = jwt.sign({ user_id: element.username }, process.env.TOKEN_KEY, { expiresIn: "2h" });
-                element.token = token;
-                console.log(element.token);
-                element.save();
-            }
-        });
-        */
-
-        return res.json(data);
+        return res.status(200).send("Login effettuato con successo.");
     })
 };
 
-module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login };
+const logout = async (req, res) => {
+
+    res.clearCookie('tokenEpiOpera');
+
+    return res.status(200).send("Logout effettuato con successo.");
+}
+
+module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login, logout };
