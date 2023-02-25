@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const token = require('../util/token');
+const tokenManager = require('../util/token');
 
 const refreshToken = (req, res, next) => {
     console.log("Refresh Token invoked");
@@ -13,7 +13,7 @@ const refreshToken = (req, res, next) => {
 
     try{
         const oldToken = jwt.verify(cookie, process.env.TOKEN_KEY);
-        token.setCookie(res, { username: oldToken.username });
+        tokenManager.setCookie(res, { username: oldToken.username });
     } catch (err) {
         return next();
     }

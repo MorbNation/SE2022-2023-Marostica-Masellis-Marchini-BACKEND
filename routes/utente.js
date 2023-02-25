@@ -17,6 +17,10 @@ router.post('/api/utente', refreshToken, userController.newUtente);
 router.put('/api/utente/login', refreshToken, userController.login);
 router.put('/api/utente/logout', refreshToken, userController.logout);
 router.put('/api/utente/segui', refreshToken, auth, userController.seguiUtente);
+router.put('/api/utente/modificaMail', refreshToken, auth, userController.modificaMail);
+router.put('/api/utente/modificaPassword', refreshToken, auth, userController.modificaPassword);
+router.put('/api/utente/modificaNSFW', refreshToken, auth, userController.modificaNSFW);
+router.put('/api/utente/cambiaLingua', refreshToken, auth, userController.cambiaLingua);
 
 router.delete('/api/utente', refreshToken, auth, userController.deleteUtente);
 

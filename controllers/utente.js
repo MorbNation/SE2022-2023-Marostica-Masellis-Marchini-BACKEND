@@ -5,7 +5,7 @@ const Commento_Post = require('../models/commento_post');
 const Commento_Profilo = require('../models/commento_profilo');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const token = require('../util/token');
+const tokenManager = require('../util/token');
 
 const newUtente = async (req, res) => {
 
@@ -31,7 +31,7 @@ const newUtente = async (req, res) => {
             nome_tema_selezionato: req.body.nome_tema_selezionato
         });
 
-        token.setCookie(res, { username: req.body.username });
+        tokenManager.setCookie(res, { username: req.body.username });
 
         newUtente.save((err, data) => {
             if (err) return res.json({ Error: err });
@@ -135,11 +135,14 @@ const login = async (req, res) => {
             return res.status(404).send("Utente non trovato.");
         }
 
-        if(bcrypt.compare(psw, utente.password)){
-            token.setCookie(res, { username: utente.username });
-        }
+        bcrypt.compare(psw, utente.password, (err, result) => {
+            if(result){
+                tokenManager.setCookie(res, { username: utente.username });
+                return res.status(200).send("Login effettuato con successo.");
+            }
 
-        return res.status(200).send("Login effettuato con successo.");
+            return res.status(401).send("Password sbagliata.")
+        })
     })
 };
 
@@ -150,4 +153,64 @@ const logout = async (req, res) => {
     return res.status(200).send("Logout effettuato con successo.");
 }
 
-module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login, logout };
+const modificaMail = async (req, res) => {
+
+    const username = req.body.username;
+    const email = req.body.email;
+
+    const query = { username: username };
+    const utente = await Utente.findOneAndUpdate(query, { email: email }).exec();
+
+    res.status(200).send("Mail cambiata con sucesso.");
+}
+
+const modificaPassword = async (req, res) => {
+
+    const username = req.body.username;
+    //const encPsw =  await bcrypt.hash(req.body.password, 10);
+    const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+
+    const query = { username: username };
+    const utente = await Utente.findOne(query).exec();
+
+    //if (utente.password != encPsw){
+    //     res.status(401).send("Password sbagliata.")
+    //}
+
+    utente.password = newPassword;
+    utente.save();
+
+    return res.status(200).send("Password cambiata con successo.");
+}
+
+const modificaNSFW = async (req, res) => {
+
+    const username = req.body.username;
+    const nsfw = req.body.nsfw;
+
+    if (nsfw != "no" && nsfw != "blur" && nsfw != "yes"){
+        return res.status(400).send("NSFW non valido.");
+    }
+
+    const query = { username: username };
+    const utente = await Utente.findOneAndUpdate(query, { nsfw: nsfw }).exec();
+
+    return res.status(200).send("NSFW cambiato con successo.");
+}
+
+const cambiaLingua = async (req, res) => {
+
+    const username = req.body.username;
+    const lingua = req.body.lingua;
+
+    if (lingua != "italiano" && lingua != "inglese"){
+        return res.status(400).send("Lingua non valida.");
+    }
+
+    const query = { username: username };
+    const utente = await Utente.findOneAndUpdate(query, { lingua: lingua }).exec();
+
+    return res.status(200).send("Lingua cambiata con successo.");
+}
+
+module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login, logout, modificaMail, modificaPassword, modificaNSFW, cambiaLingua };
