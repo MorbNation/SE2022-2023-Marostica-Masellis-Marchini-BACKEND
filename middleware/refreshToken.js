@@ -1,5 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const token = require('../util/token');
 
 const refreshToken = (req, res, next) => {
     console.log("Refresh Token invoked");
@@ -11,11 +12,8 @@ const refreshToken = (req, res, next) => {
     }
 
     try{
-        const token = jwt.verify(cookie, process.env.TOKEN_KEY);
-        console.log(token.username);
-        const newToken = jwt.sign({ username: token.username }, process.env.TOKEN_KEY, { expiresIn: "15min" });
-        res.cookie('tokenEpiOpera', newToken, {maxAge: 900000})
-        console.log(newToken);
+        const oldToken = jwt.verify(cookie, process.env.TOKEN_KEY);
+        token.setCookie(res, { username: oldToken.username });
     } catch (err) {
         return next();
     }

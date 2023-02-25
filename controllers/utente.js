@@ -5,6 +5,7 @@ const Commento_Post = require('../models/commento_post');
 const Commento_Profilo = require('../models/commento_profilo');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const token = require('../util/token');
 
 const newUtente = async (req, res) => {
 
@@ -30,10 +31,7 @@ const newUtente = async (req, res) => {
             nome_tema_selezionato: req.body.nome_tema_selezionato
         });
 
-        const token = jwt.sign({ username: req.body.username }, process.env.TOKEN_KEY, { expiresIn: "15min" });
-
-        // Il cookie dura 15 min, come il token di JWT
-        res.cookie('tokenEpiOpera', token, {maxAge: 900000})
+        token.setCookie(res, { username: req.body.username });
 
         newUtente.save((err, data) => {
             if (err) return res.json({ Error: err });
@@ -138,9 +136,7 @@ const login = async (req, res) => {
         }
 
         if(bcrypt.compare(psw, utente.password)){
-            var token = jwt.sign({ username: utente.username }, process.env.TOKEN_KEY, { expiresIn: "15m" });
-            console.log(utente.token);
-            res.cookie('tokenEpiOpera', token, {maxAge: 900000});
+            token.setCookie(res, { username: utente.username });
         }
 
         return res.status(200).send("Login effettuato con successo.");
