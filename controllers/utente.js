@@ -6,6 +6,7 @@ const Commento_Profilo = require('../models/commento_profilo');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const tokenManager = require('../util/token');
+const textRequirements = require('../util/textRequirements');
 
 const newUtente = async (req, res) => {
 
@@ -15,6 +16,16 @@ const newUtente = async (req, res) => {
     let utente = await Utente.findOne({ username: req.body.username }).exec();
 
     const encPsw = await bcrypt.hash(req.body.password, 10);
+
+    if (!textRequirements.checkMail(req.body.email)) {
+        return res.status(400).send(`La mail usata per la registrazione deve essere del dominio unitn.it`);
+    }
+    if (!textRequirements.checkUsername(req.body.username)) {
+        return res.status(400).send(`L'username deve essere almeno lungo 3 caratteri e non deve contenere i caratteri "@" e "#"`);
+    }
+    if (!textRequirements.checkPassword(req.body.password)) {
+        return res.status(400).send(`La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri`);
+    }
 
     if (!utente) {
         const newUtente = new Utente({
