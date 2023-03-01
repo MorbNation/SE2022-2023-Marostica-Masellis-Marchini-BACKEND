@@ -8,7 +8,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 host: localhost:8080
-basepath: /
+basepath: /api/
 schemes:
   - http
 consumes:
@@ -41,7 +41,7 @@ paths:
     get:
       tags:
         - Utenti
-      summary: Retrieves all users registered on the database
+      summary: Retrieves a user registered on the database
       responses:
         '200':
           description: OK
@@ -68,9 +68,7 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
-
-  /utente/{username}:
-
+      
     delete:
       tags:
         - Utenti
@@ -91,6 +89,46 @@ paths:
       responses:
         '400':
           description: Invalid username
+        '403':
+          description: Forbidden
+        '404':
+          description: User not found
+
+  /utente/all:
+    
+    get:
+      tags:
+        - Utenti
+      summary: Retrieves all users registered on the database
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref:  '#/definitions/Utente'
+
+  /utente/login:
+    put:
+      tags: 
+        - Utenti
+      summary: Generates a new login token for the user
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user which is logging in
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          description: The password of the user which is logging in
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Wrong password
         '403':
           description: Forbidden
         '404':
@@ -603,31 +641,49 @@ definitions:
         example: user@something.domain
       password:
         type: string
+      descrizione:
+        type: string
+        default: Ciao!
+      icona_profilo:
+        type: string
+        default: DefaultPathPfp
       iconaNSFW:
         type: boolean
         default: false
+      banner:
+        type: string
+        default: DefaultPathBanner
       bannerNSFW:
         type: boolean
         default: false
+      userscore:
+        type: number
+        default: 0
       lingua:
         type: string
         enum:
           - italiano
           - inglese
+        default: italiano
+      isAmministratore:
+        type: boolean
+        default: false
       nsfw:
         type: string
         enum:
           - 'no'
           - blur
           - 'yes'
+        default: 'no'
       utenti_seguiti:
         type: array
         items:
-          type: number
+          type: string
       post_favoriti:
         type: array
         items:
-          type: number
+          type: string
+      
 
   Post:
     required:
@@ -638,7 +694,7 @@ definitions:
       titolo:
         type: string
       data:
-        type: string
+        type: number
       testo:
         type: string
       media:
@@ -662,6 +718,11 @@ definitions:
           type: number
       creatore_post:
         type: string
+      valutazioni:
+        type: number
+        additionalProperties:
+          type: string
+        
 
   Commento_Post:
     required:
@@ -672,7 +733,7 @@ definitions:
       id_post:
         type: number
       data:
-        type: string
+        type: number
       testo:
         type: string
       punteggio_commento:
@@ -683,10 +744,15 @@ definitions:
         default: false
       creatore_commento:
         type: string
+      valutazioni:
+        type: number
+        additionalProperties:
+          type: string
 
   Commento_Profilo:
     required:
       - id
+        creatore_commento
     properties:
       id:
         type: number
@@ -695,7 +761,7 @@ definitions:
       titolo:
         type: string
       data:
-        type: string
+        type: number
       testo: 
         type: string
       punteggio_commento:
@@ -706,6 +772,10 @@ definitions:
         default: false
       creatore_commento:  
         type: string
+      valutazioni:
+        type: number  
+        additionalProperties:
+          type: string
 
   Valutazione:
     required:
@@ -718,6 +788,6 @@ definitions:
       username:
         type: string
       valutazione:
-        type: number
+        type: number   
 
 ##Definitions end
