@@ -727,6 +727,7 @@ definitions:
   Commento_Post:
     required:
       - id
+        creatore_commento
     properties:
       id:
         type: number
