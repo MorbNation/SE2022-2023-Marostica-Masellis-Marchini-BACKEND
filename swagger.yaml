@@ -171,7 +171,99 @@ paths:
           description: OK
         '404':
           description: Utente non trovato
+  
+  /api/utente/modificaMail:
+    put:
+      tags:
+        - Utenti
+      summary: Change the mail field of a logged in user
+      parameters: 
+        - name: body
+          in: body
+          description: Username and new mail
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User not found
 
+  /api/utente/modificaPassword:
+    put:
+      tags:
+        - Utenti
+      summary: Change the password field of a logged in user
+      parameters: 
+        - name: body
+          in: body
+          description: Username and new password
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              newPassword:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User not found
+        
+  /api/utente/modificaNSFW:
+    put:
+      tags:
+        - Utenti
+      summary: Change the NSFW setting of a user
+      parameters:
+        - name: body
+          in: body
+          description: Username of the user whose setting will be changed and new NSFW setting
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              nsfw: 
+                type: string
+      responses:  
+        '200':
+          description: OK
+        '400':
+          description: Invalid setting
+        '404':
+          description: User not found
+
+  /api/utente/cambiaLingua:
+    put:
+      tags:
+        - Utenti
+      summary: Change the language setting of a user
+      parameters:
+        - name: body
+          in: body
+          description: Username of the user whose setting will be changed and new language setting
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              lingua: 
+                type: string
+      responses:  
+        '200':
+          description: OK
+        '400':
+          description: Invalid setting
+        '404':
+          description: User not found
+        
 #Utente APIs end
 
 #Post APIs begin
