@@ -36,12 +36,21 @@ paths:
 
 #Utente APIs begin
 
-  /utente:
+  /api/utente:
 
     get:
       tags:
         - Utenti
       summary: Retrieves a user registered on the database
+      parameters:
+        - name: body
+          in: body
+          description: Name of the user to retrieve
+          required: true
+          schema:
+            properties:
+              username_utente:
+                type: string
       responses:
         '200':
           description: OK
@@ -94,7 +103,7 @@ paths:
         '404':
           description: User not found
 
-  /utente/all:
+  /api/utente/all:
     
     get:
       tags:
@@ -106,24 +115,22 @@ paths:
           schema:
             $ref:  '#/definitions/Utente'
 
-  /utente/login:
+  /api/utente/login:
     put:
       tags: 
         - Utenti
       summary: Generates a new login token for the user
       parameters:
-        - name: username
-          in: path
-          description: The username of the user which is logging in
+        - name: body
+          in: body
+          description: Username and password of user to login
           required: true
           schema:
-            type: string
-        - name: password
-          in: path
-          description: The password of the user which is logging in
-          required: true
-          schema:
-            type: string
+            properties:
+              username:
+                type: string
+              password: 
+                type: string
       responses:
         '200':
           description: OK
@@ -133,12 +140,43 @@ paths:
           description: Forbidden
         '404':
           description: User not found
+  
+  /api/utente/logout:
+    put:
+      tags:
+        - Utenti
+      summary: Logs out a user by clearing the associated cookie
+      responses:
+        '200':
+          description: OK
+
+  /api/utente/segui:
+    put: 
+      tags:
+        - Utenti
+      summary: Associates a user to the requesting user's followed list
+      parameters:
+        - name: body
+          in: body
+          description: Username of requesting user and username of user to be followed
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              utenteDaSeguire:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Utente non trovato
 
 #Utente APIs end
 
 #Post APIs begin
 
-  /posts:
+  /api/posts:
 
     get:
       tags:
@@ -150,7 +188,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/id/{id}:
+  /api/post/id/{id}:
 
     get:
       tags: 
@@ -168,7 +206,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/user/{username}:
+  /api/post/user/{username}:
 
     get: 
       tags:
@@ -186,7 +224,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/segnala/{id}:
+  /api/post/segnala/{id}:
 
     put:
       tags:
@@ -217,7 +255,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/valuta: 
+  /api/post/valuta: 
 
     put:
       tags:
@@ -255,7 +293,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/modifica:
+  /api/post/modifica:
 
     put:
       tags:
@@ -300,7 +338,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/salvaNeiFavoriti:
+  /api/post/salvaNeiFavoriti:
 
     put:
       tags:
@@ -336,7 +374,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post:
+  /api/post:
 
     post:
       tags:
@@ -367,7 +405,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/{id}:
+  /api/post/{id}:
 
     delete:
       tags:
@@ -398,7 +436,7 @@ paths:
 
 #Commento_Post APIs begin
 
-  /commento_post:
+  /api/commento_post:
 
     post:
       tags:
@@ -429,7 +467,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_post/{id_post}:
+  /api/commento_post/{id_post}:
 
     get:
       tags:
@@ -448,7 +486,7 @@ paths:
         '404':
           description: Comment not found
 
-  /commento_post/{id}:
+  /api/commento_post/{id}:
 
     delete:
       tags:
@@ -475,7 +513,7 @@ paths:
         '404':
           description: Comment not found
 
-  /commento_post/segnala/{id}:
+  /api/commento_post/segnala/{id}:
     put:  
       tags: 
         - Commenti Post
@@ -505,7 +543,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_post/valuta:
+  /api/commento_post/valuta:
     put:
       tags:
         - Commenti Post
@@ -546,7 +584,7 @@ paths:
 
 #Commento_Profilo APIs begin
 
-  /commento_profilo:
+  /api/commento_profilo:
 
     post: 
       tags:
@@ -577,7 +615,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_profilo/{profilo_commentato}:
+  /api/commento_profilo/{profilo_commentato}:
 
     get:
       tags:
@@ -596,7 +634,7 @@ paths:
         '404':
           description: Profile not found
 
-  /commento_profilo/{id}:
+  /api/commento_profilo/{id}:
 
     delete:
       tags:
