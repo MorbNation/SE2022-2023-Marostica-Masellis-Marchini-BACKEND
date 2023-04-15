@@ -9,9 +9,11 @@ const newPost = async (req, res) => {
 
     let post = await Post.findOne({ id: req.body.id }).exec();
 
+    const id = uuidv4();
+
     if (!post) {
         const newPost = new Post({
-            id: uuidv4(),
+            id: id,
             titolo: req.body.titolo,
             data: Date.now(),
             testo: req.body.testo,
@@ -23,10 +25,10 @@ const newPost = async (req, res) => {
 
         newPost.save((err, data) => {
             if (err) return res.json({ Error: err });
-            return res.json(data);
+            return res.status(200).send(id);
         });
     } else {
-        return res.json({ message: "Post already exists", req: req.body })
+        return res.status(400).send("Il post esiste giá.");
     }
 };
 
@@ -37,9 +39,9 @@ const getPosts = (req, res) => {
     Post.find({}, (err, data) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(400).json({ Error: err });
         }
-        return res.json(data);
+        return res.status(200).json(data);
     });
 };
 
