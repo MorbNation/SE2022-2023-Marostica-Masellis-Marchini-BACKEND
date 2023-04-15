@@ -24,11 +24,11 @@ const newPost = async (req, res) => {
         });
 
         newPost.save((err, data) => {
-            if (err) return res.json({ Error: err });
-            return res.status(200).send(id);
+            if (err) return res.status(500).send();
+            return res.status(200).json({ Id: id });
         });
     } else {
-        return res.status(400).send("Il post esiste giá.");
+        return res.status(400).json({ Error: "Il post esiste giá."});
     }
 };
 
@@ -39,9 +39,16 @@ const getPosts = (req, res) => {
     Post.find({}, (err, data) => {
 
         if (err) {
-            return res.status(400).json({ Error: err });
+            return res.status(500).send();
         }
-        return res.status(200).json(data);
+
+        const retval = [];
+
+        data.forEach(element => {
+            retval.push(element.id);
+        });
+
+        return res.status(200).json(retval);
     });
 };
 
@@ -55,24 +62,33 @@ const getPostById = (req, res) => {
     Post.findOne(query, (err,data) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
-        return res.json(data);
+
+        if (!data) {
+            return res.status(404).json({ Error: "Il post non esiste."});
+        }
+
+        return res.status(200).json(data);
     });
 }
 
-const getPostByUser = (req, res) => {
+const getPostByUser = async (req, res) => {
 
     let postUser = req.body.creatore_post;
     var query = { creatore_post: postUser };
     console.log("Getting post by username...");
 
+    const userExists = await Utente.findOne({ username: postUser }).exec();
+
+    if (!userExists) return res.status(404).json({ Error: "L'utente non esiste."});
+
     Post.find(query, (err,data) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
-        return res.json(data);
+        return res.status(200).json(data);
     });
 }
 
@@ -85,20 +101,20 @@ const segnalaPost = (req, res) => {
 
     console.log(`Flagging post with id ${postId}...`);
 
-    Post.find(query, (err,data) => {
+    Post.findOne(query, (err,data) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
 
-        console.log(data);
+        if(!data){
+            return res.status(404).json({ Error: "Post non trovato." });
+        }
         
-        data.forEach(element => {
-            element.segnalato = true;
-            element.save();
-        });
+        data.segnalato = true;
+        data.save();
 
-        return res.json(data);
+        return res.status(200).send();
     });
 }
 
@@ -111,10 +127,15 @@ const valutaPost = (req, res) => {
 
     Post.findOne(query, (err,data) => {
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
+
         if (valutazione != -1 && valutazione != 0 && valutazione != 1) {
-            return res.json({ Error: "Valutazione non valida."})
+            return res.status(500).send();
+        }
+
+        if (!data) {
+            return res.status(404).json({ Error: "Post non trovato."});
         }
 
         var valutazionePrecedente = data.valutazioni.get(username);
@@ -128,10 +149,10 @@ const valutaPost = (req, res) => {
 
         Utente.findOne(query, (err, utente) => {
             if (err) {
-                return res.json({ Error: err });
+                return res.status(500).send();
             }
-            if (utente == null) {
-                return res.json({ Error: "Creatore del post non trovato."})
+            if (!utente) {
+                return res.status(404).json({ Error: "Creatore del post non trovato."});
             }
 
             utente.userscore += cambioPunteggio;
@@ -139,7 +160,7 @@ const valutaPost = (req, res) => {
             utente.save();
             data.save();
 
-            return res.json({ Result: "Valutazione effettuata con successo", punteggio_post: data.punteggio_post});
+            return res.status(200).json({ PunteggioPost: data.punteggio_post, ValutazioneAttuale: valutazione });
         })
     })
 }
@@ -156,11 +177,17 @@ const modificaPost = (req, res) => {
     const query = { id: postId };
 
     Post.findOne(query, (err, post) => {
+
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
+
+        if (!post) {
+            return res.status(404).json({ Error: "Il post non esiste." });
+        }
+
         if (post.creatore_post != username){
-            return res.json({ Error: "L'utente che ha effettuato la richiesta non é il creatore del post." })
+            return res.status(401).json({ Error: "Utente non autorizzato." });
         }
 
         post.titolo = titolo;
@@ -170,7 +197,7 @@ const modificaPost = (req, res) => {
 
         post.save();
 
-        return res.json({ Result: "Modifica effettuata con successo." });
+        return res.status(200).json(post);
     })
 }
 
@@ -180,24 +207,30 @@ const visualizzaProfilo = (req, res) => {
 
 }
 
-const salvaNeiFavoriti = (req, res) => {
+const salvaNeiFavoriti = async (req, res) => {
 
     const postId = req.body.id;
     const username = req.body.username;
 
     const query = { username: username };
 
+    const postExists = await Post.findOne({ id: postId }).exec();
+
+    if (!postExists) {
+        return res.status(404).json({ Error: "Il post non esiste." });
+    }
+
     Utente.findOne(query, (err, utente) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
 
         // Se un post é giá favorito dall'utente, allora non succede nulla.
         if (!utente.post_favoriti.includes(postId)) utente.post_favoriti.push(postId);
         utente.save();
 
-        return res.json(utente);
+        return res.status(200).send();;
     })
 }
 
@@ -209,11 +242,15 @@ const deletePost = async (req, res) => {
     var query = { id: postId };
     const post = await Post.findOne(query).exec();
 
+    if (!post) {
+        return res.status(404).json({ Error: "Il post non esiste." });
+    }
+
     query = { username: username };
     const utente = await Utente.findOne(query).exec();
 
     if(!utente.isAmministratore && utente.username != post.creatore_post){
-        return res.status(401).send("Utente non autorizzato.");
+        return res.status(401).json({ Error: "Utente non autorizzato." });
     }
 
     query = { username: post.creatore_post };
@@ -226,7 +263,7 @@ const deletePost = async (req, res) => {
     
     creatore_post.save();
 
-    return res.status(200).send("Post eliminato con successo.");
+    return res.status(200).send();
 };
 
 module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, salvaNeiFavoriti, deletePost };

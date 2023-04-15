@@ -6,7 +6,7 @@ const verifyToken = (req, res, next) => {
     
     const token = req.cookies.tokenEpiOpera;
 
-    if (!token) return res.status(403).send("A token is required for authentication");
+    if (!token) return res.status(401).send("Login non effettuato.");
 
     try{
         const decoded = jwt.verify(token, process.env.TOKEN_KEY);
