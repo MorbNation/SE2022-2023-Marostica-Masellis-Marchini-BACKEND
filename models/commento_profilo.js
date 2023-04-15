@@ -7,7 +7,6 @@ const Commento_ProfiloSchema = new mongoose.Schema({
     data: { type: Number, required: true},
     testo: { type: String, required: true},
     punteggio_commento: { type: Number, default: 0},
-    punteggio_commento:{ type: Number, default: 0 },
     segnalato: { type: Boolean, default: 0 },
     creatore_commento: { type: String, required: true },
     valutazioni: { type: Map, of: Number, default: {} }

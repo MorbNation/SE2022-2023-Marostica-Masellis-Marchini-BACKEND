@@ -172,7 +172,7 @@ const modificaMail = async (req, res) => {
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { email: email }).exec();
 
-    res.status(200).send("Mail cambiata con sucesso.");
+    res.status(200).send("Mail cambiata con successo.");
 }
 
 const modificaPassword = async (req, res) => {

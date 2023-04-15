@@ -8,7 +8,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 host: localhost:8080
-basepath: /
+basepath: /api/
 schemes:
   - http
 consumes:
@@ -36,12 +36,21 @@ paths:
 
 #Utente APIs begin
 
-  /utente:
+  /api/utente:
 
     get:
       tags:
         - Utenti
-      summary: Retrieves all users registered on the database
+      summary: Retrieves a user registered on the database
+      parameters:
+        - name: body
+          in: body
+          description: Name of the user to retrieve
+          required: true
+          schema:
+            properties:
+              username_utente:
+                type: string
       responses:
         '200':
           description: OK
@@ -68,9 +77,7 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
-
-  /utente/{username}:
-
+      
     delete:
       tags:
         - Utenti
@@ -96,11 +103,172 @@ paths:
         '404':
           description: User not found
 
+  /api/utente/all:
+    
+    get:
+      tags:
+        - Utenti
+      summary: Retrieves all users registered on the database
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref:  '#/definitions/Utente'
+
+  /api/utente/login:
+    put:
+      tags: 
+        - Utenti
+      summary: Generates a new login token for the user
+      parameters:
+        - name: body
+          in: body
+          description: Username and password of user to login
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              password: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Wrong password
+        '403':
+          description: Forbidden
+        '404':
+          description: User not found
+  
+  /api/utente/logout:
+    put:
+      tags:
+        - Utenti
+      summary: Logs out a user by clearing the associated cookie
+      responses:
+        '200':
+          description: OK
+
+  /api/utente/segui:
+    put: 
+      tags:
+        - Utenti
+      summary: Associates a user to the requesting user's followed list
+      parameters:
+        - name: body
+          in: body
+          description: Username of requesting user and username of user to be followed
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              utenteDaSeguire:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Utente non trovato
+  
+  /api/utente/modificaMail:
+    put:
+      tags:
+        - Utenti
+      summary: Change the mail field of a logged in user
+      parameters: 
+        - name: body
+          in: body
+          description: Username and new mail
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User not found
+
+  /api/utente/modificaPassword:
+    put:
+      tags:
+        - Utenti
+      summary: Change the password field of a logged in user
+      parameters: 
+        - name: body
+          in: body
+          description: Username and new password
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              newPassword:
+                type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User not found
+        
+  /api/utente/modificaNSFW:
+    put:
+      tags:
+        - Utenti
+      summary: Change the NSFW setting of a user
+      parameters:
+        - name: body
+          in: body
+          description: Username of the user whose setting will be changed and new NSFW setting
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              nsfw: 
+                type: string
+      responses:  
+        '200':
+          description: OK
+        '400':
+          description: Invalid setting
+        '404':
+          description: User not found
+
+  /api/utente/cambiaLingua:
+    put:
+      tags:
+        - Utenti
+      summary: Change the language setting of a user
+      parameters:
+        - name: body
+          in: body
+          description: Username of the user whose setting will be changed and new language setting
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              lingua: 
+                type: string
+      responses:  
+        '200':
+          description: OK
+        '400':
+          description: Invalid setting
+        '404':
+          description: User not found
+        
 #Utente APIs end
 
 #Post APIs begin
 
-  /posts:
+  /api/posts:
 
     get:
       tags:
@@ -112,7 +280,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/id/{id}:
+  /api/post/id/{id}:
 
     get:
       tags: 
@@ -130,7 +298,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/user/{username}:
+  /api/post/user/{username}:
 
     get: 
       tags:
@@ -148,7 +316,7 @@ paths:
           schema:
             $ref: '#/definitions/Post'
 
-  /post/segnala/{id}:
+  /api/post/segnala/{id}:
 
     put:
       tags:
@@ -179,7 +347,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/valuta: 
+  /api/post/valuta: 
 
     put:
       tags:
@@ -217,7 +385,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/modifica:
+  /api/post/modifica:
 
     put:
       tags:
@@ -262,7 +430,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/salvaNeiFavoriti:
+  /api/post/salvaNeiFavoriti:
 
     put:
       tags:
@@ -298,7 +466,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post:
+  /api/post:
 
     post:
       tags:
@@ -329,7 +497,7 @@ paths:
         '500':
           description: Internal server error
 
-  /post/{id}:
+  /api/post/{id}:
 
     delete:
       tags:
@@ -360,7 +528,7 @@ paths:
 
 #Commento_Post APIs begin
 
-  /commento_post:
+  /api/commento_post:
 
     post:
       tags:
@@ -391,7 +559,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_post/{id_post}:
+  /api/commento_post/{id_post}:
 
     get:
       tags:
@@ -410,7 +578,7 @@ paths:
         '404':
           description: Comment not found
 
-  /commento_post/{id}:
+  /api/commento_post/{id}:
 
     delete:
       tags:
@@ -437,7 +605,7 @@ paths:
         '404':
           description: Comment not found
 
-  /commento_post/segnala/{id}:
+  /api/commento_post/segnala/{id}:
     put:  
       tags: 
         - Commenti Post
@@ -467,7 +635,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_post/valuta:
+  /api/commento_post/valuta:
     put:
       tags:
         - Commenti Post
@@ -508,7 +676,7 @@ paths:
 
 #Commento_Profilo APIs begin
 
-  /commento_profilo:
+  /api/commento_profilo:
 
     post: 
       tags:
@@ -539,7 +707,7 @@ paths:
         '500':
           description: Internal server error
 
-  /commento_profilo/{profilo_commentato}:
+  /api/commento_profilo/{profilo_commentato}:
 
     get:
       tags:
@@ -558,7 +726,7 @@ paths:
         '404':
           description: Profile not found
 
-  /commento_profilo/{id}:
+  /api/commento_profilo/{id}:
 
     delete:
       tags:
@@ -603,31 +771,49 @@ definitions:
         example: user@something.domain
       password:
         type: string
+      descrizione:
+        type: string
+        default: Ciao!
+      icona_profilo:
+        type: string
+        default: DefaultPathPfp
       iconaNSFW:
         type: boolean
         default: false
+      banner:
+        type: string
+        default: DefaultPathBanner
       bannerNSFW:
         type: boolean
         default: false
+      userscore:
+        type: number
+        default: 0
       lingua:
         type: string
         enum:
           - italiano
           - inglese
+        default: italiano
+      isAmministratore:
+        type: boolean
+        default: false
       nsfw:
         type: string
         enum:
           - 'no'
           - blur
           - 'yes'
+        default: 'no'
       utenti_seguiti:
         type: array
         items:
-          type: number
+          type: string
       post_favoriti:
         type: array
         items:
-          type: number
+          type: string
+      
 
   Post:
     required:
@@ -638,7 +824,7 @@ definitions:
       titolo:
         type: string
       data:
-        type: string
+        type: number
       testo:
         type: string
       media:
@@ -662,17 +848,23 @@ definitions:
           type: number
       creatore_post:
         type: string
+      valutazioni:
+        type: number
+        additionalProperties:
+          type: string
+        
 
   Commento_Post:
     required:
       - id
+        creatore_commento
     properties:
       id:
         type: number
       id_post:
         type: number
       data:
-        type: string
+        type: number
       testo:
         type: string
       punteggio_commento:
@@ -683,10 +875,15 @@ definitions:
         default: false
       creatore_commento:
         type: string
+      valutazioni:
+        type: number
+        additionalProperties:
+          type: string
 
   Commento_Profilo:
     required:
       - id
+        creatore_commento
     properties:
       id:
         type: number
@@ -695,7 +892,7 @@ definitions:
       titolo:
         type: string
       data:
-        type: string
+        type: number
       testo: 
         type: string
       punteggio_commento:
@@ -706,6 +903,10 @@ definitions:
         default: false
       creatore_commento:  
         type: string
+      valutazioni:
+        type: number  
+        additionalProperties:
+          type: string
 
   Valutazione:
     required:
@@ -718,6 +919,6 @@ definitions:
       username:
         type: string
       valutazione:
-        type: number
+        type: number   
 
 ##Definitions end
