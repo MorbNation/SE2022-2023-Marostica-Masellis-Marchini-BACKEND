@@ -18,13 +18,13 @@ const newUtente = async (req, res) => {
     const encPsw = await bcrypt.hash(req.body.password, 10);
 
     if (!textRequirements.checkMail(req.body.email)) {
-        return res.status(400).send(`La mail usata per la registrazione deve essere del dominio unitn.it`);
+        return res.status(400).json({ Error: `La mail usata per la registrazione deve essere del dominio unitn.it` });
     }
     if (!textRequirements.checkUsername(req.body.username)) {
-        return res.status(400).send(`L'username deve essere almeno lungo 3 caratteri e non deve contenere i caratteri "@" e "#"`);
+        return res.status(400).json({ Error: `L'username deve essere almeno lungo 3 caratteri e non deve contenere i caratteri "@" e "#"` });
     }
     if (!textRequirements.checkPassword(req.body.password)) {
-        return res.status(400).send(`La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri`);
+        return res.status(400).jsom({ Error: `La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri` });
     }
 
     if (!utente) {
@@ -45,12 +45,12 @@ const newUtente = async (req, res) => {
         tokenManager.setCookie(res, { username: req.body.username });
 
         newUtente.save((err, data) => {
-            if (err) return res.json({ Error: err });
-            return res.json(data);
+            if (err) return res.status(500).send();
+            return res.status(200).send();
         });
 
     } else {
-        return res.json({ message: "User already exists", req: req.body });
+        return res.status(409).json({ Error: "Utente già esistente." });
     }
 };
 
@@ -62,10 +62,14 @@ const getUtente = (req, res) => {
 
     Utente.find(query, (err, utente) => {
 
+        if (utente.length <= 0) {
+            return res.status(404).json({ Error: "L'utente non esiste." })
+        }
+
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         } else {
-            return res.json(utente);
+            return res.status(200).json(utente);
         }
     });
 };
@@ -77,9 +81,14 @@ const getUtenti = (req, res) => {
     Utente.find({}, (err, data) => {
 
         if (err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         } else {
-            return res.json(data);
+            var usernames = [];
+            data.forEach(user => {
+                usernames.push(user.username);
+            });
+
+            return res.status(200).json({ Utenti: usernames });
         }
     });
 };
@@ -92,14 +101,14 @@ const seguiUtente = async (req, res) => {
     const query = { username: username };
     var utente = await Utente.findOne(query).exec();
 
-    if (!utente) return res.status(404).send("Utente da seguire non trovato.");
+    if (!utente) return res.status(404).json({ Error: "Utente da seguire non trovato." });
 
     if (!utente.utenti_seguiti.includes(utenteDaSeguire)) utente.utenti_seguiti.push(utenteDaSeguire);
     else utente.utenti_seguiti = utente.utenti_seguiti.filter(entry => entry != utenteDaSeguire);
 
     utente.save();
 
-    return res.status(200).send("Utente seguito correttamente.");
+    return res.status(200).json({ IsFollowing: utente.utenti_seguiti.includes(utenteDaSeguire) });
 }
 
 const deleteUtente = async (req, res) => {
@@ -111,7 +120,7 @@ const deleteUtente = async (req, res) => {
     const utente = await Utente.findOne(query).exec();
 
     if(!utente.isAmministratore && utente.username != username_utente){
-        res.status(401).send("Utente non autorizzato.");
+        res.status(401).json({ Error: "Utente non autorizzato." });
     }
 
     query = { username: username_utente };
@@ -124,7 +133,7 @@ const deleteUtente = async (req, res) => {
     Commento_Post.deleteMany(query).exec();
     Commento_Profilo.deleteMany(query).exec();
 
-    res.status(200).send("Utente eliminato con successo.");
+    res.status(200).send();
 };
 
 const login = async (req, res) => {
@@ -137,22 +146,22 @@ const login = async (req, res) => {
     Utente.findOne(query, (err, utente) => {
 
         if(err) {
-            return res.json({ Error: err });
+            return res.status(500).send();
         }
 
         console.log(utente);
 
         if(!utente) {
-            return res.status(404).send("Utente non trovato.");
+            return res.status(404).json({ Error: "Utente non trovato." });
         }
 
         bcrypt.compare(psw, utente.password, (err, result) => {
             if(result){
                 tokenManager.setCookie(res, { username: utente.username });
-                return res.status(200).send("Login effettuato con successo.");
+                return res.status(200).send();
             }
 
-            return res.status(401).send("Password sbagliata.")
+            return res.status(401).json({ Error: "Password sbagliata." });
         })
     })
 };
@@ -161,7 +170,7 @@ const logout = async (req, res) => {
 
     res.clearCookie('tokenEpiOpera');
 
-    return res.status(200).send("Logout effettuato con successo.");
+    return res.status(200).send();
 }
 
 const modificaMail = async (req, res) => {
@@ -169,17 +178,27 @@ const modificaMail = async (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
 
+    if (!textRequirements.checkMail(email)) {
+        return res.status(400).json({ Error: `La mail usata deve essere del dominio unitn.it` });
+    }
+
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { email: email }).exec();
 
-    res.status(200).send("Mail cambiata con successo.");
+    res.status(200).send();
 }
 
 const modificaPassword = async (req, res) => {
 
+    if (!textRequirements.checkPassword(req.body.newPassword)) {
+        return res.status(400).json({ Error: `La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri` });
+    }
+
     const username = req.body.username;
     //const encPsw =  await bcrypt.hash(req.body.password, 10);
     const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+
+    
 
     const query = { username: username };
     const utente = await Utente.findOne(query).exec();
@@ -191,7 +210,7 @@ const modificaPassword = async (req, res) => {
     utente.password = newPassword;
     utente.save();
 
-    return res.status(200).send("Password cambiata con successo.");
+    return res.status(200).send();
 }
 
 const modificaNSFW = async (req, res) => {
@@ -200,13 +219,13 @@ const modificaNSFW = async (req, res) => {
     const nsfw = req.body.nsfw;
 
     if (nsfw != "no" && nsfw != "blur" && nsfw != "yes"){
-        return res.status(400).send("NSFW non valido.");
+        return res.status(400).json({ Error: "NSFW non valido." });
     }
 
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { nsfw: nsfw }).exec();
 
-    return res.status(200).send("NSFW cambiato con successo.");
+    return res.status(200).send();
 }
 
 const cambiaLingua = async (req, res) => {
@@ -215,13 +234,13 @@ const cambiaLingua = async (req, res) => {
     const lingua = req.body.lingua;
 
     if (lingua != "italiano" && lingua != "inglese"){
-        return res.status(400).send("Lingua non valida.");
+        return res.status(400).json({ Error: "Lingua non valida." });
     }
 
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { lingua: lingua }).exec();
 
-    return res.status(200).send("Lingua cambiata con successo.");
+    return res.status(200).send();
 }
 
 module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login, logout, modificaMail, modificaPassword, modificaNSFW, cambiaLingua };
