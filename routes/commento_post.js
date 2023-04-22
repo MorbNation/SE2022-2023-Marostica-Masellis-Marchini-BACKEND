@@ -10,6 +10,7 @@ const commentController = require("../controllers/commento_post");
 //API
 
 router.get('/api/commento_post/', refreshToken, commentController.getCommento_Post);
+router.get('/api/commento_post/all', refreshToken, commentController.getCommenti_Post);
 
 router.post('/api/commento_post', refreshToken, auth, commentController.newCommento_Post);
 

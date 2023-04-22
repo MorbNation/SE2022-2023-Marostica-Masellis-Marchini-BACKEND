@@ -24,7 +24,7 @@ const newUtente = async (req, res) => {
         return res.status(400).json({ Error: `L'username deve essere almeno lungo 3 caratteri e non deve contenere i caratteri "@" e "#"` });
     }
     if (!textRequirements.checkPassword(req.body.password)) {
-        return res.status(400).jsom({ Error: `La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri` });
+        return res.status(400).json({ Error: `La password deve avere almeno una maiuscola, minuscola, numero, carattere speciale ed essere almeno 12 caratteri` });
     }
 
     if (!utente) {
