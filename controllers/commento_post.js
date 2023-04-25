@@ -31,7 +31,7 @@ const newCommento_Post = async (req, res) => {
 
         newCommento_Post.save((err, data) => {
             if (err) return res.status(500).send();
-            return res.status(200).send();
+            return res.status(200).json({ Id: newCommento_Post.id });
         });
     })
 };
@@ -235,7 +235,7 @@ const valutaCommento_Post = (req, res) => {
             utente.save();
             data.save();
 
-            return res.status(200).json({ PunteggioCommento: data.punteggio_post, ValutazioneAttuale: valutazione });
+            return res.status(200).json({ PunteggioCommento: data.punteggio_commento, ValutazioneAttuale: valutazione });
         })
     })
 }

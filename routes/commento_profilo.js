@@ -10,6 +10,7 @@ const commentController = require("../controllers/commento_profilo");
 //API
 
 router.get('/api/commento_profilo/', refreshToken, commentController.getCommento_Profilo);
+router.get('/api/commento_profilo/all', refreshToken, commentController.getCommenti_Profilo);
 
 router.post('/api/commento_profilo', refreshToken, auth, commentController.newCommento_Profilo);
 
