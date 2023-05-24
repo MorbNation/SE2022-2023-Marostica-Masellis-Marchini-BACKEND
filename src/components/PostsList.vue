@@ -1,16 +1,12 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { posts, fetchPosts } from '../states/posts.js'
 
 const HOST = `http://localhost:8080`;
-const posts = reactive([]);
-
-async function showPosts() {
-    posts.values = await (await fetch(HOST + 'api/posts')).json();
-}
+const API_URL = HOST + '/api';
 
 onMounted( () => {
-    showPosts();
+    fetchPosts();
 });
 
 </script>
@@ -19,8 +15,7 @@ onMounted( () => {
     <h1>Post:</h1>
     <ul>
         <li v-for="post in posts.values" :key="post.self">
-            <a :href="HOST+'/api'+post.self">{{ post.id }}</a>
-            -
+            <a :href="HOST+post.self">{{ post.id }}</a>
         </li>
     </ul>
 </template>
