@@ -45,7 +45,7 @@ const getPosts = (req, res) => {
         const retval = [];
 
         data.forEach(element => {
-            retval.push(element.id);
+            retval.push(element);
         });
 
         return res.status(200).json(retval);
