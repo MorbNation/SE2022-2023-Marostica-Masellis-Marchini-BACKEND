@@ -7,9 +7,11 @@ const swaggerUI = require('swagger-ui-express');
 //const swaggerDocument = require('./swagger.json');
 const swaggerDocument = YAML.load('./swagger.yaml');
 var cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 mongoose.connect(
     process.env.DB_TOKEN,
