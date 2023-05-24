@@ -1,12 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-
-
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import PostView from './views/PostView.vue';
-
-import { ref, onMounted } from 'vue'
 </script>
 
 <template>
