@@ -12,11 +12,16 @@ onMounted( () => {
 </script>
 
 <template>
-    <h1>Post:</h1>
     <ul>
-        <li v-for="post in posts.values" :key="post.self">
-            <!-- <a :href="HOST+post.self">{{ post.id }}</a> -->
-            <img :src="'/src/assets/' + post.media" height="500" width="500">
-        </li>
+        <div v-for="post in posts.values" :key="post.self">
+            <h4>u/{{ post.creatore_post }}</h4>
+            <h2>{{ post.titolo }}</h2>
+            <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
+            <p>{{ post.testo }}</p>
+            <p v-for="tag in post.tag">#{{ tag }}</p>
+            <p>Upvotes: {{ post.punteggio_post }}</p>
+            <date-format :date="new Date(post.data)"></date-format>
+            <br /><br />
+        </div>
     </ul>
 </template>
