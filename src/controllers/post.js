@@ -75,9 +75,9 @@ const getPostById = (req, res) => {
 
 const getPostByUser = async (req, res) => {
 
-    let postUser = req.body.creatore_post;
+    let postUser = req.params.user;
     var query = { creatore_post: postUser };
-    console.log("Getting post by username...");
+    console.log("Getting post by username " + postUser + "...");
 
     const userExists = await Utente.findOne({ username: postUser }).exec();
 

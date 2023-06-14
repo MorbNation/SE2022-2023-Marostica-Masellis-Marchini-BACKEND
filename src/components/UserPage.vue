@@ -15,6 +15,8 @@ async function getUser(){
         return;
     }
     warning.value = '';
+    //NON FUNZIONA AAAAA
+    //Sospetto che sia perchè in realtà è da fare in altra maniera però nessuno ci ha spiegato come bruh
     await fetchUser(username.value).catch( err => console.err(error) );
 };
 

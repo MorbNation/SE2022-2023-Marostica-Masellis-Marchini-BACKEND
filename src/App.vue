@@ -6,15 +6,12 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <img alt="EpiOpera logo" class="logo" src="./assets/squirrel.jpg" width="125" height="125" />
 
-    <!-- <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div> -->
-
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink><br />
         <RouterLink to="/posts">Posts</RouterLink><br />
-        <RouterLink to="/user">User</RouterLink>
+        <RouterLink to="/user">User</RouterLink><br />
+        <RouterLink to="/login">Profile</RouterLink>
       </nav>
     </div>
   </header>

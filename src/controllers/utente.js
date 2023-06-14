@@ -157,8 +157,8 @@ const login = async (req, res) => {
 
         bcrypt.compare(psw, utente.password, (err, result) => {
             if(result){
-                tokenManager.setCookie(res, { username: utente.username });
-                return res.status(200).send();
+                token = tokenManager.setCookie(res, { username: utente.username });
+                return res.status(200).json({ token: token, username: username });
             }
 
             return res.status(401).json({ Error: "Password sbagliata." });

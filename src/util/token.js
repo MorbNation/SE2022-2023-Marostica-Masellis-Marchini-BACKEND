@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const setCookie = (res, data) => {
     const token = jwt.sign(data, process.env.TOKEN_KEY, { expiresIn: "15min" });
-    res.cookie('tokenEpiOpera', token, {maxAge: 900000})
+    res.cookie('tokenEpiOpera', token, {maxAge: 900000});
+    return token;
 } 
 
 module.exports = { setCookie };
