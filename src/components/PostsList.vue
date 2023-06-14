@@ -5,7 +5,7 @@ import { posts, fetchPosts } from '../states/posts.js'
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + '/api';
 
-onMounted( () => {
+onMounted(() => {
     fetchPosts();
 });
 

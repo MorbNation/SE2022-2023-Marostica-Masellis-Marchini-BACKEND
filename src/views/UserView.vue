@@ -1,5 +1,5 @@
 <script setup>
-    import UserPage from '../components/UserPage.vue';
+import UserPage from '../components/UserPage.vue';
 </script>
 
 <template>

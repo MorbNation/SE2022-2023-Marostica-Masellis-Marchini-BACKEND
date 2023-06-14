@@ -1,32 +1,36 @@
 <script setup>
-    import { ref, reactive, watch } from 'vue';
-    import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
+import { ref, reactive, watch } from 'vue';
+import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
 
-    const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
-    const API_URL = HOST + '/api';
+const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
+const API_URL = HOST + '/api';
 
-    const username = ref('Ilcalmissimo');
-    const password = ref('Cotoletta.123');
-    // const warning = ref('');
-    const postsByUser = reactive([]);
+const username = ref('Ilcalmissimo');
+const password = ref('Cotoletta.123');
+// const warning = ref('');
+const postsByUser = reactive([]);
 
-    const emit = defineEmits(["login"]);
+const emit = defineEmits(["login"]);
 
-    watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
-        fetchPostsByUser();
-    })
+watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
+    fetchPostsByUser();
+})
 
-    async function fetchPostsByUser() {
-        // warning.value = 'aaa';
+async function fetchPostsByUser() {
+    // warning.value = 'aaa';
+    if (loggedUser.username == undefined) {
+        return;
+    } else {
         postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username)).json();
     }
+}
 
-    function login() {
-        fetch(API_URL + "/utente/login", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: username.value, password: password.value })
-        })
+function login() {
+    fetch(API_URL + "/utente/login", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username.value, password: password.value })
+    })
         .then((res) => res.json())
         .then(function (data) {
             setLoggedUser(data);
@@ -34,11 +38,11 @@
             return;
         })
         .catch((error) => console.error(error));
-    };
+};
 
-    function logout() {
-        clearLoggedUser();
-    }
+function logout() {
+    clearLoggedUser();
+}
 </script>
 
 <template>

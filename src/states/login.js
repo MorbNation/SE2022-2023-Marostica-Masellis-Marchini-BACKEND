@@ -6,13 +6,13 @@ const loggedUser = reactive({
     self: undefined
 });
 
-function setLoggedUser (data){
+function setLoggedUser(data) {
     loggedUser.token = data.token;
     loggedUser.username = data.username;
     loggedUser.self = data.self;
 }
 
-function clearLoggedUser (){
+function clearLoggedUser() {
     loggedUser.token = undefined;
     loggedUser.username = undefined;
     loggedUser.self = undefined;

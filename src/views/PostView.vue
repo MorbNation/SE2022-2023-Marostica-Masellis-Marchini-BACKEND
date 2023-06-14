@@ -1,5 +1,5 @@
 <script setup>
-    import PostsList from '../components/PostsList.vue';
+import PostsList from '../components/PostsList.vue';
 </script>
 
 <template>
