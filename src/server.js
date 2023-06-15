@@ -13,6 +13,8 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(express.static('src/assets'));
+app.use(fileUpload());
 
 mongoose.connect(
     process.env.DB_TOKEN,
@@ -40,7 +42,6 @@ const routesAuth = require('./routes/welcome');
 
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesAuth);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-app.use(fileUpload());
 
 //Upload API
 
@@ -51,7 +52,7 @@ app.post('/api/upload', (req, res) => {
 
     const file = req.files.file;
     
-    file.mv(`./src/assets/${file.name}`, (err) =>{
+    file.mv(`${__dirname}/src/assets/${file.name}`, (err) =>{
         if(err){
             console.error(err);
             return res.status(500).send({ msg: "Error occured" });

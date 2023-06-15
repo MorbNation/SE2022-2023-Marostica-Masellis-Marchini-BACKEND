@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, watch } from 'vue';
 import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
+import axios from 'axios'
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -11,7 +12,7 @@ const password = ref('Cotoletta.123');
 const titolo = ref('Titolo');
 const tag = ref('Tags');
 const testo = ref('Testo');
-const file = ref('');
+const selectedFile = "";
 
 // const warning = ref('');
 const postsByUser = reactive([]);
@@ -59,16 +60,21 @@ function logout() {
 
 function onFileChange(_file){
     const fileList = _file.target.files[0];
-    file.value = fileList;
+    selectedFile = fileList;
 }
 
 function onUploadFile(){
-    fetch(API_URL + "/upload", {
-        method: "POST",
-        headers: { "Content-Type": "multitype/form-data" },
-        files: file.value
-    })
-    .catch((error) => console.error(error));
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    axios
+        .post(API_URL + "/upload", formData)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error =>{
+            console.error(error);
+        });
 }
 
 </script>
@@ -85,7 +91,7 @@ function onUploadFile(){
                 <input name="testo" v-model="testo" /><br />
                 <input name="tags" v-model="tag" /><br />
                 <input type="file" name="media" accept="image/*" @change="onFileChange"><br />
-                <button @click="onUploadFile" :disabled="!file">Create post</button>
+                <button @click="onUploadFile">Create post</button>
             </div>
 
             <div v-for="post in postsByUser.values" :key="post.self">
