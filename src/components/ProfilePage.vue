@@ -7,10 +7,16 @@ const API_URL = HOST + '/api';
 
 const username = ref('Ilcalmissimo');
 const password = ref('Cotoletta.123');
+
+const titolo = ref('Titolo');
+const tag = ref('Tags');
+const testo = ref('Testo');
+const file = ref('');
+
 // const warning = ref('');
 const postsByUser = reactive([]);
 
-const emit = defineEmits(["login"]);
+const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
     fetchPostsByUser();
@@ -41,16 +47,50 @@ function login() {
 };
 
 function logout() {
-    clearLoggedUser();
+    fetch(API_URL + '/utente/logout', {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(() => {
+        clearLoggedUser();
+    })
+    .catch((error) => console.error(error));
 }
+
+function onFileChange(_file){
+    const fileList = _file.target.files[0];
+    file.value = fileList;
+}
+
+function onUploadFile(){
+    const formData = new FormData();
+    formData.append("file", file.value);
+
+    fetch(API_URL + "/upload", {
+        method: "POST",
+        headers: { "Content-Type": "multitype/form-data" },
+        files: file.value
+    })
+    .catch((error) => console.error(error));
+}
+
 </script>
 
 <template>
-    <form>
+    <form enctype="multipart/form-data" novalidate>
         <span v-if="loggedUser.token">
-            Welcome {{ loggedUser.username }}<br />
-            <button type="button" @click="logout">Log out</button>
-            <!-- <p style="color: red;">{{ warning }}</p> -->
+            <h2>Welcome {{ loggedUser.username }}</h2>
+            <button type="button" @click="logout">Log out</button><br /><br />
+
+            <h4>Crea nuovo post</h4>
+            <div>
+                <input name="titolo" v-model="titolo" /><br />
+                <input name="testo" v-model="testo" /><br />
+                <input name="tags" v-model="tag" /><br />
+                <input type="file" name="media" accept="image/*" @change="onFileChange"><br />
+                <button @click="onUploadFile" :disabled="!file">Create post</button>
+            </div>
+
             <div v-for="post in postsByUser.values" :key="post.self">
                 <h2>{{ post.titolo }}</h2>
                 <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
@@ -60,8 +100,8 @@ function logout() {
                 <date-format :date="new Date(post.data)"></date-format>
                 <br /><br />
             </div>
-        </span>
 
+        </span>
         <span v-if="!loggedUser.token">
             <input name="email" v-model="username" /><br />
             <input name="password" v-model="password" /><br />

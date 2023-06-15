@@ -1,6 +1,7 @@
 require('dotenv').config();
 const YAML = require('yamljs');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const app = express();
 const swaggerUI = require('swagger-ui-express');
@@ -39,3 +40,22 @@ const routesAuth = require('./routes/welcome');
 
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesAuth);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(fileUpload());
+
+//Upload API
+
+app.post('/api/upload', (req, res) => {
+    if(!req.files){
+        return res.status(500).send({ msg: "file not found" });
+    }
+
+    const file = req.files.file;
+    
+    file.mv(`./src/assets/${file.name}`, (err) =>{
+        if(err){
+            console.error(err);
+            return res.status(500).send({ msg: "Error occured" });
+        }
+        return res.send({ name: file.name, path: `./assets/${file.name}`});
+    });
+});
