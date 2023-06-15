@@ -63,9 +63,6 @@ function onFileChange(_file){
 }
 
 function onUploadFile(){
-    const formData = new FormData();
-    formData.append("file", file.value);
-
     fetch(API_URL + "/upload", {
         method: "POST",
         headers: { "Content-Type": "multitype/form-data" },
