@@ -14,13 +14,13 @@ router.get('/api/utente/all', refreshToken, userController.getUtenti);
 
 router.post('/api/utente', refreshToken, userController.newUtente);
 
-router.put('/api/utente/login', refreshToken, userController.login);
+router.put('/api/utente/login', userController.login);
 router.put('/api/utente/logout', refreshToken, userController.logout);
-router.put('/api/utente/segui', refreshToken, auth, userController.seguiUtente);
-router.put('/api/utente/modificaMail', refreshToken, auth, userController.modificaMail);
-router.put('/api/utente/modificaPassword', refreshToken, auth, userController.modificaPassword);
-router.put('/api/utente/modificaNSFW', refreshToken, auth, userController.modificaNSFW);
-router.put('/api/utente/cambiaLingua', refreshToken, auth, userController.cambiaLingua);
+router.put('/api/utente/segui', auth, refreshToken, userController.seguiUtente);
+router.put('/api/utente/modificaMail', auth, refreshToken, userController.modificaMail);
+router.put('/api/utente/modificaPassword', auth, refreshToken, userController.modificaPassword);
+router.put('/api/utente/modificaNSFW', auth, refreshToken, userController.modificaNSFW);
+router.put('/api/utente/cambiaLingua', auth, refreshToken, userController.cambiaLingua);
 
 router.delete('/api/utente', refreshToken, auth, userController.deleteUtente);
 

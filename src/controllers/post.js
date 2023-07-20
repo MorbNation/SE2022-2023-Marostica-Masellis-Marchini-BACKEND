@@ -7,7 +7,7 @@ const newPost = async (req, res) => {
     console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
 
-    let post = await Post.findOne({ id: req.body.id }).exec();
+    let post = await Post.findOne({ titolo: req.body.titolo }).exec();
 
     const id = uuidv4();
 
