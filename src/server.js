@@ -52,7 +52,7 @@ app.post('/api/upload', (req, res) => {
 
     const file = req.files.file;
     
-    file.mv(`${__dirname}/src/assets/${file.name}`, (err) =>{
+    file.mv(`${__dirname}/assets/${file.name}`, (err) =>{
         if(err){
             console.error(err);
             return res.status(500).send({ msg: "Error occured" });

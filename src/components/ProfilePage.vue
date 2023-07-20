@@ -12,7 +12,7 @@ const password = ref('Cotoletta.123');
 const titolo = ref('Titolo');
 const tag = ref('Tags');
 const testo = ref('Testo');
-const selectedFile = "";
+var selectedFile = "";
 
 // const warning = ref('');
 const postsByUser = reactive([]);
@@ -59,7 +59,7 @@ function logout() {
 }
 
 function onFileChange(_file){
-    const fileList = _file.target.files[0];
+    let fileList = _file.target.files[0];
     selectedFile = fileList;
 }
 
