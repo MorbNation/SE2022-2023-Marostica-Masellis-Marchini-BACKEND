@@ -85,21 +85,21 @@ function onUploadFile(){
         console.log(err);
     });
 
-    // fetch(API_URL + 'post', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-type': 'application/json',
-    //         'Authorization': `Bearer ${loggedUser.token}`
-    //     },
-    //     body: JSON.stringify(postData),
-    //     credentials: 'include'
-    // })
-    // .then(res => {
-    //     console.log(res);
-    // })
-    // .catch(err => {
-    //     console.log(err);
-    // });
+    fetch(API_URL + '/post', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Coookie': `tokenEpiOpera=${loggedUser.token}`
+        },
+        body: JSON.stringify(postData),
+        credentials: 'include'
+    })
+    .then(res => {
+        console.log(res);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 }
 
 </script>
