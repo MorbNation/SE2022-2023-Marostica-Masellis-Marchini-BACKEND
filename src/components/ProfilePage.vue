@@ -1,7 +1,6 @@
 <script setup>
 import { ref, reactive, watch } from 'vue';
 import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
-import axios from 'axios';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -86,21 +85,21 @@ function onUploadFile(){
         console.log(err);
     });
 
-    fetch(API_URL + 'post', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
-        },
-        body: JSON.stringify(postData),
-        credentials: 'include'
-    })
-    .then(res => {
-        console.log(res);
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    // fetch(API_URL + 'post', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-type': 'application/json',
+    //         'Authorization': `Bearer ${loggedUser.token}`
+    //     },
+    //     body: JSON.stringify(postData),
+    //     credentials: 'include'
+    // })
+    // .then(res => {
+    //     console.log(res);
+    // })
+    // .catch(err => {
+    //     console.log(err);
+    // });
 }
 
 </script>

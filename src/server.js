@@ -64,6 +64,6 @@ app.post('/api/upload', (req, res) => {
             console.error(err);
             return res.status(500).send({ msg: "Error occured" });
         }
-        return res.send({ name: file.name, path: `./assets/${file.name}`});
+        return res.json({ name: file.name, path: `./assets/${file.name}`});
     });
 });
