@@ -1,23 +1,28 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { user, fetchUser } from '../states/user'
+import { onMounted, reactive, ref } from 'vue';
 
 const HOST = `http://localhost:8080/`;
-const API_URL = HOST + '/api';
+const API_URL = HOST + 'api';
 
 const warning = ref('');
 const username = ref('');
+const userPosts = reactive([]);
 
 async function getUser(){
-    console.log("Orcodio");
     if(username.value == ''){
         warning.value = 'Please specify a username!';
         return;
     }
     warning.value = '';
-    //NON FUNZIONA AAAAA
-    //Sospetto che sia perchè in realtà è da fare in altra maniera però nessuno ci ha spiegato come bruh
-    await fetchUser(username.value).catch( err => console.err(error) );
+
+    userPosts.values = await (await fetch(API_URL + `/post/user/${username.value}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })).json();
+
+    console.log(userPosts.values);
 };
 
 </script>
@@ -31,7 +36,13 @@ async function getUser(){
         <br />
         <span style="color: red">{{ warning }}</span>
     </form>
-    <div>
-        <p>{{ user.values.username_utente }}</p>
+    <div v-for="post in userPosts.values" :key="post.self">
+        <h2>{{ post.titolo }}</h2>
+        <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
+        <p>{{ post.testo }}</p>
+        <p v-for="tag in post.tag">#{{ tag }}</p>
+        <p>Upvotes: {{ post.punteggio_post }}</p>
+        <date-format :date="new Date(post.data)"></date-format>
+        <br /><br />
     </div>
 </template>
