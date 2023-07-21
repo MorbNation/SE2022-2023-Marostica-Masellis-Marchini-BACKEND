@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
 import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
@@ -12,6 +12,7 @@ const titolo = ref('Titolo');
 const tag = ref('Tags');
 const testo = ref('Testo');
 var selectedFile = "";
+var nomeFile = "";
 
 // const warning = ref('');
 const postsByUser = reactive([]);
@@ -19,6 +20,10 @@ const postsByUser = reactive([]);
 const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
+    fetchPostsByUser();
+})
+
+onMounted(() => {
     fetchPostsByUser();
 })
 
@@ -60,9 +65,10 @@ function logout() {
 function onFileChange(_file){
     let fileList = _file.target.files[0];
     selectedFile = fileList;
+    nomeFile = fileList.name;
 }
 
-function onUploadFile(){
+async function onUploadFile(){
     const formData = new FormData();
     formData.append('file', selectedFile);
 
@@ -70,11 +76,12 @@ function onUploadFile(){
         titolo: titolo.value,
         testo: testo.value,
         tag: tag.value.split(" "),
-        media: selectedFile,
-        creatore_post: loggedUser.username
+        media: nomeFile,
+        username: loggedUser.username,
+        associato_a_contest: []
     }
 
-    fetch(API_URL + '/upload', {
+    await (fetch(API_URL + '/upload', {
         method: 'POST',
         body: formData
     })
@@ -83,13 +90,14 @@ function onUploadFile(){
     })
     .catch(err => {
         console.log(err);
-    });
+    }));
 
-    fetch(API_URL + '/post', {
+    document.cookie = `tokenEpiOpera=${loggedUser.token}`;
+
+    await (fetch(API_URL + '/post', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
-            'Coookie': `tokenEpiOpera=${loggedUser.token}`
         },
         body: JSON.stringify(postData),
         credentials: 'include'
@@ -99,7 +107,7 @@ function onUploadFile(){
     })
     .catch(err => {
         console.log(err);
-    });
+    }));
 }
 
 </script>

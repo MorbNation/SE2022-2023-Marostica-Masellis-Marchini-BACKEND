@@ -5,7 +5,6 @@ const verifyToken = (req, res, next) => {
     console.log("Verify Token invoked");
     
     const token = req.cookies.tokenEpiOpera;
-    console.log(token);
 
     if (!token) return res.status(401).send("Login non effettuato.");
 
