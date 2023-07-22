@@ -139,9 +139,11 @@ async function onUploadFile(){
 
         </span>
         <span v-if="!loggedUser.token">
-            <input name="email" v-model="username" /><br />
-            <input name="password" v-model="password" /><br />
-            <button type="button" @click="login">Log in</button>
+            <form @submit.prevent="login">
+                <input name="email" v-model="username" @keyup.enter="login" /><br />
+                <input name="password" v-model="password" @keyup.enter="login" /><br />
+                <button type="button" @click="login">Log in</button>
+            </form>
         </span>
     </form>
 </template>

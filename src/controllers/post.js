@@ -54,7 +54,7 @@ const getPosts = (req, res) => {
 
 const getPostById = (req, res) => {
 
-    let postId = req.body.id;
+    let postId = req.params.id;
     var query = { id: postId };
 
     console.log("Getting post by id...");

@@ -9,7 +9,7 @@ const userController = require("../controllers/utente");
 
 //API
 
-router.get('/api/utente', refreshToken, userController.getUtente);
+router.get('/api/utente/:user', refreshToken, userController.getUtente);
 router.get('/api/utente/all', refreshToken, userController.getUtenti);
 
 router.post('/api/utente', refreshToken, userController.newUtente);

@@ -10,7 +10,7 @@ const postController = require("../controllers/post");
 //API
 
 router.get('/api/posts', refreshToken, postController.getPosts);
-router.get('/api/post/id', refreshToken, postController.getPostById);
+router.get('/api/post/id/:id', refreshToken, postController.getPostById);
 router.get('/api/post/user/:user', refreshToken, postController.getPostByUser);
 
 router.post('/api/post', auth, refreshToken, postController.newPost);

@@ -26,7 +26,7 @@ const newCommento_Profilo = async (req, res) => {
 
 const getCommento_Profilo = (req, res) => {
 
-    const id = req.body.id;
+    const id = req.params.id;
     const query = { id: id };
 
     //console.log(`Getting comment with association id ${username}...`);
@@ -48,7 +48,7 @@ const getCommento_Profilo = (req, res) => {
 
 const getCommenti_Profilo = (req, res) => {
 
-    const profiloUsername = req.body.profiloUsername;
+    const profiloUsername = req.params.user;
 
     Commento_Profilo.find({ username: profiloUsername }, (err, data) => {
 

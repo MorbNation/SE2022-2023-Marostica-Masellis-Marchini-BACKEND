@@ -9,12 +9,12 @@ const commentController = require("../controllers/commento_profilo");
 
 //API
 
-router.get('/api/commento_profilo/', refreshToken, commentController.getCommento_Profilo);
-router.get('/api/commento_profilo/all', refreshToken, commentController.getCommenti_Profilo);
+router.get('/api/commento_profilo/:id', refreshToken, commentController.getCommento_Profilo);
+router.get('/api/commento_profilo/all/:user', refreshToken, commentController.getCommenti_Profilo);
 
 router.post('/api/commento_profilo', refreshToken, auth, commentController.newCommento_Profilo);
 
-router.put('/api/commento_profilo/segnala/', refreshToken, auth, commentController.segnalaCommento_Profilo);
+router.put('/api/commento_profilo/segnala', refreshToken, auth, commentController.segnalaCommento_Profilo);
 router.put('/api/commento_profilo/valuta', refreshToken, auth, commentController.valutaCommento_Profilo);
 router.put('/api/commento_profilo/modifica', refreshToken, auth, commentController.modificaCommento_Profilo);
 

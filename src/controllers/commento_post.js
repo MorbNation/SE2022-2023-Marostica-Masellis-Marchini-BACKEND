@@ -38,8 +38,8 @@ const newCommento_Post = async (req, res) => {
 
 const getCommento_Post = (req, res) => {
 
-    const commentAssoc = req.body.id;
-    const query = { id_post: commentAssoc };
+    const commentAssoc = req.params.id;
+    const query = { id: commentAssoc };
 
     console.log(`Getting comment with association id ${commentAssoc}...`);
 
@@ -59,7 +59,7 @@ const getCommento_Post = (req, res) => {
 
 const getCommenti_Post = (req, res) => {
 
-    const postId = req.body.postId;
+    const postId = req.params.id_post;
 
     Commento_Post.find({ id_post: postId }, (err, data) => {
 

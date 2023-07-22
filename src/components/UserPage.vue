@@ -28,10 +28,10 @@ async function getUser(){
 </script>
 
 <template>
-    <form>
+    <form @submit.prevent="getUser">
         <span>Lookup user page</span>
         <br />
-        <input v-model="username" />
+        <input v-model="username" @keyup.enter="getUser" />
         <button type="button" @click="getUser">Search user {{ username }}</button>
         <br />
         <span style="color: red">{{ warning }}</span>

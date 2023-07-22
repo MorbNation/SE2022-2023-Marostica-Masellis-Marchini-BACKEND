@@ -56,7 +56,7 @@ const newUtente = async (req, res) => {
 
 const getUtente = (req, res) => {
 
-    const username = req.body.username_utente;
+    const username = req.params.user;
 
     const query = { username: username };
 
