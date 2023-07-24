@@ -114,12 +114,13 @@ async function onUploadFile(){
 
 <template>
     <form enctype="multipart/form-data" novalidate>
-        <span v-if="loggedUser.token">
-            <h2>Welcome {{ loggedUser.username }}</h2>
-            <button type="button" @click="logout">Log out</button><br /><br />
-
-            <h4>Crea nuovo post</h4>
-            <div>
+        <div v-if="loggedUser.token" class="mainWrapper">
+            <div class="welcomeBox">
+                <h2>Welcome {{ loggedUser.username }}</h2>
+                <button type="button" @click="logout">Log out</button><br /><br />
+            </div>
+            <div class="contentBox">
+                <h4>Crea nuovo post</h4>
                 <input name="titolo" v-model="titolo" /><br />
                 <input name="testo" v-model="testo" /><br />
                 <input name="tags" v-model="tag" /><br />
@@ -127,23 +128,23 @@ async function onUploadFile(){
                 <button @click="onUploadFile">Create post</button>
             </div>
 
-            <div v-for="post in postsByUser.values" :key="post.self">
+            <div v-for="post in postsByUser.values" :key="post.self" class="contentBox">
                 <h2>{{ post.titolo }}</h2>
                 <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
                 <p>{{ post.testo }}</p>
                 <p v-for="tag in post.tag">#{{ tag }}</p>
                 <p>Upvotes: {{ post.punteggio_post }}</p>
                 <date-format :date="new Date(post.data)"></date-format>
-                <br /><br />
+                <br />
             </div>
 
-        </span>
-        <span v-if="!loggedUser.token">
+        </div>
+        <div v-if="!loggedUser.token" class="loginBox">
             <form @submit.prevent="login">
                 <input name="email" v-model="username" @keyup.enter="login" /><br />
                 <input name="password" v-model="password" @keyup.enter="login" /><br />
                 <button type="button" @click="login">Log in</button>
             </form>
-        </span>
+        </div>
     </form>
 </template>

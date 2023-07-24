@@ -8,9 +8,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink><br />
-        <RouterLink to="/posts">Posts</RouterLink><br />
-        <RouterLink to="/user">User</RouterLink><br />
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/posts">Posts</RouterLink>
+        <RouterLink to="/user">User</RouterLink>
         <RouterLink to="/login">Profile</RouterLink>
       </nav>
     </div>
@@ -21,7 +21,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
-  line-height: 1.5;
+  line-height: 2;
 }
 
 .logo {
@@ -32,8 +32,8 @@ header {
 @media (min-width: 1024px) {
   header {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    place-items: top;
+    background-color: black;
   }
 
   .logo {
@@ -44,6 +44,12 @@ header {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
+    margin: auto;
+  }
+
+  nav > * {
+    margin: 25px;
+    font-size: larger;
   }
 }
 </style>

@@ -7,3 +7,11 @@ import UserPage from '../components/UserPage.vue';
         <UserPage />
     </div>
 </template>
+
+<style scoped>
+    div {
+        display: block;
+        text-align: center;
+        margin: auto;
+    }
+</style>

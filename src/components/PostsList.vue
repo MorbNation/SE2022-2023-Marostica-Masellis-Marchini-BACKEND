@@ -12,6 +12,7 @@ onMounted(() => {
 </script>
 
 <template>
+
     <div v-for="post in posts.values" :key="post.self">
         <h4>u/{{ post.creatore_post }}</h4>
         <h2>{{ post.titolo }}</h2>
@@ -22,4 +23,5 @@ onMounted(() => {
         <date-format :date="new Date(post.data)"></date-format>
         <br /><br />
     </div>
+    
 </template>
