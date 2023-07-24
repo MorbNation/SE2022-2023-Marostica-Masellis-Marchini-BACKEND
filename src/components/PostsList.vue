@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { posts, fetchPosts } from '../states/posts.js'
+import { loggedUser } from '../states/login';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + '/api';
@@ -13,7 +14,11 @@ onMounted(() => {
 
 <template>
 
-    <div v-for="post in posts.values" :key="post.self">
+    <div v-if="loggedUser.token">
+        <h2>Welcome {{ loggedUser.username }}</h2><br /><br />
+    </div>
+
+    <div v-for="post in posts.values" :key="post.self" class="contentBox">
         <h4>u/{{ post.creatore_post }}</h4>
         <h2>{{ post.titolo }}</h2>
         <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
@@ -23,5 +28,5 @@ onMounted(() => {
         <date-format :date="new Date(post.data)"></date-format>
         <br /><br />
     </div>
-    
+
 </template>

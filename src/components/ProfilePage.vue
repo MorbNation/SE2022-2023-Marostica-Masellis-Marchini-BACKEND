@@ -5,12 +5,12 @@ import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
 
-const username = ref('Ilcalmissimo');
+const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */
 const password = ref('Cotoletta.123');
 
-const titolo = ref('Titolo');
-const tag = ref('Tags');
-const testo = ref('Testo');
+const titolo = ref('');
+const tag = ref('');
+const testo = ref('');
 var selectedFile = "";
 var nomeFile = "";
 
@@ -115,16 +115,20 @@ async function onUploadFile(){
 <template>
     <form enctype="multipart/form-data" novalidate>
         <div v-if="loggedUser.token" class="mainWrapper">
+
             <div class="welcomeBox">
                 <h2>Welcome {{ loggedUser.username }}</h2>
                 <button type="button" @click="logout">Log out</button><br /><br />
             </div>
-            <div class="contentBox">
+
+            <div class="loginBox">
                 <h4>Crea nuovo post</h4>
-                <input name="titolo" v-model="titolo" /><br />
-                <input name="testo" v-model="testo" /><br />
-                <input name="tags" v-model="tag" /><br />
-                <input type="file" name="media" accept="image/*" @change="onFileChange"><br />
+                <input class="textBox" name="titolo" v-model="titolo" placeholder="Titolo" /><br />
+                <input class="textBox" name="testo" v-model="testo" placeholder="Testo" /><br />
+                <input class="textBox" name="tags" v-model="tag" placeholder="Tags" /><br />
+                <label for="file-upload" class="label">
+                    <input type="file" id="file-upload" name="media" accept="image/*" @change="onFileChange"><br />
+                </label>
                 <button @click="onUploadFile">Create post</button>
             </div>
 
@@ -139,12 +143,15 @@ async function onUploadFile(){
             </div>
 
         </div>
+
         <div v-if="!loggedUser.token" class="loginBox">
+            <h2>Login to your account</h2>
             <form @submit.prevent="login">
-                <input name="email" v-model="username" @keyup.enter="login" /><br />
-                <input name="password" v-model="password" @keyup.enter="login" /><br />
+                <input class="textBox" name="email" v-model="username" @keyup.enter="login" /><br />
+                <input class="textBox" name="password" v-model="password" @keyup.enter="login" /><br />
                 <button type="button" @click="login">Log in</button>
             </form>
         </div>
+
     </form>
 </template>

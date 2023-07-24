@@ -30,21 +30,18 @@ async function getUser(){
 
 <template>
 
-    <div v-if="loggedUser.token">
-        <h2>Welcome {{ loggedUser.username }}</h2>
-        <button type="button" @click="logout">Log out</button><br /><br />
+    <div class="contentBox">
+        <form @submit.prevent="getUser">
+            <span>Lookup user page</span>
+            <br />
+            <input class="textBox" v-model="username" @keyup.enter="getUser" />
+            <button type="button" @click="getUser">Search user</button>
+            <br />
+            <span style="color: red">{{ warning }}</span>
+        </form>
     </div>
 
-    <form @submit.prevent="getUser">
-        <span>Lookup user page</span>
-        <br />
-        <input v-model="username" @keyup.enter="getUser" />
-        <button type="button" @click="getUser">Search user {{ username }}</button>
-        <br />
-        <span style="color: red">{{ warning }}</span>
-    </form>
-
-    <div v-for="post in userPosts.values" :key="post.self">
+    <div v-for="post in userPosts.values" :key="post.self" class="contentBox">
         <h2>{{ post.titolo }}</h2>
         <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
         <p>{{ post.testo }}</p>
@@ -53,5 +50,5 @@ async function getUser(){
         <date-format :date="new Date(post.data)"></date-format>
         <br /><br />
     </div>
-    
+
 </template>

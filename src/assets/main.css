@@ -53,6 +53,8 @@ a,
   border: 1px solid rgb(123, 123, 123);
   border-radius: 10px;
   margin: 50px;
+  display: block;
+  text-align: center;
 }
 
 .welcomeBox {
@@ -61,4 +63,69 @@ a,
   padding-bottom: 20px;
   margin-top: 30px;
   margin-bottom: 30px;
+  text-align: center;
+}
+
+.textBox {
+  background-color: rgb(85, 85, 85);
+  border-radius: 10px;
+  border: 2px solid gray;
+  width: 300px;
+  height: 40px;
+  text-align: center;
+  margin: 5px;
+  color: white;
+}
+
+.textBox:hover {
+  border: 3px solid gray;
+}
+
+.textBox:focus {
+  background-color: rgb(136, 136, 136);
+}
+
+button {
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid gray;
+  width: 300px;
+  height: 40px;
+  text-align: center;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: rgb(206, 206, 206);
+}
+
+button:active {
+  background-color: rgb(136, 136, 136);
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+input[type="file"]::before {
+  content: "Choose a file";
+  display: block;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid gray;
+  width: auto;
+  height: 40px;
+  justify-content: center;
+  text-align: center;
+  margin: 10px;
+  -webkit-user-select: none;
+  color: black;
+}
+
+input[type="file"]:hover::before {
+  background-color: rgb(206, 206, 206);
+}
+
+input[type="file"]:active::before {
+  background-color: rgb(136, 136, 136);
 }

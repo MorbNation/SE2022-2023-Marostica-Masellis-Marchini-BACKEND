@@ -4,14 +4,13 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <img alt="EpiOpera logo" class="logo" src="./assets/squirrel.jpg" width="125" height="125" />
+    <img alt="EpiOpera logo" class="logo" src="./assets/logo.png" width="125" height="125" />
 
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
-        <RouterLink to="/user">User</RouterLink>
-        <RouterLink to="/login">Profile</RouterLink>
+        <RouterLink to="/posts">Home</RouterLink>
+        <RouterLink to="/user">Search User</RouterLink>
+        <RouterLink to="/login">Your Profile</RouterLink>
       </nav>
     </div>
   </header>
