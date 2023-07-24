@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { posts, fetchPosts } from '../states/posts.js'
+import { posts, fetchPosts, vote } from '../states/posts.js'
 import { loggedUser } from '../states/login';
 
 const HOST = `http://localhost:8080/`;
@@ -25,7 +25,9 @@ onMounted(() => {
         <p>{{ post.testo }}</p>
         <p v-for="tag in post.tag">#{{ tag }}</p>
         <p>Upvotes: {{ post.punteggio_post }}</p>
-        <date-format :date="new Date(post.data)"></date-format>
+        <date-format :date="new Date(post.data)"></date-format><br /><br />
+        <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
+        <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
         <br /><br />
     </div>
 

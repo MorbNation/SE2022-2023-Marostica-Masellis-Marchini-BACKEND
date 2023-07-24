@@ -85,7 +85,7 @@ a,
   background-color: rgb(136, 136, 136);
 }
 
-button {
+button.generic {
   background-color: white;
   border-radius: 10px;
   border: 2px solid gray;
@@ -95,11 +95,11 @@ button {
   margin: 10px;
 }
 
-button:hover {
+button.generic:hover {
   background-color: rgb(206, 206, 206);
 }
 
-button:active {
+button.generic:active {
   background-color: rgb(136, 136, 136);
 }
 

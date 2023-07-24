@@ -5,7 +5,6 @@ const setCookie = (res, data) => {
     const token = jwt.sign(data, process.env.TOKEN_KEY, { expiresIn: "15min" });
     res.cookie('tokenEpiOpera', token, {
         maxAge: 900000,
-        httpOnly: true,
         sameSite: 'strict'
     });
     return token;

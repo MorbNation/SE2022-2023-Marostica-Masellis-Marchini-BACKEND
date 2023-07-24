@@ -14,7 +14,7 @@ router.get('/api/utente/all', refreshToken, userController.getUtenti);
 
 router.post('/api/utente', refreshToken, userController.newUtente);
 
-router.put('/api/utente/login', userController.login);
+router.put('/api/utente/login', refreshToken, userController.login);
 router.put('/api/utente/logout', refreshToken, userController.logout);
 router.put('/api/utente/segui', auth, refreshToken, userController.seguiUtente);
 router.put('/api/utente/modificaMail', auth, refreshToken, userController.modificaMail);

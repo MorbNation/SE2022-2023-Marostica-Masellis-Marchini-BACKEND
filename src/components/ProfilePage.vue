@@ -32,7 +32,7 @@ async function fetchPostsByUser() {
     if (loggedUser.username == undefined) {
         return;
     } else {
-        postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username)).json();
+        postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username, { credentials: 'include' })).json();
     }
 }
 
@@ -46,6 +46,7 @@ function login() {
         .then(function (data) {
             setLoggedUser(data);
             emit("login", loggedUser);
+            document.cookie = `tokenEpiOpera=${data.token}`;
             return;
         })
         .catch((error) => console.error(error));
@@ -58,6 +59,7 @@ function logout() {
     })
     .then(() => {
         clearLoggedUser();
+        document.cookie = "tokenEpiOpera=; Max-Age=-99999999";
     })
     .catch((error) => console.error(error));
 }
@@ -118,7 +120,7 @@ async function onUploadFile(){
 
             <div class="welcomeBox">
                 <h2>Welcome {{ loggedUser.username }}</h2>
-                <button type="button" @click="logout">Log out</button><br /><br />
+                <button type="button" class="generic" @click="logout">Log out</button><br /><br />
             </div>
 
             <div class="loginBox">
@@ -129,7 +131,7 @@ async function onUploadFile(){
                 <label for="file-upload" class="label">
                     <input type="file" id="file-upload" name="media" accept="image/*" @change="onFileChange"><br />
                 </label>
-                <button @click="onUploadFile">Create post</button>
+                <button class="generic" @click="onUploadFile">Create post</button>
             </div>
 
             <div v-for="post in postsByUser.values" :key="post.self" class="contentBox">
@@ -149,7 +151,7 @@ async function onUploadFile(){
             <form @submit.prevent="login">
                 <input class="textBox" name="email" v-model="username" @keyup.enter="login" /><br />
                 <input class="textBox" name="password" v-model="password" @keyup.enter="login" /><br />
-                <button type="button" @click="login">Log in</button>
+                <button class="generic" type="button" @click="login">Log in</button>
             </form>
         </div>
 
