@@ -236,7 +236,7 @@ const salvaNeiFavoriti = async (req, res) => {
 
 const deletePost = async (req, res) => {
 
-    const postId = req.body.id;
+    const postId = req.params.id;
     const username = req.body.username;
 
     var query = { id: postId };

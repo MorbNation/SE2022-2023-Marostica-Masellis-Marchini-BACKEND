@@ -196,8 +196,6 @@ paths:
           required: true
           schema:
             properties:
-              username:
-                type: string
               utenteDaSeguire:
                 type: string
       security:
@@ -225,8 +223,6 @@ paths:
           required: true
           schema:
             properties:
-              username:
-                type: string
               email:
                 type: string
       security:
@@ -254,8 +250,6 @@ paths:
           required: true
           schema:
             properties:
-              username:
-                type: string
               newPassword:
                 type: string
       security:
@@ -283,8 +277,6 @@ paths:
           required: true
           schema:
             properties:
-              username:
-                type: string
               nsfw: 
                 type: string
       security:
@@ -314,8 +306,6 @@ paths:
           required: true
           schema:
             properties:
-              username:
-                type: string
               lingua: 
                 type: string
       security:
@@ -348,6 +338,11 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post/id/{id}:
 
@@ -360,21 +355,26 @@ paths:
           in: path
           description: The id of the post to retrieve
           schema:
-            type: number
+            type: string
       responses:
         '200':
           description: OK
           schema:
             $ref: '#/definitions/Post'
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
-  /api/post/user/{username}:
+  /api/post/user/{user}:
 
     get: 
       tags:
         - Post
       summary: Retrieves all posts posted by a user
       parameters: 
-        - name: username
+        - name: user
           in: path
           description: The username of the post's author
           schema:
@@ -384,26 +384,29 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Post'
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
-  /api/post/segnala/{id}:
+  /api/post/segnala:
 
     put:
       tags:
         - Post
       summary: Flags a post
       parameters:
-        - name: id
-          in: path
-          description: The id of post to flag
+        - name: body
+          in: body
+          description: The body of post to flag
           required: true
           schema:
-            type: number
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+            properties:
+              id:
+                type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -415,6 +418,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post/valuta: 
 
@@ -422,7 +430,7 @@ paths:
       tags:
         - Post
       summary: Increments or decrements a post's score
-      description: The function requires the id of the post to be evaluated, the username of the user evaluating the post and the vote (-1, 0, 1)
+      description: The function requires the id of the post to be evaluated and the vote (-1, 0, 1)
       parameters:
         - name: body
           in: body
@@ -431,17 +439,11 @@ paths:
           schema:
             properties:
               id: 
-                type: number
-              username: 
                 type: string
               valutazione:
                 type: number
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -453,6 +455,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post/modifica:
 
@@ -468,8 +475,6 @@ paths:
           schema:
             properties: 
               id: 
-                type: number
-              username:
                 type: string
               titolo:
                 type: string
@@ -481,12 +486,8 @@ paths:
                 type: array
                 items:
                   type: string
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -498,6 +499,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post/salvaNeiFavoriti:
 
@@ -505,7 +511,7 @@ paths:
       tags:
         - Post
       summary: Saves a post in a user's favourites
-      description: A post's editable attributes are the username of the poster, the title, the text, the media and tags
+      description: A post's editable attributes are the title, the text, the media and tags
       parameters:
         - name: body
           in: body
@@ -514,15 +520,9 @@ paths:
           schema:
             properties:
               id: 
-                type: number
-              username: 
                 type: string
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -534,6 +534,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post:
 
@@ -548,12 +553,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Post'
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -565,6 +566,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/post/{id}:
 
@@ -579,12 +585,8 @@ paths:
           required: true
           schema:
             type: string
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '400':
           description: Invalid post id
@@ -592,6 +594,11 @@ paths:
           description: Forbidden
         '404':
           description: Post not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
 #Post APIs end
 
@@ -610,12 +617,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Commento_Post'
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -627,8 +630,13 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
-  /api/commento_post/{id_post}:
+  /api/commento_post/all/{id}:
 
     get:
       tags:
@@ -640,14 +648,43 @@ paths:
           description: Association Id of post comment to get
           required: true
           schema:
-            type: number
+            type: string
       responses:
         '400':
           description: Invalid association id
         '404':
           description: Comment not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/commento_post/{id}:
+
+    get:
+      tags:
+        - Commenti Post
+      summary: Get a post comment by its ID
+      parameters:
+        - name: id
+          in: path
+          description: The comment's ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
+        '200':
+          description: OK
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: tokenEpiOpera=abcdef; Path=/
 
     delete:
       tags:
@@ -660,12 +697,8 @@ paths:
           required: true
           schema:
             type: string
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '400':
           description: Invalid comment id
@@ -673,25 +706,29 @@ paths:
           description: Forbidden
         '404':
           description: Comment not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/commento_post/segnala/{id}:
+
     put:  
       tags: 
         - Commenti Post
       summary: Flags a post comment
       parameters: 
-        - name: id
-          in: path
+        - name: body
+          in: body
           description: The id of the post comment to flag
           required: true
           schema:
-            type: number
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+            properties:
+              id:
+                type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -703,13 +740,18 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/commento_post/valuta:
     put:
       tags:
         - Commenti Post
       summary: Increments or decrements a post comment's score
-      description: The function requires the id of the comment to be evaluated, the username of the user evaluating the comment and the vote (-1, 0, 1)
+      description: The function requires the id of the comment to be evaluated and the vote (-1, 0, 1)
       parameters:
         - name: body
           in: body
@@ -718,17 +760,11 @@ paths:
           schema:
             properties:
               id: 
-                type: number
-              username: 
                 type: string
               valutazione:
                 type: number
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -740,6 +776,47 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+  /api/commento_post/modifica:
+    put:
+      tags:
+        - Commenti Post
+      summary: Edit the comment
+      description: Function requires the ID, the new text in the body
+      parameters:
+        - name: body
+          in: body
+          description: Attributes of the edit function
+          required: true
+          schema:
+            properties:
+              id: 
+                type: string
+              testo:
+                type: string
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Commento_Post'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
 #Commento_Post APIs end
 
@@ -758,12 +835,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Commento_Profilo'
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
@@ -775,15 +848,20 @@ paths:
           description: Forbidden
         '500':
           description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
-  /api/commento_profilo/{profilo_commentato}:
+  /api/commento_profilo/all/{user}:
 
     get:
       tags:
         - Commenti Profilo
       summary: Retrieves all comments on the database relating to a specific profile
       parameters:
-        - name: profilo_commentato
+        - name: user
           in: path
           description: The name of commented profile
           required: true
@@ -794,6 +872,11 @@ paths:
           description: Invalid profile name
         '404':
           description: Profile not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/commento_profilo/{id}:
 
@@ -807,13 +890,9 @@ paths:
           description: The id of the profile comment to be deleted
           required: true
           schema:
-            type: number
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
             type: string
+      security:
+        - cookieAuth: []
       responses:
         '400':
           description: Invalid comment Id
@@ -821,6 +900,143 @@ paths:
           description: Frobidden
         '404': 
           description: Comment not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+              
+    get:
+      tags:
+        - Commenti Profilo
+      summary: Retrieves a specific profile comment by its ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the profile comment to retrieve
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []
+      responses:
+        '404': 
+          description: Comment not found
+        '500':  
+          description: Internal server error
+        '200': 
+          description: OK
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+  /api/commento_profilo/segnala/{id}:
+
+    put:  
+      tags: 
+        - Commenti Profilo
+      summary: Flags a profile comment
+      parameters: 
+        - name: body
+          in: body
+          description: The id of the profile comment to flag
+          required: true
+          schema:
+            properties:
+              id:
+                type: string
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: OK
+          schema: 
+            $ref: '#/definitions/Commento_Profilo'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+  /api/commento_profilo/modifica:
+    put:
+      tags:
+        - Commenti Profilo
+      summary: Edit the comment
+      description: Function requires the ID, the new text in the body
+      parameters:
+        - name: body
+          in: body
+          description: Attributes of the edit function
+          required: true
+          schema:
+            properties:
+              id: 
+                type: string
+              testo:
+                type: string
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Commento_Profilo'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+  /api/commento_profilo/valuta:
+    put:
+      tags:
+        - Commenti Profilo
+      summary: Increments or decrements a proflie comment's score
+      description: The function requires the id of the comment to be evaluated and the vote (-1, 0, 1)
+      parameters:
+        - name: body
+          in: body
+          description: Attributes of the evaluation function
+          required: true
+          schema:
+            properties:
+              id: 
+                type: string
+              valutazione:
+                type: number
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Commento_Profilo'
+        '400':
+          description: Invalid input
+        '403': 
+          description: Forbidden
+        '500':
+          description: Internal server error
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
 #Commento_Profilo APIs end
 
@@ -889,7 +1105,7 @@ definitions:
       - id
     properties:
       id:
-        type: number
+        type: string
       titolo:
         type: string
       data:
@@ -929,9 +1145,9 @@ definitions:
         creatore_commento
     properties:
       id:
-        type: number
+        type: string
       id_post:
-        type: number
+        type: string
       data:
         type: number
       testo:
@@ -955,7 +1171,7 @@ definitions:
         creatore_commento
     properties:
       id:
-        type: number
+        type: string
       profilo_commentato:
         type: string
       titolo:
@@ -984,7 +1200,7 @@ definitions:
         valutazione
     properties:
       id:
-        type: number
+        type: string
       username:
         type: string
       valutazione:

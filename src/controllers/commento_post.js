@@ -79,7 +79,7 @@ const getCommenti_Post = (req, res) => {
 
 const deleteCommento_Post = (req, res) => {
 
-    const commentId = req.body.id;
+    const commentId = req.params.id;
 
     console.log(`Deleting comment with id ${commentId}...`);
 
