@@ -22,6 +22,6 @@ router.put('/api/utente/modificaPassword', auth, refreshToken, userController.mo
 router.put('/api/utente/modificaNSFW', auth, refreshToken, userController.modificaNSFW);
 router.put('/api/utente/cambiaLingua', auth, refreshToken, userController.cambiaLingua);
 
-router.delete('/api/utente', refreshToken, auth, userController.deleteUtente);
+router.delete('/api/utente/:username_utente', refreshToken, auth, userController.deleteUtente);
 
 module.exports = router;

@@ -113,7 +113,7 @@ const seguiUtente = async (req, res) => {
 
 const deleteUtente = async (req, res) => {
 
-    const username_utente = req.body.username_utente;
+    const username_utente = req.params.user;
     const username = req.body.username;
 
     var query = { username: username };

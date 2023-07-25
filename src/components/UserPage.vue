@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { loggedUser } from '../states/login';
+import { vote } from '../states/posts';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + 'api';
@@ -47,7 +48,9 @@ async function getUser(){
         <p>{{ post.testo }}</p>
         <p v-for="tag in post.tag">#{{ tag }}</p>
         <p>Upvotes: {{ post.punteggio_post }}</p>
-        <date-format :date="new Date(post.data)"></date-format>
+        <date-format :date="new Date(post.data)"></date-format><br /><br />
+        <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
+        <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
         <br /><br />
     </div>
 

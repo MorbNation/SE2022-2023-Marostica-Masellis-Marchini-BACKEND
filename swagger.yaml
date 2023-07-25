@@ -16,6 +16,15 @@ consumes:
 produces:
   - application/json
 
+##Components
+
+components: 
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: tokenEpiOpera
+
 ##Tags
 
 tags: 
@@ -27,8 +36,8 @@ tags:
     description: APIs for the Commento_Post class
   - name: Commenti Profilo
     description: APIs for the Commento_Profilo class
-  - name: Demo
-    description: Demo APIs
+  - name: Miscellaneous
+    description: Various utility APIs
 
 ##APIs begin
 
@@ -36,26 +45,56 @@ paths:
 
 #Utente APIs begin
 
-  /api/utente:
-
+  /api/utente/{user}:
     get:
       tags:
         - Utenti
-      summary: Retrieves a user registered on the database
+      summary: Retrieves a user registered to the database
       parameters:
-        - name: body
-          in: body
+        - name: user
+          in: path
           description: Name of the user to retrieve
           required: true
           schema:
-            properties:
-              username_utente:
-                type: string
+            type: string
       responses:
         '200':
           description: OK
           schema:
             $ref: '#/definitions/Utente'
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+    delete:
+      tags:
+        - Utenti
+      summary: Deletes a user from the database by username
+      parameters:
+        - name: user
+          in: path
+          description: The username of the user to delete
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []
+      responses:
+        '400':
+          description: Invalid username
+        '403':
+          description: Forbidden
+        '404':
+          description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
+
+  /api/utente:
 
     post:
       tags:
@@ -77,31 +116,11 @@ paths:
           description: Invalid input
         '500':
           description: Internal server error
-      
-    delete:
-      tags:
-        - Utenti
-      summary: Deletes a user from the database by username
-      parameters:
-        - name: username
-          in: path
-          description: The username of the user to delete
-          required: true
-          schema:
-            type: string
-        - name: x-access-token
-          in: header
-          description: The authentication token
-          required: true
-          schema: 
-            type: string
-      responses:
-        '400':
-          description: Invalid username
-        '403':
-          description: Forbidden
-        '404':
-          description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/utente/all:
     
@@ -114,6 +133,11 @@ paths:
           description: OK
           schema:
             $ref:  '#/definitions/Utente'
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/utente/login:
     put:
@@ -140,6 +164,11 @@ paths:
           description: Forbidden
         '404':
           description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
   
   /api/utente/logout:
     put:
@@ -149,6 +178,11 @@ paths:
       responses:
         '200':
           description: OK
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/utente/segui:
     put: 
@@ -166,11 +200,18 @@ paths:
                 type: string
               utenteDaSeguire:
                 type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
         '404':
           description: Utente non trovato
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
   
   /api/utente/modificaMail:
     put:
@@ -188,11 +229,18 @@ paths:
                 type: string
               email:
                 type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
         '404':
           description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/utente/modificaPassword:
     put:
@@ -210,11 +258,18 @@ paths:
                 type: string
               newPassword:
                 type: string
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
         '404':
           description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
         
   /api/utente/modificaNSFW:
     put:
@@ -232,6 +287,8 @@ paths:
                 type: string
               nsfw: 
                 type: string
+      security:
+        - cookieAuth: []
       responses:  
         '200':
           description: OK
@@ -239,6 +296,11 @@ paths:
           description: Invalid setting
         '404':
           description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
 
   /api/utente/cambiaLingua:
     put:
@@ -256,6 +318,8 @@ paths:
                 type: string
               lingua: 
                 type: string
+      security:
+        - cookieAuth: []
       responses:  
         '200':
           description: OK
@@ -263,6 +327,11 @@ paths:
           description: Invalid setting
         '404':
           description: User not found
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: tokenEpiOpera=abcdef; Path=/
         
 #Utente APIs end
 

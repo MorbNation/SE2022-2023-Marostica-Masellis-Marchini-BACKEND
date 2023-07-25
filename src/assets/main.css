@@ -129,3 +129,22 @@ input[type="file"]:hover::before {
 input[type="file"]:active::before {
   background-color: rgb(136, 136, 136);
 }
+
+.vote {
+  display: inline-block;
+  overflow: hidden;
+  width: 80px;
+  height: 40px;
+  background-position: 0 -25px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 2px solid gray;
+}
+
+.vote:hover {
+  background-color: rgb(206, 206, 206);
+}
+
+.vote:active {
+  background-color: rgb(136, 136, 136);
+}
