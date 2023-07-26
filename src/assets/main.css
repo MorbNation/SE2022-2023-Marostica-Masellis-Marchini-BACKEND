@@ -147,7 +147,6 @@ input[type="file"]::before {
   justify-content: center;
   text-align: center;
   margin: 10px;
-  -webkit-user-select: none;
   color: black;
 }
 
