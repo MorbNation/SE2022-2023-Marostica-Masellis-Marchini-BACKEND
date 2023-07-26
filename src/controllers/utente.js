@@ -10,7 +10,6 @@ const textRequirements = require('../util/textRequirements');
 
 const newUtente = async (req, res) => {
 
-    console.log(req.body);
     console.log("Trying to register new user...");
 
     let utente = await Utente.findOne({ username: req.body.username }).exec();
@@ -42,11 +41,11 @@ const newUtente = async (req, res) => {
             nome_tema_selezionato: req.body.nome_tema_selezionato
         });
 
-        tokenManager.setCookie(res, { username: req.body.username });
+        const token = tokenManager.setCookie(res, { username: req.body.username });
 
         newUtente.save((err, data) => {
             if (err) return res.status(500).send();
-            return res.status(200).send();
+            return res.status(200).json({ username: req.body.username, token: token });
         });
 
     } else {

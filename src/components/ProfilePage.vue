@@ -7,6 +7,8 @@ const API_URL = HOST + '/api';
 
 const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */
 const password = ref('Cotoletta.1234');
+const password2 = ref('');
+const email = ref('');
 
 const titolo = ref('');
 const tag = ref('');
@@ -14,7 +16,6 @@ const testo = ref('');
 const newMail = ref('');
 const newPsw = ref('');
 const newPsw2 = ref('');
-const nfsw = ref('');
 var selectedFile = "";
 var nomeFile = "";
 
@@ -24,6 +25,7 @@ const userObj = reactive([]);
 const mailOK = ref('');
 const pswOK = ref('');
 const nsfwOK = ref('');
+const regOK = ref('');
 
 const emit = defineEmits(["login", "newPost"]);
 
@@ -77,6 +79,47 @@ function login() {
         console.log(error);
     });
 };
+
+function register() {
+    if(password.value !== password2.value) {
+        regOK.value = 'Password does not match';
+        return;
+    }
+
+    let registrationBody = {
+        username: username.value,
+        email: email.value,
+        password: password.value,
+        utenti_seguiti: [],
+        post_favoriti: []
+    };
+
+    fetch(API_URL + '/utente', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(registrationBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            const data = await res.json();
+            setLoggedUser(data);
+            emit("login", loggedUser);
+            document.cookie = `tokenEpiOpera=${data.token}`;
+            regOK.value = '';
+        } else {
+            const errorData = await res.json();
+            regOK.value = errorData.Error || "Something went wrong";
+        }
+    })
+    .catch(err => {
+        regOK.value = 'Network error';
+        console.log(err);
+    })
+
+}
 
 function logout() {
     fetch(API_URL + '/utente/logout', {
@@ -249,7 +292,7 @@ function changeNSFW() {
                 <button type="button" class="generic" @click="logout">Log out</button><br />
                 <button type="button" class="generic" @click="showHideSettings">Settings</button>
 
-                <div id="settings" class="contentBox">
+                <div id="settings" class="contentBox" style="display: none;">
 
                     <input class="textBox" type="text" name="newMail" v-model="newMail" placeholder="New Email address" />
                     <button type="button" class="smaller" @click="changeMail">Submit</button><br />
@@ -303,15 +346,30 @@ function changeNSFW() {
 
         </div>
 
-        <div v-if="!loggedUser.token" class="loginBox">
-            <h2>Login to your account</h2>
-            <form @submit.prevent="login">
-                <input class="textBox" name="username" v-model="username" @keyup.enter="login" /><br />
-                <input class="textBox" type='password' name="password" v-model="password" @keyup.enter="login" /><br />
-                <button class="generic" type="button" @click="login">Log in</button>
-            </form>
-            <span style="color: red;">{{ warning }}</span>
+        <div v-if="!loggedUser.token">
+            <div class="loginBox">
+                <h2>Login to your account</h2>
+                <form @submit.prevent="login">
+                    <input class="textBox" name="username" v-model="username" @keyup.enter="login" /><br />
+                    <input class="textBox" type='password' name="password" v-model="password" @keyup.enter="login" /><br />
+                    <button class="generic" type="button" @click="login">Log in</button>
+                </form>
+                <span style="color: red;">{{ warning }}</span>
+            </div>
+
+            <div class="loginBox">
+                <h2>Sign up</h2>
+                <form @submit.prevent="register">
+                    <input type="text" name="username" v-model="username" @keyup.enter="register" class="textBox" placeholder="Username" /><br />
+                    <input type="email" name="email" v-model="email" @keyup.enter="register" class="textBox" placeholder="Email" /><br />
+                    <input type="password" name="password" v-model="password" @keyup.enter="register" class="textBox"  placeholder="Password"/><br />
+                    <input type="password" name="password2" v-model="password2" @keyup.enter="register" class="textBox" placeholder="Repeat Password"/><br />
+                    <button type="button" class="generic" @click="register">Sign me up</button>
+                </form>
+                <span style="color: red;">{{ regOK }}</span>
+            </div>
         </div>
+        
 
     </form>
 </template>

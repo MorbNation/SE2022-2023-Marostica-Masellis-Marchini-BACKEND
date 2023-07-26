@@ -57,6 +57,7 @@ a,
 
 .mainWrapper {
   background-color: rgb(33, 33, 33);
+  display: block;
 }
 
 .loginBox {

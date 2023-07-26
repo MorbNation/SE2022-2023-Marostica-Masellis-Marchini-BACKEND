@@ -5,9 +5,9 @@ const UtenteSchema = new mongoose.Schema({
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     descrizione: { type: String, default: "Ciao!" },
-    icona_profilo: { type: String, default: "DefaultPathPfp" }, //placeholder for media
+    icona_profilo: { type: String, default: "DefaultPathPfp.png" }, //placeholder for media
     iconaNSFW: { type: Boolean, default: false },
-    banner: { type: String, default: "DefaultPathBanner" }, //placeholder for media
+    banner: { type: String, default: "DefaultPathBanner.jpg" }, //placeholder for media
     bannerNSFW: { type: Boolean, default: false },
     userscore: { type: Number, default: 0 },
     lingua: { type: String, enum: ["italiano", "inglese"] , default: "italiano" },
