@@ -6,7 +6,7 @@ const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
 
 const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */
-const password = ref('Cotoletta.1234');
+const password = ref('Cotoletta.123');
 const password2 = ref('');
 const email = ref('');
 
@@ -139,7 +139,7 @@ function onFileChange(_file){
     nomeFile = fileList.name;
 }
 
-async function onUploadFile(){
+function onUploadFile(){
     const formData = new FormData();
     formData.append('file', selectedFile);
 
@@ -152,7 +152,7 @@ async function onUploadFile(){
         associato_a_contest: []
     }
 
-    await (fetch(API_URL + '/upload', {
+    fetch(API_URL + '/upload', {
         method: 'POST',
         body: formData
     })
@@ -161,11 +161,11 @@ async function onUploadFile(){
     })
     .catch(err => {
         console.log(err);
-    }));
+    });
 
     document.cookie = `tokenEpiOpera=${loggedUser.token}`;
 
-    await (fetch(API_URL + '/post', {
+    fetch(API_URL + '/post', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
@@ -178,7 +178,9 @@ async function onUploadFile(){
     })
     .catch(err => {
         console.log(err);
-    }));
+    });
+
+    fetchPostsByUser();
 }
 
 function showHideSettings() {
@@ -331,7 +333,7 @@ function changeNSFW() {
                 <label for="file-upload" class="label">
                     <input type="file" id="file-upload" name="media" accept="image/*" @change="onFileChange"><br />
                 </label>
-                <button class="generic" @click="onUploadFile">Create post</button>
+                <button type="button" class="generic" @click="onUploadFile">Create post</button>
             </div>
 
             <div v-for="post in postsByUser.values" :key="post.self" class="contentBox">
