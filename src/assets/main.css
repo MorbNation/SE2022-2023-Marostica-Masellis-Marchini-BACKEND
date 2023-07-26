@@ -36,12 +36,23 @@ a,
   }
 }
 
+.circular {
+  border-radius: 50px;
+}
+
 .contentBox {
   padding: 20px;
   border: 2px solid rgb(123, 123, 123);
   border-radius: 10px;
   margin: 50px;
   justify-content: center;
+}
+
+.userBox {
+  background-color: black;
+  display: block;
+  text-align: center
+  ;
 }
 
 .mainWrapper {
@@ -100,6 +111,24 @@ button.generic:hover {
 }
 
 button.generic:active {
+  background-color: rgb(136, 136, 136);
+}
+
+button.smaller {
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid gray;
+  width: 60px;
+  height: 40px;
+  text-align: center;
+  margin: 10px;
+}
+
+button.smaller:hover {
+  background-color: rgb(206, 206, 206);
+}
+
+button.smaller:active {
   background-color: rgb(136, 136, 136);
 }
 

@@ -6,29 +6,47 @@ const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
 
 const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */
-const password = ref('Cotoletta.123');
+const password = ref('Cotoletta.1234');
 
 const titolo = ref('');
 const tag = ref('');
 const testo = ref('');
+const newMail = ref('');
+const newPsw = ref('');
+const newPsw2 = ref('');
+const nfsw = ref('');
 var selectedFile = "";
 var nomeFile = "";
 
-// const warning = ref('');
+const warning = ref('');
 const postsByUser = reactive([]);
+const userObj = reactive([]);
+const mailOK = ref('');
+const pswOK = ref('');
+const nsfwOK = ref('');
 
 const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
     fetchPostsByUser();
+    fetchUser();
+    warning.value = '';
 })
 
 onMounted(() => {
     fetchPostsByUser();
+    fetchUser();
 })
 
+async function fetchUser() {
+    if(loggedUser.username == undefined) {
+        return;
+    } else {
+        userObj.values = await (await fetch(API_URL + '/utente/' + loggedUser.username, { credentials: 'include' })).json();
+    }
+} 
+
 async function fetchPostsByUser() {
-    // warning.value = 'aaa';
     if (loggedUser.username == undefined) {
         return;
     } else {
@@ -42,14 +60,22 @@ function login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username.value, password: password.value })
     })
-        .then((res) => res.json())
-        .then(function (data) {
+    .then(async (res) => {
+        if (res.ok) {
+            const data = await res.json();
             setLoggedUser(data);
             emit("login", loggedUser);
             document.cookie = `tokenEpiOpera=${data.token}`;
-            return;
-        })
-        .catch((error) => console.error(error));
+            warning.value = ''; // Clear the warning if the login is successful
+        } else {
+            const errorData = await res.json();
+            warning.value = errorData.Error || 'Credentials are incorrect';
+        }
+    })
+    .catch((error) => {
+        warning.value = "Network error";
+        console.log(error);
+    });
 };
 
 function logout() {
@@ -99,7 +125,7 @@ async function onUploadFile(){
     await (fetch(API_URL + '/post', {
         method: 'POST',
         headers: {
-            'Content-type': 'application/json',
+            'Content-type': 'application/json'
         },
         body: JSON.stringify(postData),
         credentials: 'include'
@@ -112,22 +138,153 @@ async function onUploadFile(){
     }));
 }
 
+function showHideSettings() {
+    let elem = document.getElementById("settings");
+    mailOK.value = '';
+    pswOK.value = '';
+    nsfwOK.value = '';
+    if(elem.style.display === "none") elem.style.display = "block";
+    else elem.style.display = "none";
+}
+
+function changeMail() {
+
+    let newMailBody = {
+        email: newMail.value
+    }
+
+    fetch(API_URL + '/utente/modificaMail', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newMailBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            mailOK.value = 'Email changed succesfully!';
+        } else {
+            const data = await res.json();
+            mailOK.value = data.Error || "Somwthing went wrong";
+        }
+    })
+    .catch(err => {
+        mailOK.value = "Network error";
+        console.log(err);
+    })
+}
+
+async function changePsw() {
+
+    if(newPsw.value !== newPsw2.value){
+        pswOK.value = 'Password does not match';
+        return;
+    }
+
+    let newPswBody = {
+        newPassword: newPsw.value
+    }
+
+    fetch(API_URL + '/utente/modificaPassword', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newPswBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            pswOK.value = 'Password changed succesfully!';
+        } else {
+            const data = await res.json();
+            pswOK.value = data.Error || "Something went wrong";
+        }
+    })
+    .catch(err => {
+        pswOK.value = "Network error";
+        console.log(err);
+    })
+}
+
+function changeNSFW() {
+    let nsfwBody = {
+        nsfw: nsfw.value
+    }
+
+    fetch(API_URL + '/utente/modificaNSFW', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(nsfwBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            nsfwOK.value = "NSFW setting changed succesfully!";
+        } else {
+            const data = await res.json();
+            nsfwOK.value = data.Error || "Something went wrong";
+        }
+    })
+    .catch(err => {
+        nsfwOK.value = "Network error";
+        console.log(err);
+    })
+}
+
 </script>
 
 <template>
     <form enctype="multipart/form-data" novalidate>
         <div v-if="loggedUser.token" class="mainWrapper">
 
-            <div class="welcomeBox">
-                <h2>Welcome {{ loggedUser.username }}</h2>
-                <button type="button" class="generic" @click="logout">Log out</button><br /><br />
+            <div class="userBox" v-for="user in userObj.values" :key="user.self" :style="{ backgroundImage: 'url(' + `/src/assets/` + user.banner + ')' }">
+
+                <h2>Welcome {{ user.username }}</h2><br />
+                <img class="circular" :src="'/src/assets/' + user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
+                <p>Userscore: {{ user.userscore }}</p>
+                <button type="button" class="generic" @click="logout">Log out</button><br />
+                <button type="button" class="generic" @click="showHideSettings">Settings</button>
+
+                <div id="settings" class="contentBox">
+
+                    <input class="textBox" type="text" name="newMail" v-model="newMail" placeholder="New Email address" />
+                    <button type="button" class="smaller" @click="changeMail">Submit</button><br />
+                    <span style="color: red;">{{ mailOK }}</span>
+
+                    <div class="table" style="display: flex; justify-content: center;">
+                        <table style="display: block; margin: auto; align-self: auto;">
+                            <tr>
+                                <td><input type="password" class="textBox" name="newPsw" v-model="newPsw" placeholder="New Password" /></td>
+                                <td rowspan="4"><button type="button" class="smaller" @click="changePsw">Submit</button></td>
+                            </tr>
+                            <tr>
+                                <input type="password" class="textBox" name="newPsw" v-model="newPsw2" placeholder="Repeat Password" />
+                            </tr>
+                        </table>
+                    </div>
+                    <span style="color: red;">{{ pswOK }}</span><br />
+
+                    <label for="nsfw" style="padding: 20px;">NSFW:</label>
+                    <select name="nsfw" id="nsfw" v-model="nsfw">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="blur">Blur</option>
+                    </select>
+                    <button type="button" @click="changeNSFW" class="smaller">Submit</button><br />
+                    <span style="color: red;">{{ nsfwOK }}</span>
+
+                </div>
             </div>
 
             <div class="loginBox">
                 <h4>Crea nuovo post</h4>
-                <input class="textBox" name="titolo" v-model="titolo" placeholder="Titolo" /><br />
-                <input class="textBox" name="testo" v-model="testo" placeholder="Testo" /><br />
-                <input class="textBox" name="tags" v-model="tag" placeholder="Tags" /><br />
+                <input class="textBox" type="text" name="titolo" v-model="titolo" placeholder="Titolo" /><br />
+                <input class="textBox" type="text" name="testo" v-model="testo" placeholder="Testo" /><br />
+                <input class="textBox" type="text" name="tags" v-model="tag" placeholder="Tags" /><br />
                 <label for="file-upload" class="label">
                     <input type="file" id="file-upload" name="media" accept="image/*" @change="onFileChange"><br />
                 </label>
@@ -149,10 +306,11 @@ async function onUploadFile(){
         <div v-if="!loggedUser.token" class="loginBox">
             <h2>Login to your account</h2>
             <form @submit.prevent="login">
-                <input class="textBox" name="email" v-model="username" @keyup.enter="login" /><br />
-                <input class="textBox" name="password" v-model="password" @keyup.enter="login" /><br />
+                <input class="textBox" name="username" v-model="username" @keyup.enter="login" /><br />
+                <input class="textBox" type='password' name="password" v-model="password" @keyup.enter="login" /><br />
                 <button class="generic" type="button" @click="login">Log in</button>
             </form>
+            <span style="color: red;">{{ warning }}</span>
         </div>
 
     </form>

@@ -35,7 +35,7 @@ async function getUser(){
         <form @submit.prevent="getUser">
             <span>Lookup user page</span>
             <br />
-            <input class="textBox" v-model="username" @keyup.enter="getUser" />
+            <input class="textBox" v-model="username" @keyup.enter="getUser" placeholder="Username" />
             <button type="button" class="generic" @click="getUser">Search user</button>
             <br />
             <span style="color: red">{{ warning }}</span>
