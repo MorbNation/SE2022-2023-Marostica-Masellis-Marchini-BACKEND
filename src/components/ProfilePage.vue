@@ -143,9 +143,15 @@ function onUploadFile(){
     const formData = new FormData();
     formData.append('file', selectedFile);
 
+    let text = testo.value;
+    let media = nomeFile;
+
+    if(text === '') text = null;
+    if(media === '') media = null;
+
     const postData = {
         titolo: titolo.value,
-        testo: testo.value,
+        testo: text,
         tag: tag.value.split(" "),
         media: nomeFile,
         username: loggedUser.username,
