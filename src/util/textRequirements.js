@@ -1,3 +1,6 @@
+// Various input text checking functions
+
+// Checks that an item is alphanumeric
 const controlla = (item) => {
     if(item>='A' && item<='Z'){
         //console.log(item+" 0");
@@ -15,6 +18,7 @@ const controlla = (item) => {
     return 3;
 }
 
+// Checks the format of the password in accordance to the specification
 const checkPassword = (pass) => {
 
     const leng = pass.length;
@@ -51,6 +55,7 @@ const checkPassword = (pass) => {
     return true;
 }
 
+// Checks the format of an email in accordance to the specification
 const checkMail = (mail) => {
 
     const pattern = /.+@+.+unitn\.it$/;
@@ -63,6 +68,7 @@ const checkMail = (mail) => {
     return true;
 }
 
+// Checks the format of a username in accordance to the specification
 const checkUsername = (username) => {
 
     const lengn = username.length;
@@ -84,6 +90,7 @@ const checkUsername = (username) => {
     return true;
 }
 
+// Checks that two passwords match
 const checkSamePassword = (pass1, pass2) => {
 
     return pass1 == pass2;

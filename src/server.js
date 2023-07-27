@@ -1,3 +1,4 @@
+// Dependencies
 require('dotenv').config();
 const YAML = require('yamljs');
 const express = require('express');
@@ -10,6 +11,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 var cookieParser = require('cookie-parser');
 const cors = require('cors');
 
+// Bindings
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -19,6 +21,7 @@ app.use(cors({
 app.use(express.static('src/assets'));
 app.use(fileUpload());
 
+// Establish connection with the database
 mongoose.connect(
     process.env.DB_TOKEN,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -36,13 +39,14 @@ app.listen(process.env.PORT, () => {
     console.log(`App listening on port ${process.env.PORT}`);
 });
 
-//Questa cosa è un po' stupida, si potrebbe mettere tutto in un unico file e poi importare solo quel file
+// Imports the APIs routes
 const routesPost = require('./routes/post');
 const routesUtente = require('./routes/utente');
 const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
 const routesAuth = require('./routes/welcome');
 
+// Binds the APIs
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesAuth);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 

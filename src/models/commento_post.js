@@ -1,3 +1,5 @@
+// Model for the Commento_Post class
+
 const mongoose = require('mongoose');
 
 const Commento_PostSchema = new mongoose.Schema({

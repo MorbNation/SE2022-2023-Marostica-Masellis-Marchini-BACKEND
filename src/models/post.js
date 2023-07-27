@@ -1,3 +1,5 @@
+// Model for the Post class
+
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({

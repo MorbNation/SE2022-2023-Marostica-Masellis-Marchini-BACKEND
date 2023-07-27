@@ -1,3 +1,5 @@
+// Model for the Utente class
+
 const mongoose = require('mongoose');
 
 const UtenteSchema = new mongoose.Schema({

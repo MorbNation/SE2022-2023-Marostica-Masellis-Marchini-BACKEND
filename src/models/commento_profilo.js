@@ -1,3 +1,5 @@
+// Model for the Commento_Profilo class
+
 const mongoose = require('mongoose');
 
 const Commento_ProfiloSchema = new mongoose.Schema({
