@@ -119,6 +119,7 @@ const deleteUtente = async (req, res) => {
     const utente = await Utente.findOne(query).exec();
 
     if(!utente.isAmministratore && utente.username != username_utente){
+        console.log(utente.username + " " + username_utente);
         res.status(401).json({ Error: "Utente non autorizzato." });
     }
 

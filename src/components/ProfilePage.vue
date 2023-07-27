@@ -280,6 +280,34 @@ function changeNSFW() {
     })
 }
 
+async function deleteAccount() {
+
+    let text = "Are you sure you want to delete this account?"
+    if(window.confirm(text) != true) return;
+
+    await (fetch(API_URL + '/utente/' + loggedUser.username, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(!res.ok) {
+            const data = res.json();
+            window.alert(data.Error || "Something went wrong");
+            return;
+        }
+    })
+    .catch(err => {
+        window.alert("Network error");
+        console.log(err);
+        return;
+    }));
+
+    logout();
+}
+
 </script>
 
 <template>
@@ -321,6 +349,8 @@ function changeNSFW() {
                     </select>
                     <button type="button" @click="changeNSFW" class="smaller">Submit</button><br />
                     <span style="color: red;">{{ nsfwOK }}</span>
+
+                    <button type="button" class="generic" @click="deleteAccount">Delete this account</button>
 
                 </div>
             </div>

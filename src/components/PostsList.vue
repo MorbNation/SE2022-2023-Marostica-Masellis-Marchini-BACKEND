@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onActivated, onBeforeMount, onMounted, ref } from 'vue';
 import { posts, fetchPosts, vote } from '../states/posts.js'
 import { loggedUser } from '../states/login';
 
@@ -9,6 +9,10 @@ const API_URL = HOST + '/api';
 onMounted(() => {
     fetchPosts();
 });
+
+onActivated(() => {
+    fetchPosts();
+})
 
 </script>
 
