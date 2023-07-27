@@ -104,7 +104,7 @@ const deleteCommento_Profilo = (req, res) => {
                             utente.userscore -= commento.punteggio_commento;
                             utente.save();
 
-                            return res.status(200).send();
+                            return res.status(200).json({ id: commentId });
                         }
                     })
                 }
@@ -134,7 +134,7 @@ const segnalaCommento_Profilo = (req, res) => {
         data.segnalato = true;
         data.save();
 
-        return res.status(200).send();
+        return res.status(200).json({ id: commentId });
     });
 }
 
@@ -173,7 +173,7 @@ const modificaCommento_Profilo = (req, res) => {
             commento.testo = testo;
             commento.save();
 
-            return res.status(200).send();
+            return res.status(200).json(commento);
         })
     })
 }

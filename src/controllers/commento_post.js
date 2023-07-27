@@ -122,7 +122,7 @@ const deleteCommento_Post = (req, res) => {
                                 post.save();
                             })
 
-                            return res.status(200).send();
+                            return res.status(200).json({ id: commentId });
                         }
                     })
                 }
@@ -133,7 +133,7 @@ const deleteCommento_Post = (req, res) => {
 
 const segnalaCommento_Post = (req, res) => {
 
-    commentId = req.body.id;
+    const commentId = req.body.id;
     var query = { id: commentId };
 
     console.log(`Flagging comment with id ${commentId}...`);
@@ -152,7 +152,7 @@ const segnalaCommento_Post = (req, res) => {
         data.segnalato = true;
         data.save();
 
-        return res.status(200).send();
+        return res.status(200).json({ id: commentId });
     });
 }
 
@@ -185,7 +185,7 @@ const modificaCommento_Post = (req, res) => {
             commento.testo = testo;
             commento.save();
 
-            return res.status(200).send();
+            return res.status(200).json({ id: commentId, testo: testo });
         })
     })
 }
