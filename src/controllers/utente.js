@@ -66,7 +66,7 @@ const getUtente = (req, res) => {
         }
 
         if (err) {
-            return res.status(500).send();
+            return res.status(500).json({ Error: "Errore interno al server" });
         } else {
             return res.status(200).json(utente);
         }
@@ -184,7 +184,7 @@ const modificaMail = async (req, res) => {
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { email: email }).exec();
 
-    res.status(200).send();
+    res.status(200).json({ email: email });
 }
 
 const modificaPassword = async (req, res) => {
@@ -224,7 +224,7 @@ const modificaNSFW = async (req, res) => {
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { nsfw: nsfw }).exec();
 
-    return res.status(200).send();
+    return res.status(200).json({ nsfw: nsfw });
 }
 
 const cambiaLingua = async (req, res) => {
@@ -239,7 +239,7 @@ const cambiaLingua = async (req, res) => {
     const query = { username: username };
     const utente = await Utente.findOneAndUpdate(query, { lingua: lingua }).exec();
 
-    return res.status(200).send();
+    return res.status(200).json({ lingua: lingua });
 }
 
 module.exports = { newUtente: newUtente, getUtente, getUtenti, seguiUtente, deleteUtente, login, logout, modificaMail, modificaPassword, modificaNSFW, cambiaLingua };

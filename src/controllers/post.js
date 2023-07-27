@@ -118,7 +118,7 @@ const segnalaPost = (req, res) => {
         data.segnalato = true;
         data.save();
 
-        return res.status(200).send();
+        return res.status(200).json({ id: postId });
     });
 }
 
@@ -205,12 +205,6 @@ const modificaPost = (req, res) => {
     })
 }
 
-const visualizzaProfilo = (req, res) => {
-
-    // É una roba che dovrebbe fare il front end, dobbiamo spostarla e vedere come organizzarci
-
-}
-
 const salvaNeiFavoriti = async (req, res) => {
 
     const postId = req.body.id;
@@ -234,7 +228,7 @@ const salvaNeiFavoriti = async (req, res) => {
         if (!utente.post_favoriti.includes(postId)) utente.post_favoriti.push(postId);
         utente.save();
 
-        return res.status(200).send();;
+        return res.status(200).json({ id: id, username: username });;
     })
 }
 
@@ -267,7 +261,7 @@ const deletePost = async (req, res) => {
     
     creatore_post.save();
 
-    return res.status(200).send();
+    return res.status(200).json({ id: id });
 };
 
 module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, salvaNeiFavoriti, deletePost };
