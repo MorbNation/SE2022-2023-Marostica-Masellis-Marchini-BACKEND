@@ -75,7 +75,7 @@ paths:
     delete:
       tags:
         - Utenti
-      summary: Deletes a user from the database by username
+      summary: Deletes a user from the database by username, requires authentication via login API
       parameters:
         - name: user
           in: path
@@ -199,7 +199,7 @@ paths:
     put: 
       tags:
         - Utenti
-      summary: Associates a user to the requesting user's followed list
+      summary: Associates a user to the requesting user's followed list, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -229,7 +229,7 @@ paths:
     put:
       tags:
         - Utenti
-      summary: Change the mail field of a logged in user
+      summary: Change the mail field of a logged in user, requires authentication via login API
       parameters: 
         - name: body
           in: body
@@ -259,7 +259,7 @@ paths:
     put:
       tags:
         - Utenti
-      summary: Change the password field of a logged in user
+      summary: Change the password field of a logged in user, requires authentication via login API
       parameters: 
         - name: body
           in: body
@@ -286,7 +286,7 @@ paths:
     put:
       tags:
         - Utenti
-      summary: Change the NSFW setting of a user
+      summary: Change the NSFW setting of a user, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -316,7 +316,7 @@ paths:
     put:
       tags:
         - Utenti
-      summary: Change the language setting of a user
+      summary: Change the language setting of a user, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -424,7 +424,7 @@ paths:
     put:
       tags:
         - Post
-      summary: Flags a post
+      summary: Flags a post, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -457,7 +457,7 @@ paths:
     put:
       tags:
         - Post
-      summary: Increments or decrements a post's score
+      summary: Increments or decrements a post's score, requires authentication via login API
       description: The function requires the id of the post to be evaluated and the vote (-1, 0, 1)
       parameters:
         - name: body
@@ -495,7 +495,7 @@ paths:
     put:
       tags:
         - Post
-      summary: Edits a post
+      summary: Edits a post, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -539,7 +539,7 @@ paths:
     put:
       tags:
         - Post
-      summary: Saves a post in a user's favourites
+      summary: Saves a post in a user's favourites, requires authentication via login API
       description: A post's editable attributes are the title, the text, the media and tags
       parameters:
         - name: body
@@ -575,7 +575,7 @@ paths:
     post:
       tags:
         - Post
-      summary: Uploads a new post to the database 
+      summary: Uploads a new post to the database, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -641,7 +641,7 @@ paths:
     post:
       tags:
         - Commenti Post
-      summary: Post a new post comment
+      summary: Post a new post comment, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -722,7 +722,7 @@ paths:
     delete:
       tags:
         - Commenti Post
-      summary: Deletes a post comment by id
+      summary: Deletes a post comment by id, requires authentication via login API
       parameters:
         - name: id
           in: path
@@ -751,7 +751,7 @@ paths:
     put:  
       tags: 
         - Commenti Post
-      summary: Flags a post comment
+      summary: Flags a post comment, requires authentication via login API
       parameters: 
         - name: body
           in: body
@@ -783,7 +783,7 @@ paths:
     put:
       tags:
         - Commenti Post
-      summary: Increments or decrements a post comment's score
+      summary: Increments or decrements a post comment's score, requires authentication via login API
       description: The function requires the id of the comment to be evaluated and the vote (-1, 0, 1)
       parameters:
         - name: body
@@ -822,7 +822,7 @@ paths:
     put:
       tags:
         - Commenti Post
-      summary: Edit the comment
+      summary: Edit the comment, requires authentication via login API
       description: Function requires the ID, the new text in the body
       parameters:
         - name: body
@@ -864,7 +864,7 @@ paths:
     post: 
       tags:
         - Commenti Profilo
-      summary: Uploads a new post comment on the database
+      summary: Uploads a new post comment on the database, requires authentication via login API
       parameters:
         - name: body
           in: body
@@ -919,7 +919,7 @@ paths:
     delete:
       tags:
         - Commenti Profilo
-      summary: Deletes a profile comment by its id
+      summary: Deletes a profile comment by its id, requires authentication via login API
       parameters:
         - name: id
           in: path
@@ -978,7 +978,7 @@ paths:
     put:  
       tags: 
         - Commenti Profilo
-      summary: Flags a profile comment
+      summary: Flags a profile comment, requires authentication via login API
       parameters: 
         - name: body
           in: body
@@ -1010,7 +1010,7 @@ paths:
     put:
       tags:
         - Commenti Profilo
-      summary: Edit the comment
+      summary: Edit the comment, requires authentication via login API
       description: Function requires the ID, the new text in the body
       parameters:
         - name: body
@@ -1046,7 +1046,7 @@ paths:
     put:
       tags:
         - Commenti Profilo
-      summary: Increments or decrements a proflie comment's score
+      summary: Increments or decrements a proflie comment's score, requires authentication via login API
       description: The function requires the id of the comment to be evaluated and the vote (-1, 0, 1)
       parameters:
         - name: body
