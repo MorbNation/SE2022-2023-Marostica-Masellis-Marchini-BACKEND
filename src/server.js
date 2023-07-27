@@ -46,7 +46,7 @@ const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
 
 // Binds the APIs
-app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesAuth);
+app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //Upload API
