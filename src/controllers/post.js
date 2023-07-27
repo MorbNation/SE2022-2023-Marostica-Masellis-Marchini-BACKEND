@@ -11,6 +11,10 @@ const newPost = async (req, res) => {
 
     const id = uuidv4();
 
+    if (req.body.testo != null && req.body.media != null) {
+        return res.status(400).json({ Error: "Un post non puó avere sia media che testo."});
+    }
+
     if (!post) {
         const newPost = new Post({
             id: id,
