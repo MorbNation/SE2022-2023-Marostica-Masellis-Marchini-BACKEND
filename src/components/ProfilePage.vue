@@ -65,7 +65,8 @@ function onUploadFile(){
     if(media != null) {
         fetch(API_URL + '/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
         })
         .then(res => {
             console.log(res);

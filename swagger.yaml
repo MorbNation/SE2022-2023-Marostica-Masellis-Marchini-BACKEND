@@ -1119,6 +1119,8 @@ paths:
           description: The file to upload
           required: true
           type: file
+      security:
+        - cookieAuth: []
       responses:
         '201':
           description: Created
