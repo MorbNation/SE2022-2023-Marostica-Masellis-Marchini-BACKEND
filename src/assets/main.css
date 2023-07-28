@@ -1,10 +1,9 @@
 @import './base.css';
 
 #app {
-  max-width: 720px;
   margin: 0 auto;
   padding: 2rem;
-
+  display: block;
   font-weight: normal;
 }
 
@@ -25,6 +24,8 @@ a,
   body {
     display: flex;
     place-items: top;
+    justify-content: center;
+    align-items: center;
   }
 
   #app {
@@ -44,29 +45,46 @@ a,
   padding: 20px;
   border: 2px solid rgb(123, 123, 123);
   border-radius: 10px;
-  margin: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
   justify-content: center;
+  max-width: 1024px;
+  text-align: center;
 }
 
 .userBox {
   background-color: black;
   display: block;
-  text-align: center
-  ;
+  text-align: center;
+  padding: 20px;
 }
 
 .mainWrapper {
   background-color: rgb(33, 33, 33);
   display: block;
+  justify-content: center;
+}
+
+.mainWrapper > * {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .loginBox {
   padding: 20px;
   border: 1px solid rgb(123, 123, 123);
   border-radius: 10px;
-  margin: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
   display: block;
   text-align: center;
+  max-width: 1024px;
 }
 
 .welcomeBox {

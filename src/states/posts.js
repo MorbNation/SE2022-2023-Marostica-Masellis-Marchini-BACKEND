@@ -8,14 +8,52 @@ const posts = reactive([]);
 const postsByUser = reactive([]);
 
 async function fetchPosts() {
-    posts.values = await (await fetch(API_URL + '/posts')).json();
+    try {
+        const response = await fetch(API_URL + '/posts', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if(!response.ok) {
+            const data = await response.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            posts.values = await response.json();
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
 }
 
 async function fetchPostsByUser() {
     if (loggedUser.username == undefined) {
         return;
     } else {
-        postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username, { credentials: 'include' })).json();
+        try {
+            const response = await fetch(API_URL + '/post/user/' + loggedUser.username, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                window.alert(data.Error || "Something went wrong");
+                postsByUser.values = []; // Empty the userPosts.values in case of an error.
+            } else {
+                postsByUser.values = await response.json();
+            }
+        } catch (err) {
+            window.alert("Network error");
+            console.log(err);
+            postsByUser.values = []; // Empty the userPosts.values in case of a network error.
+        }
     }
 }
 
