@@ -37,7 +37,7 @@ const newPost = async (req, res) => {
         // Saves the new post to the databaes and returns its id
         newPost.save((err, data) => {
             if (err) return res.status(500).send();
-            return res.status(200).json({ Id: id });
+            return res.status(201).json({ Id: id });
         });
     } else {
         // If a post with the same title is found returns an error

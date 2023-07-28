@@ -36,6 +36,8 @@ tags:
     description: APIs for the Commento_Post class
   - name: Commenti Profilo
     description: APIs for the Commento_Profilo class
+  - name: Upload
+    description: API for the file upload function
 
 ##APIs begin
 
@@ -110,8 +112,8 @@ paths:
           schema:
             $ref: '#/definitions/Utente'
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           schema:
             $ref: '#/definitions/Utente'
         '400':
@@ -598,8 +600,8 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           schema:
             Id:
               type: string
@@ -666,8 +668,8 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           schema:
             Id:
               type: string
@@ -891,8 +893,8 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           schema:
             Id:
               type: string
@@ -1100,6 +1102,41 @@ paths:
               example: tokenEpiOpera=abcdef; Path=/
 
 #Commento_Profilo APIs end
+
+#Upload API begin
+
+  /api/upload:
+    post:
+      summary: Upload a file
+      description: Uploads a file to the server
+      tags: 
+        - Upload
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file
+          in: formData
+          description: The file to upload
+          required: true
+          type: file
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the uploaded file
+                  path:
+                    type: string
+                    description: URL path to the uploaded file
+        '500':
+          description: Internal server error
+
+#Upload API end
 
 ##APIs end
 

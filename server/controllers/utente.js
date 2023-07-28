@@ -55,7 +55,7 @@ const newUtente = async (req, res) => {
         // New user is saved to the database
         newUtente.save((err, data) => {
             if (err) return res.status(500).send();
-            return res.status(200).json({ username: req.body.username, token: token });
+            return res.status(201).json({ username: req.body.username, token: token });
         });
 
     } else {

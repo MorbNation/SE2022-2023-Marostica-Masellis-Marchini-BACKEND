@@ -24,7 +24,7 @@ const newCommento_Profilo = async (req, res) => {
     // Saves to the database and returns the new profile comment
     newCommento_Profilo.save((err, data) => {
         if (err) { console.log(err); return res.status(500).send()};
-        return res.status(200).json({ Id: newCommento_Profilo.id });
+        return res.status(201).json({ Id: newCommento_Profilo.id });
     });
 };
 

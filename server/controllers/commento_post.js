@@ -38,7 +38,7 @@ const newCommento_Post = async (req, res) => {
         newCommento_Post.save((err, data) => {
             if (err) return res.status(500).send();
             // Returns the id of the created post
-            return res.status(200).json({ Id: newCommento_Post.id });
+            return res.status(201).json({ Id: newCommento_Post.id });
         });
     })
 };
