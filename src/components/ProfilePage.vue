@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount } from '../states/user';
+import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK } from '../states/user';
 import { fetchPostsByUser, postsByUser } from '../states/posts';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
@@ -18,8 +18,6 @@ var nomeFile = "";
 const mailOK = ref('');
 const pswOK = ref('');
 const nsfwOK = ref('');
-const regOK = ref('');
-
 // const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {

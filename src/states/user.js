@@ -13,6 +13,7 @@ const email = ref('');
 
 const warning = ref('');
 const userObj = reactive([]);
+const regOK = ref('');
 
 async function fetchUser() {
     if(loggedUser.username == undefined) {
@@ -47,15 +48,15 @@ function login() {
 };
 
 function register() {
-    if(password.value !== password2.value) {
+    if(pswreg.value !== pswreg2.value) {
         regOK.value = 'Password does not match';
         return;
     }
 
     let registrationBody = {
-        username: username.value,
+        username: userreg.value,
         email: email.value,
-        password: password.value,
+        password: pswreg.value,
         utenti_seguiti: [],
         post_favoriti: []
     };
@@ -190,4 +191,5 @@ export {
     email,
     warning,
     userObj,
+    regOK
 }
