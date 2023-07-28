@@ -146,28 +146,36 @@ function onUploadFile(){
     let text = testo.value;
     let media = nomeFile;
 
-    if(text === '') text = null;
-    if(media === '') media = null;
+    if(text == '') {
+        console.log("Text is null");
+        text = null;
+    }
+    if(media == '') {
+        console.log("Media is null");
+        media = null;
+    }
 
     const postData = {
         titolo: titolo.value,
         testo: text,
         tag: tag.value.split(" "),
-        media: nomeFile,
+        media: media,
         username: loggedUser.username,
         associato_a_contest: []
     }
 
-    fetch(API_URL + '/upload', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => {
-        console.log(res);
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    if(media != null) {
+        fetch(API_URL + '/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
 
     document.cookie = `tokenEpiOpera=${loggedUser.token}`;
 
@@ -374,8 +382,8 @@ async function deleteAccount() {
 
             <div v-for="post in postsByUser.values" :key="post.self" class="contentBox">
                 <h2>{{ post.titolo }}</h2>
-                <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
-                <p>{{ post.testo }}</p>
+                <img v-if="post.media != null" :src="'/src/assets/' + post.media" height="500" width="500"><br />
+                <h3>{{ post.testo }}</h3><br />
                 <p v-for="tag in post.tag">#{{ tag }}</p>
                 <p>Upvotes: {{ post.punteggio_post }}</p>
                 <date-format :date="new Date(post.data)"></date-format>

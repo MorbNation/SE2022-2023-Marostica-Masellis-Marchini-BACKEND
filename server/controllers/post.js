@@ -27,8 +27,8 @@ const newPost = async (req, res) => {
             id: id,
             titolo: req.body.titolo,
             data: Date.now(),
-            testo: req.body.testo,
-            media: req.body.media,
+            testo: req.body.testo === '' ? null : req.body.testo,
+            media: req.body.media === '' ? null : req.body.media,
             tag: req.body.tag,
             associato_a_contest: req.body.associato_a_contest,
             creatore_post: req.body.username
