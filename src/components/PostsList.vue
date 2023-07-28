@@ -1,7 +1,7 @@
 <script setup>
-import { onActivated, onBeforeMount, onMounted, ref } from 'vue';
+import { onActivated, onMounted } from 'vue';
 import { posts, fetchPosts, vote } from '../states/posts.js'
-import { loggedUser } from '../states/login';
+import { loggedUser } from '../states/user';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + '/api';

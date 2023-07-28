@@ -1,13 +1,22 @@
 import { reactive } from 'vue'
-import { loggedUser } from './login';
+import { loggedUser } from './user';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
 
 const posts = reactive([]);
+const postsByUser = reactive([]);
 
 async function fetchPosts() {
     posts.values = await (await fetch(API_URL + '/posts')).json();
+}
+
+async function fetchPostsByUser() {
+    if (loggedUser.username == undefined) {
+        return;
+    } else {
+        postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username, { credentials: 'include' })).json();
+    }
 }
 
 async function vote(score, post) {
@@ -34,4 +43,4 @@ async function vote(score, post) {
     });
 }
 
-export { posts, fetchPosts, vote };
+export { posts, fetchPosts, vote, fetchPostsByUser, postsByUser };

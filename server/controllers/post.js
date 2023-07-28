@@ -315,7 +315,7 @@ const deletePost = async (req, res) => {
     creatore_post.save();
 
     // Returns the id of the deleted post
-    return res.status(200).json({ id: id });
+    return res.status(200).json({ id: postId });
 };
 
 module.exports = { newPost, getPosts, getPostById, getPostByUser, valutaPost, segnalaPost, modificaPost, salvaNeiFavoriti, deletePost };

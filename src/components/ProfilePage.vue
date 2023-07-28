@@ -1,14 +1,10 @@
 <script setup>
 import { ref, reactive, watch, onMounted } from 'vue';
-import { loggedUser, setLoggedUser, clearLoggedUser } from '../states/login';
+import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount } from '../states/user';
+import { fetchPostsByUser, postsByUser } from '../states/posts';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
-
-const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */
-const password = ref('Cotoletta.123');
-const password2 = ref('');
-const email = ref('');
 
 const titolo = ref('');
 const tag = ref('');
@@ -19,15 +15,12 @@ const newPsw2 = ref('');
 var selectedFile = "";
 var nomeFile = "";
 
-const warning = ref('');
-const postsByUser = reactive([]);
-const userObj = reactive([]);
 const mailOK = ref('');
 const pswOK = ref('');
 const nsfwOK = ref('');
 const regOK = ref('');
 
-const emit = defineEmits(["login", "newPost"]);
+// const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
     fetchPostsByUser();
@@ -39,99 +32,6 @@ onMounted(() => {
     fetchPostsByUser();
     fetchUser();
 })
-
-async function fetchUser() {
-    if(loggedUser.username == undefined) {
-        return;
-    } else {
-        userObj.values = await (await fetch(API_URL + '/utente/' + loggedUser.username, { credentials: 'include' })).json();
-    }
-} 
-
-async function fetchPostsByUser() {
-    if (loggedUser.username == undefined) {
-        return;
-    } else {
-        postsByUser.values = await (await fetch(API_URL + '/post/user/' + loggedUser.username, { credentials: 'include' })).json();
-    }
-}
-
-function login() {
-    fetch(API_URL + "/utente/login", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.value, password: password.value })
-    })
-    .then(async (res) => {
-        if (res.ok) {
-            const data = await res.json();
-            setLoggedUser(data);
-            emit("login", loggedUser);
-            document.cookie = `tokenEpiOpera=${data.token}`;
-            warning.value = ''; // Clear the warning if the login is successful
-        } else {
-            const errorData = await res.json();
-            warning.value = errorData.Error || 'Credentials are incorrect';
-        }
-    })
-    .catch((error) => {
-        warning.value = "Network error";
-        console.log(error);
-    });
-};
-
-function register() {
-    if(password.value !== password2.value) {
-        regOK.value = 'Password does not match';
-        return;
-    }
-
-    let registrationBody = {
-        username: username.value,
-        email: email.value,
-        password: password.value,
-        utenti_seguiti: [],
-        post_favoriti: []
-    };
-
-    fetch(API_URL + '/utente', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(registrationBody),
-        credentials: 'include'
-    })
-    .then(async (res) => {
-        if(res.ok){
-            const data = await res.json();
-            setLoggedUser(data);
-            emit("login", loggedUser);
-            document.cookie = `tokenEpiOpera=${data.token}`;
-            regOK.value = '';
-        } else {
-            const errorData = await res.json();
-            regOK.value = errorData.Error || "Something went wrong";
-        }
-    })
-    .catch(err => {
-        regOK.value = 'Network error';
-        console.log(err);
-    })
-
-}
-
-function logout() {
-    fetch(API_URL + '/utente/logout', {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(() => {
-        clearLoggedUser();
-        document.cookie = "tokenEpiOpera=; Max-Age=-99999999";
-    })
-    .catch((error) => console.error(error));
-}
 
 function onFileChange(_file){
     let fileList = _file.target.files[0];
@@ -280,7 +180,7 @@ function changeNSFW() {
         body: JSON.stringify(nsfwBody),
         credentials: 'include'
     })
-    .then(async (res) => {
+    .then(async (res) => {Ilcalmissimo
         if(res.ok){
             nsfwOK.value = "NSFW setting changed succesfully!";
         } else {
@@ -292,34 +192,6 @@ function changeNSFW() {
         nsfwOK.value = "Network error";
         console.log(err);
     })
-}
-
-async function deleteAccount() {
-
-    let text = "Are you sure you want to delete this account?"
-    if(window.confirm(text) != true) return;
-
-    await (fetch(API_URL + '/utente/' + loggedUser.username, {
-        method: 'DELETE',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        credentials: 'include'
-    })
-    .then(async (res) => {
-        if(!res.ok) {
-            const data = res.json();
-            window.alert(data.Error || "Something went wrong");
-            return;
-        }
-    })
-    .catch(err => {
-        window.alert("Network error");
-        console.log(err);
-        return;
-    }));
-
-    logout();
 }
 
 </script>
@@ -388,6 +260,7 @@ async function deleteAccount() {
                 <p>Upvotes: {{ post.punteggio_post }}</p>
                 <date-format :date="new Date(post.data)"></date-format>
                 <br />
+                <button type="button" class="smaller" @click="deletePost(post.id)">Delete</button>
             </div>
 
         </div>
@@ -406,10 +279,10 @@ async function deleteAccount() {
             <div class="loginBox">
                 <h2>Sign up</h2>
                 <form @submit.prevent="register">
-                    <input type="text" name="username" v-model="username" @keyup.enter="register" class="textBox" placeholder="Username" /><br />
+                    <input type="text" name="username" v-model="userreg" @keyup.enter="register" class="textBox" placeholder="Username" /><br />
                     <input type="email" name="email" v-model="email" @keyup.enter="register" class="textBox" placeholder="Email" /><br />
-                    <input type="password" name="password" v-model="password" @keyup.enter="register" class="textBox"  placeholder="Password"/><br />
-                    <input type="password" name="password2" v-model="password2" @keyup.enter="register" class="textBox" placeholder="Repeat Password"/><br />
+                    <input type="password" name="password" v-model="pswreg" @keyup.enter="register" class="textBox"  placeholder="Password"/><br />
+                    <input type="password" name="password2" v-model="pswreg2" @keyup.enter="register" class="textBox" placeholder="Repeat Password"/><br />
                     <button type="button" class="generic" @click="register">Sign me up</button>
                 </form>
                 <span style="color: red;">{{ regOK }}</span>

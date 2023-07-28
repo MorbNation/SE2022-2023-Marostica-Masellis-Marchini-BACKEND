@@ -22,6 +22,6 @@ router.put('/api/post/modifica', auth, refreshToken, postController.modificaPost
 router.put('/api/post/salvaNeiFavoriti', auth, refreshToken, postController.salvaNeiFavoriti);
 
 // DELETE
-router.delete('/api/post', auth, refreshToken, postController.deletePost);
+router.delete('/api/post/:id', auth, refreshToken, postController.deletePost);
 
 module.exports = router;
