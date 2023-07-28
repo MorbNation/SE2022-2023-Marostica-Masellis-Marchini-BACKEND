@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import { loggedUser } from '../states/login';
+import { loggedUser } from '../states/user';
 import { vote } from '../states/posts';
 
 const HOST = `http://localhost:8080/`;
