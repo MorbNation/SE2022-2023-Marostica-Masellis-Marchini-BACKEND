@@ -33,6 +33,7 @@ async function editPost(postId, media) {
 
         if(response.ok) {
             editOK.value = 'Success';
+            fetchPostsByUser();
         } else {
             const data = await response.json();
             editOK.value = data.Error || "Something went wrong";
