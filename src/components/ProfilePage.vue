@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw } from '../states/user';
+import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
 import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag } from '../states/posts';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
@@ -9,9 +9,6 @@ const API_URL = HOST + '/api';
 const titolo2 = ref('');
 const tag2 = ref('');
 const testo2 = ref('');
-const newMail = ref('');
-const newPsw = ref('');
-const newPsw2 = ref('');
 var selectedFile = "";
 var nomeFile = "";
 

@@ -10,6 +10,9 @@ const userreg = ref('');
 const pswreg = ref('');
 const pswreg2 = ref('');
 const email = ref('');
+const newMail = ref('');
+const newPsw = ref('');
+const newPsw2 = ref('');
 
 const warning = ref('');
 const userObj = reactive([]);
@@ -288,5 +291,8 @@ export {
     regOK,
     mailOK,
     pswOK,
-    nsfwOK
+    nsfwOK,
+    newMail,
+    newPsw,
+    newPsw2
 }
