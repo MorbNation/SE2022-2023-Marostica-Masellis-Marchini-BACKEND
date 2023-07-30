@@ -98,7 +98,7 @@ function showHide(id) {
         pswOK.value = '';
         nsfwOK.value = '';
     } else {
-        editOK.value == '';
+        editOK.value = '';
     }
     if(elem.style.display === "none") elem.style.display = "block";
     else elem.style.display = "none";
@@ -176,7 +176,8 @@ function showHide(id) {
                 <input type="text" class="textBox" name="titolo" v-model="titolo" placeholder="New title" /><br />
                 <input type="text" class="textBox" name="testo" v-model="testo" placeholder="New text" /><br />
                 <input type="text" class="textBox" name="tags" v-model="tag" placeholder="New Tags" /><br />
-                <button type="button" class="smaller" @click="editPost(post.id, post.media)">Submit</button>
+                <button type="button" class="smaller" @click="editPost(post.id, post.media)">Submit</button><br />
+                <span style="color: red;">{{ editOK }}</span>
             </div>
             <br />
             <button type="button" class="smaller" @click="deletePost(post.id)">Delete</button>
