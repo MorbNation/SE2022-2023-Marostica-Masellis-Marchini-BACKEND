@@ -236,7 +236,7 @@ function changeNSFW() {
         body: JSON.stringify(nsfwBody),
         credentials: 'include'
     })
-    .then(async (res) => {Ilcalmissimo
+    .then(async (res) => {
         if(res.ok){
             nsfwOK.value = "NSFW setting changed succesfully!";
         } else {
