@@ -1,24 +1,19 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK } from '../states/user';
-import { fetchPostsByUser, postsByUser } from '../states/posts';
+import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw } from '../states/user';
+import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag } from '../states/posts';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
 
-const titolo = ref('');
-const tag = ref('');
-const testo = ref('');
+const titolo2 = ref('');
+const tag2 = ref('');
+const testo2 = ref('');
 const newMail = ref('');
 const newPsw = ref('');
 const newPsw2 = ref('');
 var selectedFile = "";
 var nomeFile = "";
-
-const mailOK = ref('');
-const pswOK = ref('');
-const nsfwOK = ref('');
-// const emit = defineEmits(["login", "newPost"]);
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
     fetchPostsByUser();
@@ -41,7 +36,7 @@ function onUploadFile(){
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    let text = testo.value;
+    let text = testo2.value;
     let media = nomeFile;
 
     if(text == '') {
@@ -54,9 +49,9 @@ function onUploadFile(){
     }
 
     const postData = {
-        titolo: titolo.value,
+        titolo: titolo2.value,
         testo: text,
-        tag: tag.value.split(" "),
+        tag: tag2.value.split(" "),
         media: media,
         username: loggedUser.username,
         associato_a_contest: []
@@ -96,101 +91,17 @@ function onUploadFile(){
     fetchPostsByUser();
 }
 
-function showHideSettings() {
-    let elem = document.getElementById("settings");
-    mailOK.value = '';
-    pswOK.value = '';
-    nsfwOK.value = '';
+function showHide(id) {
+    let elem = document.getElementById(id);
+    if(id === 'settings') {
+        mailOK.value = '';
+        pswOK.value = '';
+        nsfwOK.value = '';
+    } else {
+        editOK.value == '';
+    }
     if(elem.style.display === "none") elem.style.display = "block";
     else elem.style.display = "none";
-}
-
-function changeMail() {
-
-    let newMailBody = {
-        email: newMail.value
-    }
-
-    fetch(API_URL + '/utente/modificaMail', {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(newMailBody),
-        credentials: 'include'
-    })
-    .then(async (res) => {
-        if(res.ok){
-            mailOK.value = 'Email changed succesfully!';
-        } else {
-            const data = await res.json();
-            mailOK.value = data.Error || "Somwthing went wrong";
-        }
-    })
-    .catch(err => {
-        mailOK.value = "Network error";
-        console.log(err);
-    })
-}
-
-async function changePsw() {
-
-    if(newPsw.value !== newPsw2.value){
-        pswOK.value = 'Password does not match';
-        return;
-    }
-
-    let newPswBody = {
-        newPassword: newPsw.value
-    }
-
-    fetch(API_URL + '/utente/modificaPassword', {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(newPswBody),
-        credentials: 'include'
-    })
-    .then(async (res) => {
-        if(res.ok){
-            pswOK.value = 'Password changed succesfully!';
-        } else {
-            const data = await res.json();
-            pswOK.value = data.Error || "Something went wrong";
-        }
-    })
-    .catch(err => {
-        pswOK.value = "Network error";
-        console.log(err);
-    })
-}
-
-function changeNSFW() {
-    let nsfwBody = {
-        nsfw: nsfw.value
-    }
-
-    fetch(API_URL + '/utente/modificaNSFW', {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(nsfwBody),
-        credentials: 'include'
-    })
-    .then(async (res) => {Ilcalmissimo
-        if(res.ok){
-            nsfwOK.value = "NSFW setting changed succesfully!";
-        } else {
-            const data = await res.json();
-            nsfwOK.value = data.Error || "Something went wrong";
-        }
-    })
-    .catch(err => {
-        nsfwOK.value = "Network error";
-        console.log(err);
-    })
 }
 
 </script>
@@ -205,7 +116,7 @@ function changeNSFW() {
             <img class="circular" :src="'/src/assets/' + user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ user.userscore }}</p>
             <button type="button" class="generic" @click="logout">Log out</button><br />
-            <button type="button" class="generic" @click="showHideSettings">Settings</button>
+            <button type="button" class="generic" @click="showHide('settings')">Settings</button>
 
             <div id="settings" class="contentBox" style="display: none;">
 
@@ -242,9 +153,9 @@ function changeNSFW() {
 
         <div class="contentBox">
             <h4>Crea nuovo post</h4>
-            <input class="textBox" type="text" name="titolo" v-model="titolo" placeholder="Titolo" /><br />
-            <input class="textBox" type="text" name="testo" v-model="testo" placeholder="Testo" /><br />
-            <input class="textBox" type="text" name="tags" v-model="tag" placeholder="Tags" /><br />
+            <input class="textBox" type="text" name="titolo" v-model="titolo2" placeholder="Titolo" /><br />
+            <input class="textBox" type="text" name="testo" v-model="testo2" placeholder="Testo" /><br />
+            <input class="textBox" type="text" name="tags" v-model="tag2" placeholder="Tags" /><br />
             <label for="file-upload" class="label">
                 <input type="file" id="file-upload" name="media" accept="image/*" @change="onFileChange"><br />
             </label>
@@ -258,6 +169,15 @@ function changeNSFW() {
             <p v-for="tag in post.tag">#{{ tag }}</p>
             <p>Upvotes: {{ post.punteggio_post }}</p>
             <date-format :date="new Date(post.data)"></date-format>
+            <br/>
+            <button type="button" class="smaller" @click="showHide(post.id)">Edit</button>
+            <div :id="post.id" style="display: none;">
+                <h3>Edit post</h3>
+                <input type="text" class="textBox" name="titolo" v-model="titolo" placeholder="New title" /><br />
+                <input type="text" class="textBox" name="testo" v-model="testo" placeholder="New text" /><br />
+                <input type="text" class="textBox" name="tags" v-model="tag" placeholder="New Tags" /><br />
+                <button type="button" class="smaller" @click="editPost(post.id, post.media)">Submit</button>
+            </div>
             <br />
             <button type="button" class="smaller" @click="deletePost(post.id)">Delete</button>
         </div>

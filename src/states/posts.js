@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { loggedUser } from './user';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
@@ -6,6 +6,42 @@ const API_URL = HOST + '/api';
 
 const posts = reactive([]);
 const postsByUser = reactive([]);
+
+const titolo = ref('');
+const testo = ref('');
+const tag = ref('');
+const editOK = ref('');
+
+async function editPost(postId, media) {
+    let editBody = {
+        id: postId,
+        titolo: titolo.value,
+        testo: testo.value,
+        tag: tag.value.split(" "),
+        media: media
+    };
+
+    try {
+        const response = await fetch(API_URL + '/post/modifica', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(editBody),
+            credentials: 'include'
+        });
+
+        if(response.ok) {
+            editOK.value = 'Success';
+        } else {
+            const data = await response.json();
+            editOK.value = data.Error || "Something went wrong";
+        }
+    } catch (err) {
+        editOK.value = "Network error";
+        console.log(err);
+    }
+}
 
 async function fetchPosts() {
     try {
@@ -81,4 +117,16 @@ async function vote(score, post) {
     });
 }
 
-export { posts, fetchPosts, vote, fetchPostsByUser, postsByUser };
+export {
+    posts,
+    postsByUser,
+    editOK,
+    titolo,
+    testo,
+    tag,
+
+    fetchPosts,
+    fetchPostsByUser,
+    vote,
+    editPost
+}

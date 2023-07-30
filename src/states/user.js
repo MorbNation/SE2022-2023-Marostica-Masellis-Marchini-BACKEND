@@ -14,6 +14,9 @@ const email = ref('');
 const warning = ref('');
 const userObj = reactive([]);
 const regOK = ref('');
+const mailOK = ref('');
+const pswOK = ref('');
+const nsfwOK = ref('');
 
 async function fetchUser() {
     if(loggedUser.username == undefined) {
@@ -156,6 +159,94 @@ async function deletePost(postId) {
     fetchPostsByUser();
 }
 
+function changeMail() {
+
+    let newMailBody = {
+        email: newMail.value
+    }
+
+    fetch(API_URL + '/utente/modificaMail', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newMailBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            mailOK.value = 'Email changed succesfully!';
+        } else {
+            const data = await res.json();
+            mailOK.value = data.Error || "Somwthing went wrong";
+        }
+    })
+    .catch(err => {
+        mailOK.value = "Network error";
+        console.log(err);
+    })
+}
+
+async function changePsw() {
+
+    if(newPsw.value !== newPsw2.value){
+        pswOK.value = 'Password does not match';
+        return;
+    }
+
+    let newPswBody = {
+        newPassword: newPsw.value
+    }
+
+    fetch(API_URL + '/utente/modificaPassword', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newPswBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {
+        if(res.ok){
+            pswOK.value = 'Password changed succesfully!';
+        } else {
+            const data = await res.json();
+            pswOK.value = data.Error || "Something went wrong";
+        }
+    })
+    .catch(err => {
+        pswOK.value = "Network error";
+        console.log(err);
+    })
+}
+
+function changeNSFW() {
+    let nsfwBody = {
+        nsfw: nsfw.value
+    }
+
+    fetch(API_URL + '/utente/modificaNSFW', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(nsfwBody),
+        credentials: 'include'
+    })
+    .then(async (res) => {Ilcalmissimo
+        if(res.ok){
+            nsfwOK.value = "NSFW setting changed succesfully!";
+        } else {
+            const data = await res.json();
+            nsfwOK.value = data.Error || "Something went wrong";
+        }
+    })
+    .catch(err => {
+        nsfwOK.value = "Network error";
+        console.log(err);
+    })
+}
+
 const loggedUser = reactive({
     token: undefined,
     username: undefined,
@@ -181,6 +272,9 @@ export {
     fetchUser,
     deleteAccount,
     deletePost,
+    changeMail,
+    changeNSFW,
+    changePsw,
 
     loggedUser,
     username,
@@ -191,5 +285,8 @@ export {
     email,
     warning,
     userObj,
-    regOK
+    regOK,
+    mailOK,
+    pswOK,
+    nsfwOK
 }
