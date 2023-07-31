@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
-import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag } from '../states/posts';
+import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, commento, addComment } from '../states/posts';
+import { showHide } from '../states/util';
+import { postComments, commentsOK, fetchCommentsByPost } from '../states/post_comment'
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -88,19 +90,6 @@ function onUploadFile(){
     fetchPostsByUser();
 }
 
-function showHide(id) {
-    let elem = document.getElementById(id);
-    if(id === 'settings') {
-        mailOK.value = '';
-        pswOK.value = '';
-        nsfwOK.value = '';
-    } else {
-        editOK.value = '';
-    }
-    if(elem.style.display === "none") elem.style.display = "block";
-    else elem.style.display = "none";
-}
-
 </script>
 
 <template>
@@ -167,6 +156,15 @@ function showHide(id) {
             <p>Upvotes: {{ post.punteggio_post }}</p>
             <date-format :date="new Date(post.data)"></date-format>
             <br/>
+            <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
+            <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
+                <div v-for="comment in postComments" :key="comment.self">
+                    <h2>{{ comment.creatore_commento }}   </h2>
+                    <p>{{ comment.testo }}</p>
+                    <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                </div>
+                <span style="color: red;">{{ commentsOK }}</span>
+            </div>
             <button type="button" class="smaller" @click="showHide(post.id)">Edit</button>
             <div :id="post.id" style="display: none;">
                 <h3>Edit post</h3>

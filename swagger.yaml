@@ -128,8 +128,6 @@ paths:
               type: string
               example: tokenEpiOpera=abcdef; Path=/
 
-  /api/utente/all:
-    
     get:
       tags:
         - Utenti

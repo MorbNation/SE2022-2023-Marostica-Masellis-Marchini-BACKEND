@@ -11,6 +11,7 @@ const titolo = ref('');
 const testo = ref('');
 const tag = ref('');
 const editOK = ref('');
+const commento = ref('');
 
 async function editPost(postId, media) {
     let editBody = {
@@ -118,6 +119,64 @@ async function vote(score, post) {
     });
 }
 
+async function segnala (postId) {
+    const flagData = {
+        id: postId
+    }
+
+    try {
+        const response = await (fetch(API_URL + '/post/segnala', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(flagData),
+            credentials: 'include'
+        }));
+
+        if(!response.ok) {
+            const data = await response.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(await response.json());
+        }
+    } catch (err) {
+        window.alert("Something went wrong");
+        console.log(err);
+    }
+}
+
+async function addComment(postId) {
+    let commentBody = {
+        id_post: postId,
+        testo: commento.value,
+    };
+
+    commento.value = '';
+
+    try {
+        const response = await (fetch(API_URL + '/commento_post', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(commentBody),
+            credentials: 'include'
+        }));
+
+        if(!response.ok) {
+            const data = await response.json();
+            console.log(response);
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(response);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
 export {
     posts,
     postsByUser,
@@ -125,9 +184,12 @@ export {
     titolo,
     testo,
     tag,
+    commento,
 
     fetchPosts,
     fetchPostsByUser,
     vote,
-    editPost
+    editPost,
+    segnala,
+    addComment
 }

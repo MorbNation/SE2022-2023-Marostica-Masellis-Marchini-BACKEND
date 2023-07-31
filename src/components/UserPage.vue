@@ -96,6 +96,20 @@ async function getUser() {
             <date-format :date="new Date(post.data)"></date-format><br /><br />
             <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
             <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
+            <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
+            <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
+                <div v-if="loggedUser.token" name="newComment">
+                    <input type="text" class="textBox" name="commento" v-model="commento" placeholder="Comment" />
+                    <button type="button" class="smaller" @click="addComment(post.id)">Submit</button>
+                </div>
+                <div v-for="comment in postComments" :key="comment.self">
+                    <h2>{{ comment.creatore_commento }}   </h2>
+                    <p>{{ comment.testo }}</p>
+                    <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                </div>
+                <span style="color: red;">{{ commentsOK }}</span>
+            </div>
+            <button type="button" class="smaller" v-if="loggedUser.token" @click="segnala(post.id)">Flag</button>
             <br /><br />
         </div>
 
