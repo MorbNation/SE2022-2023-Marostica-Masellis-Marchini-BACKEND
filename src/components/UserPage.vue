@@ -1,7 +1,8 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { loggedUser } from '../states/user';
-import { vote } from '../states/posts';
+import { vote, commento, addComment } from '../states/posts';
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento } from '../states/post_comment';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + 'api';
@@ -106,6 +107,10 @@ async function getUser() {
                     <h2>{{ comment.creatore_commento }}   </h2>
                     <p>{{ comment.testo }}</p>
                     <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
                 </div>
                 <span style="color: red;">{{ commentsOK }}</span>
             </div>

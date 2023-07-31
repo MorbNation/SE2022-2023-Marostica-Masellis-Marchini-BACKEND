@@ -3,7 +3,7 @@ import { onActivated, onMounted } from 'vue';
 import { posts, fetchPosts, vote, segnala, commento, addComment } from '../states/posts.js'
 import { loggedUser } from '../states/user';
 import { showHide } from '../states/util';
-import { postComments, commentsOK, fetchCommentsByPost } from '../states/post_comment';
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento } from '../states/post_comment';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + '/api';
@@ -42,6 +42,10 @@ onActivated(() => {
                     <h2>{{ comment.creatore_commento }}   </h2>
                     <p>{{ comment.testo }}</p>
                     <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
                 </div>
                 <span style="color: red;">{{ commentsOK }}</span>
             </div>

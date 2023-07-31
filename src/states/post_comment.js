@@ -57,9 +57,89 @@ async function fetchCommentsByPost(postId) {
     }
 }
 
+async function voteComment(valutazione, commId) {
+    let voteData = {
+        id: commId,
+        valutazione: valutazione
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/commento_post/valuta', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(voteData),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
+async function segnalaCommento(commId) {
+    let flagBody = {
+        id: commId
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/commento_post/segnala', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(flagBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
+async function deleteCommento(commId) {
+    try {
+        const res = await (fetch(API_URL + '/commento_post/' + commId, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
 export {
     postComments,
     commentsOK,
 
-    fetchCommentsByPost
+    fetchCommentsByPost,
+    voteComment,
+    segnalaCommento,
+    deleteCommento
 }

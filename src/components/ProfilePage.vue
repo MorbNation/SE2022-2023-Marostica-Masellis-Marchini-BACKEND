@@ -3,7 +3,7 @@ import { ref, watch, onMounted } from 'vue';
 import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
 import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, commento, addComment } from '../states/posts';
 import { showHide } from '../states/util';
-import { postComments, commentsOK, fetchCommentsByPost } from '../states/post_comment'
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento } from '../states/post_comment'
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -162,6 +162,10 @@ function onUploadFile(){
                     <h2>{{ comment.creatore_commento }}   </h2>
                     <p>{{ comment.testo }}</p>
                     <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                    <button class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
                 </div>
                 <span style="color: red;">{{ commentsOK }}</span>
             </div>

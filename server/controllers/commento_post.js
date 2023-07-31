@@ -156,7 +156,7 @@ const deleteCommento_Post = (req, res) => {
 };
 
 // Flag a post comment by its id
-const segnalaCommento_Post = (req, res) => {comment
+const segnalaCommento_Post = (req, res) => {
 
     const commentId = req.body.id;
     var query = { id: commentId };
@@ -263,7 +263,6 @@ const valutaCommento_Post = (req, res) => {
 
         // The comment's owner is retrieved from the databaes
         Utente.findOne(query, (err, utente) => {
-            comment
             if (err) {
                 return res.status(500).send();
             }

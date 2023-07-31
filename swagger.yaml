@@ -762,7 +762,7 @@ paths:
               type: string
               example: tokenEpiOpera=abcdef; Path=/
 
-  /api/commento_post/segnala/{id}:
+  /api/commento_post/segnala:
 
     put:  
       tags: 

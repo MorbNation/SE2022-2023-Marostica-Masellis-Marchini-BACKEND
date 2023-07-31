@@ -20,6 +20,6 @@ router.put('/api/commento_post/valuta', refreshToken, auth, commentController.va
 router.put('/api/commento_post/modifica', refreshToken, auth, commentController.modificaCommento_Post);
 
 // DELETE
-router.delete('/api/commento_post/', refreshToken, auth, commentController.deleteCommento_Post);
+router.delete('/api/commento_post/:id', refreshToken, auth, commentController.deleteCommento_Post);
 
 module.exports = router;
