@@ -3,7 +3,8 @@ import { ref, watch, onMounted } from 'vue';
 import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
 import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, commento, addComment } from '../states/posts';
 import { showHide } from '../states/util';
-import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento } from '../states/post_comment'
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit } from '../states/post_comment'
+import { profileComments, pcommEdit, pcommentsOK, fetchPCommentsByUser } from '../states/profile_comment';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -101,6 +102,15 @@ function onUploadFile(){
             <h2>Welcome {{ user.username }}</h2><br />
             <img class="circular" :src="'/src/assets/' + user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ user.userscore }}</p>
+            <button type="button" class="smaller" @click="showHide('commenti' + user.username); fetchPCommentsByUser(user.username)">Comms</button>
+            <div class="contentBox" :id="'commenti' + user.username" style="display: none;">
+                <h2 v-if="profileComments.length == 0">No Profile Comments</h2>
+                <div v-for="comment in profileComments" :key="comment.self">
+                    <h2>{{ comment.titolo }}</h2>
+                    <h3>{{ comment.creatore_commento }}</h3>
+                    <p>{{ comment.testo }}</p>
+                </div>
+            </div><br />
             <button type="button" class="generic" @click="logout">Log out</button><br />
             <button type="button" class="generic" @click="showHide('settings')">Settings</button>
 
@@ -158,14 +168,20 @@ function onUploadFile(){
             <br/>
             <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
             <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
+                <h3 v-if="postComments.length == 0">No comments</h3>
                 <div v-for="comment in postComments" :key="comment.self">
                     <h2>{{ comment.creatore_commento }}   </h2>
                     <p>{{ comment.testo }}</p>
                     <p>Voto: {{ comment.punteggio_commento }}</p><br />
-                    <button class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
-                    <button class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
                     <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
                     <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="showHide('edit' + comment.id)">Edit</button>
+                    <div v-if="loggedUser.username == comment.creatore_commento" :id="'edit' + comment.id" style="display: none;">
+                        <input type="text" class="textBox" v-model="commEdit" placeholder="Text" />
+                        <button type="button" class="smaller" @click="editCommento(comment.id)">Submit</button>
+                    </div>
                 </div>
                 <span style="color: red;">{{ commentsOK }}</span>
             </div>

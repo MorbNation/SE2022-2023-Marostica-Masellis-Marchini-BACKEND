@@ -2,7 +2,9 @@
 import { reactive, ref } from 'vue';
 import { loggedUser } from '../states/user';
 import { vote, commento, addComment } from '../states/posts';
-import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento } from '../states/post_comment';
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento } from '../states/post_comment';
+import { showHide } from '../states/util';
+import { profileComments, pcommentsOK, pcommEdit, fetchPCommentsByUser } from '../states/profile_comment';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + 'api';
@@ -86,6 +88,14 @@ async function getUser() {
             <h2>{{ _user.username }}</h2>
             <img class="circular" :src="'/src/assets/' + _user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ _user.userscore }}</p>
+            <button type="button" class="smaller" @click="showHide('commenti' + _user.username); fetchPCommentsByUser(_user.username)">Comms</button>
+            <div class="contentBox" :id="'commenti' + _user.username" style="display: none;">
+                <div v-for="comment in profileComments" :key="comment.self">
+                    <h2>{{ comment.titolo }}</h2>
+                    <h3>{{ comment.creatore_commento }}</h3>
+                    <p>{{ comment.testo }}</p>
+                </div>
+            </div>
         </div>
 
         <div v-for="post in userPosts.values" :key="post.self" class="contentBox">
@@ -103,14 +113,20 @@ async function getUser() {
                     <input type="text" class="textBox" name="commento" v-model="commento" placeholder="Comment" />
                     <button type="button" class="smaller" @click="addComment(post.id)">Submit</button>
                 </div>
+                <h3 v-if="postComments.length == 0">No comments</h3>
                 <div v-for="comment in postComments" :key="comment.self">
                     <h2>{{ comment.creatore_commento }}   </h2>
                     <p>{{ comment.testo }}</p>
                     <p>Voto: {{ comment.punteggio_commento }}</p><br />
-                    <button class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
-                    <button class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
                     <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
                     <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="showHide('edit' + comment.id)">Edit</button>
+                    <div v-if="loggedUser.username == comment.creatore_commento" :id="'edit' + comment.id" style="display: none;">
+                        <input type="text" class="textBox" v-model="commEdit" placeholder="Text" />
+                        <button type="button" class="smaller" @click="editCommento(comment.id)">Submit</button>
+                    </div>
                 </div>
                 <span style="color: red;">{{ commentsOK }}</span>
             </div>

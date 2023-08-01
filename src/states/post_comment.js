@@ -5,6 +5,7 @@ const API_URL = HOST + '/api';
 
 const postComments = reactive([]);
 const commentsOK = ref('');
+const commEdit = ref('');
 
 async function fetchCommentsByPost(postId) {
     let commenti = [];
@@ -134,12 +135,42 @@ async function deleteCommento(commId) {
     }
 }
 
+async function editCommento(commId) {
+    let editBody = {
+        id: commId,
+        testo: commEdit.value
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/commento_post/modifica', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(editBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
 export {
     postComments,
     commentsOK,
+    commEdit,
 
     fetchCommentsByPost,
     voteComment,
     segnalaCommento,
-    deleteCommento
+    deleteCommento,
+    editCommento
 }

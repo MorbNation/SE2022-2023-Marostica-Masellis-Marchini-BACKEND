@@ -59,7 +59,7 @@ const getCommenti_Profilo = (req, res) => {
     const profiloUsername = req.params.user;
 
     // Retrieves all profile comments of a specific user by its username
-    Commento_Profilo.find({ username: profiloUsername }, (err, data) => {
+    Commento_Profilo.find({ profilo_commentato: profiloUsername }, (err, data) => {
 
         if (err) {
             return res.status(500).send();
