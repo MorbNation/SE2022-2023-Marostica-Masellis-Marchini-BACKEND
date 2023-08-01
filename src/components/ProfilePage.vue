@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
-import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, commento, addComment } from '../states/posts';
+import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag } from '../states/posts';
 import { showHide } from '../states/util';
-import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit } from '../states/post_comment'
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment'
 import { profileComments, pcommEdit, pcommentsOK, fetchPCommentsByUser } from '../states/profile_comment';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;

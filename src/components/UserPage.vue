@@ -1,10 +1,10 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { loggedUser } from '../states/user';
-import { vote, commento, addComment } from '../states/posts';
-import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento } from '../states/post_comment';
+import { vote } from '../states/posts';
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commento, addComment, commEdit } from '../states/post_comment';
 import { showHide } from '../states/util';
-import { profileComments, pcommentsOK, pcommEdit, fetchPCommentsByUser } from '../states/profile_comment';
+import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPCommentsByUser, pcommento, ptitolo, addPComment, votePComment, segnalaPCommento, deletePCommento, editPCommento } from '../states/profile_comment';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + 'api';
@@ -90,11 +90,30 @@ async function getUser() {
             <p>Userscore: {{ _user.userscore }}</p>
             <button type="button" class="smaller" @click="showHide('commenti' + _user.username); fetchPCommentsByUser(_user.username)">Comms</button>
             <div class="contentBox" :id="'commenti' + _user.username" style="display: none;">
+                <h3 v-if="profileComments.length == 0">No comments</h3>
+                <div v-if="(loggedUser.username != _user.username) && (loggedUser.token)">
+                    <h2>New comment</h2>
+                    <input type="text" class="textBox" v-model="ptitolo" placeholder="Title" /><br />
+                    <input type="text" class="textBox" v-model="pcommento" placeholder="Text" /><br />
+                    <button type="button" class="smaller" @click="addPComment(_user.username)">Submit</button>
+                </div>
                 <div v-for="comment in profileComments" :key="comment.self">
                     <h2>{{ comment.titolo }}</h2>
                     <h3>{{ comment.creatore_commento }}</h3>
                     <p>{{ comment.testo }}</p>
+                    <p>Voto: {{ comment.punteggio_commento }}</p>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="votePComment(1, comment.id)">Upvote</button>
+                    <button type="button" class="vote" v-if="loggedUser.token" @click="votePComment(-1, comment.id)">Downvote</button>
+                    <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaPCommento(comment.id)">Flag</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deletePCommento(comment.id)">Delete</button>
+                    <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="showHide('edit' + comment.id)">Edit</button>
+                    <div v-if="loggedUser.username == comment.creatore_commento" :id="'edit' + comment.id" style="display: none;">
+                        <input type="text" class="textBox" v-model="pcommEditTitle" placeholder="New Title" /><br />
+                        <input type="text" class="textBox" v-model="pcommEdit" placeholder="New Text" /><br />
+                        <button type="button" class="smaller" @click="editPCommento(comment.id)">Submit</button>
+                    </div>
                 </div>
+                <span style="color: red;">{{ pcommentsOK }}</span>
             </div>
         </div>
 
@@ -102,7 +121,7 @@ async function getUser() {
             <h2>{{ post.titolo }}</h2>
             <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
             <p>{{ post.testo }}</p>
-            <p v-for="tag in post.tag">#{{ tag }}</p>
+            <p v-for="tag in post.tag">#{{ tag }}</p>text
             <p>Upvotes: {{ post.punteggio_post }}</p>
             <date-format :date="new Date(post.data)"></date-format><br /><br />
             <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>

@@ -79,7 +79,7 @@ const getCommenti_Profilo = (req, res) => {
 // Delete a profile comment by its id
 const deleteCommento_Profilo = (req, res) => {
 
-    const commentId = req.body.id;
+    const commentId = req.params.id;
 
     //console.log(`Deleting comment with id ${commentId}...`);
 

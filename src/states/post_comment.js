@@ -6,6 +6,38 @@ const API_URL = HOST + '/api';
 const postComments = reactive([]);
 const commentsOK = ref('');
 const commEdit = ref('');
+const commento = ref('');
+
+async function addComment(postId) {
+    let commentBody = {
+        id_post: postId,
+        testo: commento.value,
+    };
+
+    commento.value = '';
+
+    try {
+        const response = await (fetch(API_URL + '/commento_post', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(commentBody),
+            credentials: 'include'
+        }));
+
+        if(!response.ok) {
+            const data = await response.json();
+            console.log(response);
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(response);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
 
 async function fetchCommentsByPost(postId) {
     let commenti = [];
@@ -167,7 +199,9 @@ export {
     postComments,
     commentsOK,
     commEdit,
+    commento,
 
+    addComment,
     fetchCommentsByPost,
     voteComment,
     segnalaCommento,

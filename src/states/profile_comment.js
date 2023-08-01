@@ -7,6 +7,9 @@ const API_URL = HOST + '/api';
 const profileComments = reactive([]);
 const pcommentsOK = ref('');
 const pcommEdit = ref('');
+const pcommEditTitle = ref('');
+const pcommento = ref('');
+const ptitolo = ref('');
 
 async function fetchPCommentsByUser(username) {
     let commenti = [];
@@ -59,10 +62,131 @@ async function fetchPCommentsByUser(username) {
     }
 }
 
+async function addPComment(username) {
+    let commBody = {
+        profilo_commentato: username,
+        titolo: ptitolo.value,
+        testo: pcommento.value
+    }
+
+    pcommento.value = '';
+
+    try {
+        const res = await (fetch(API_URL + '/commento_profilo', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(commBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            console.log(res);
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
+async function votePComment(valutazione, commId) {
+    let voteData = {
+        id: commId,
+        valutazione: valutazione
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/commento_profilo/valuta', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(voteData),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
+async function segnalaPCommento(commId) {
+    let flagBody = {
+        id: commId
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/commento_profilo/segnala', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(flagBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Netwrok error");
+        console.log(err);
+    }
+}
+
+async function deletePCommento(commId) {
+    try {
+        const res = await (fetch(API_URL + '/commento_profilo/' + commId, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
+async function editPCommento(commId) {
+
+}
+
 export {
     profileComments,
     pcommentsOK,
     pcommEdit,
+    pcommento,
+    ptitolo,
+    pcommEditTitle,
 
-    fetchPCommentsByUser
+    addPComment,
+    fetchPCommentsByUser,
+    votePComment,
+    segnalaPCommento,
+    deletePCommento,
+    editPCommento
 }

@@ -1,9 +1,9 @@
 <script setup>
 import { onActivated, onMounted } from 'vue';
-import { posts, fetchPosts, vote, segnala, commento, addComment } from '../states/posts.js'
+import { posts, fetchPosts, vote, segnala } from '../states/posts.js'
 import { loggedUser } from '../states/user';
 import { showHide } from '../states/util';
-import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit } from '../states/post_comment';
+import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + '/api';
