@@ -172,7 +172,32 @@ async function deletePCommento(commId) {
 }
 
 async function editPCommento(commId) {
+    let editBody = {
+        id: commId,
+        titolo: pcommEditTitle.value,
+        testo: pcommEdit.value
+    }
 
+    try {
+        const res = await (fetch(API_URL + '/commento_profilo/modifica', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(editBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
 }
 
 export {
