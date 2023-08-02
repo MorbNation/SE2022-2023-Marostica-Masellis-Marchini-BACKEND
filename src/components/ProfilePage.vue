@@ -154,6 +154,7 @@ function goToUserPage(username){
 
             <button type="button" class="generic" @click="showHide('followed')">Show followed users</button>
             <div class="contentBox" id="followed" style="display: none;">
+                <h2 v-if="userObj.values[0].utenti_seguiti.length == 0">No followed users</h2>
                 <div v-for="name in userObj.values[0].utenti_seguiti">
                 <button type="button" class="green" @click="goToUserPage(name)">{{ name }}</button>
                 </div>
