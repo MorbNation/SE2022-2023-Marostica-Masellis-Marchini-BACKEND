@@ -1,18 +1,28 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { loggedUser } from '../states/user';
+import { reactive, ref, computed, onMounted } from 'vue';
+import { loggedUser, follow } from '../states/user';
 import { vote, savePost } from '../states/posts';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commento, addComment, commEdit } from '../states/post_comment';
 import { showHide } from '../states/util';
 import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPCommentsByUser, pcommento, ptitolo, addPComment, votePComment, segnalaPCommento, deletePCommento, editPCommento } from '../states/profile_comment';
+import { useRoute } from 'vue-router';
 
 const HOST = `http://localhost:8080/`;
 const API_URL = HOST + 'api';
 
+const route = useRoute();
 const warning = ref('');
 const username = ref('');
 const userPosts = reactive([]);
 const user = reactive([]);
+
+onMounted(() => {
+    username.value = route.params.username;
+
+    if(username.value != undefined){
+        getUser();
+    }
+});
 
 async function getUser() {
     userPosts.values = [];
@@ -86,6 +96,7 @@ async function getUser() {
 
         <div class="userBox" v-for="_user in user.values" :key="self" :style="{ backgroundImage: 'url(' + `/src/assets/` + _user.banner + ')' }">
             <h2>{{ _user.username }}</h2>
+            <button v-if="loggedUser.token" type="button" class="generic" @click="follow(_user.username)">Follow/Unfollow</button><br /><br />
             <img class="circular" :src="'/src/assets/' + _user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ _user.userscore }}</p>
             <button type="button" class="smaller" @click="showHide('commenti' + _user.username); fetchPCommentsByUser(_user.username)">Comms</button>

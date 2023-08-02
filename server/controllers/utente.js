@@ -123,6 +123,8 @@ const seguiUtente = async (req, res) => {
     // If no user is found returns an error
     if (!utente) return res.status(404).json({ Error: "Utente da seguire non trovato." });
 
+    utente = await Utente.findOne({ username: username }).exec();
+
     // If the user isn't already followed it adds it to the user's following list else it removes from the following list
     if (!utente.utenti_seguiti.includes(utenteDaSeguire)) utente.utenti_seguiti.push(utenteDaSeguire);
     else utente.utenti_seguiti = utente.utenti_seguiti.filter(entry => entry != utenteDaSeguire);

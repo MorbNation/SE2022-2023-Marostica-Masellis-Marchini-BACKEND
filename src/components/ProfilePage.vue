@@ -5,6 +5,7 @@ import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, fa
 import { showHide } from '../states/util';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment'
 import { profileComments, pcommEdit, pcommentsOK, fetchPCommentsByUser } from '../states/profile_comment';
+import { useRouter } from 'vue-router';
 
 const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
 const API_URL = HOST + '/api';
@@ -14,6 +15,7 @@ const tag2 = ref('');
 const testo2 = ref('');
 var selectedFile = "";
 var nomeFile = "";
+const router = useRouter();
 
 watch(loggedUser, (_loggedUser, _prevLoggedUser) => {
     fetchPostsByUser();
@@ -91,6 +93,10 @@ function onUploadFile(){
     fetchPostsByUser();
 }
 
+function goToUserPage(username){
+    router.push({ name: 'userparam', params: { username } })
+}
+
 </script>
 
 <template>
@@ -112,7 +118,7 @@ function onUploadFile(){
                 </div>
             </div><br />
             <button type="button" class="generic" @click="logout">Log out</button><br />
-            <button type="button" class="generic" @click="showHide('settings')">Settings</button>
+            <button type="button" class="generic" @click="showHide('settings')">Settings</button><br />
 
             <div id="settings" class="contentBox" style="display: none;">
 
@@ -144,6 +150,13 @@ function onUploadFile(){
 
                 <button type="button" class="generic" @click="deleteAccount">Delete this account</button>
 
+            </div>
+
+            <button type="button" class="generic" @click="showHide('followed')">Show followed users</button>
+            <div class="contentBox" id="followed" style="display: none;">
+                <div v-for="name in userObj.values[0].utenti_seguiti">
+                <button type="button" class="green" @click="goToUserPage(name)">{{ name }}</button>
+                </div>
             </div>
 
             <div class="contentBox">

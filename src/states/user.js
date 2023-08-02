@@ -250,6 +250,35 @@ function changeNSFW() {
     })
 }
 
+async function follow(username) {
+    let followBody = {
+        utenteDaSeguire: username
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/utente/segui', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(followBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+
+    fetchUser();
+}
+
 const loggedUser = reactive({
     token: undefined,
     username: undefined,
@@ -278,6 +307,7 @@ export {
     changeMail,
     changeNSFW,
     changePsw,
+    follow,
 
     loggedUser,
     username,

@@ -195,3 +195,20 @@ input[type="file"]:active::before {
 .vote:active {
   background-color: rgb(136, 136, 136);
 }
+
+button.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  /* Additional styles to make the button look like an anchor tag */
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline;
+}
+
+/* Add a hover effect to the button */
+button.green:hover {
+  background-color: hsla(160, 100%, 37%, 0.2);
+}
