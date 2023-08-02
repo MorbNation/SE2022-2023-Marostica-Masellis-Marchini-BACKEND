@@ -273,7 +273,7 @@ const salvaNeiFavoriti = async (req, res) => {
         utente.save();
 
         // Returns the id of the post and the username of the user saving the post
-        return res.status(200).json({ id: id, username: username });;
+        return res.status(200).json({ id: postId, username: username });;
     })
 }
 

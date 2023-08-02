@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { loggedUser, username, password, userreg, pswreg, pswreg2, email, login, register, logout, warning, userObj, fetchUser, deletePost, deleteAccount, regOK, mailOK, pswOK, nsfwOK, changeMail, changeNSFW, changePsw, newMail, newPsw, newPsw2 } from '../states/user';
-import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag } from '../states/posts';
+import { fetchPostsByUser, postsByUser, editPost, editOK, titolo, testo, tag, favoriti, fetchFavoriti, favoritiOK } from '../states/posts';
 import { showHide } from '../states/util';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment'
 import { profileComments, pcommEdit, pcommentsOK, fetchPCommentsByUser } from '../states/profile_comment';
@@ -145,6 +145,49 @@ function onUploadFile(){
                 <button type="button" class="generic" @click="deleteAccount">Delete this account</button>
 
             </div>
+
+            <div class="contentBox">
+                <h2>Favourite posts</h2>
+                <button type="button" class="generic" @click="showHide('favourites'); fetchFavoriti(user.post_favoriti)">Show</button>
+                <div :id="'favourites'" style="display: none;">
+                    <div class="contentBox" v-for="post in favoriti" :key="post.self">
+                        <h2>{{ post.titolo }}</h2>
+                        <img :src="'/src/assets/' + post.media" height="500" width="500"><br />
+                        <p>{{ post.testo }}</p>
+                        <p v-for="tag in post.tag">#{{ tag }}</p>text
+                        <p>Upvotes: {{ post.punteggio_post }}</p>
+                        <date-format :date="new Date(post.data)"></date-format><br /><br />
+                        <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
+                        <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
+                        <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
+                        <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
+                            <div v-if="loggedUser.token" name="newComment">
+                                <input type="text" class="textBox" name="newCommento" v-model="commento" placeholder="Comment" />
+                                <button type="button" class="smaller" @click="addComment(post.id)">Submit</button>
+                            </div>
+                            <h3 v-if="postComments.length == 0">No comments</h3>
+                            <div v-for="comment in postComments" :key="comment.self">
+                                <h2>{{ comment.creatore_commento }}   </h2>
+                                <p>{{ comment.testo }}</p>
+                                <p>Voto: {{ comment.punteggio_commento }}</p><br />
+                                <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(1, comment.id)">Upvote</button>
+                                <button type="button" class="vote" v-if="loggedUser.token" @click="voteComment(-1, comment.id)">Downvote</button>
+                                <button type="button" class="smaller" v-if="loggedUser.token" @click="segnalaCommento(comment.id)">Flag</button>
+                                <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="deleteCommento(comment.id)">Delete</button>
+                                <button type="button" class="smaller" v-if="loggedUser.username == comment.creatore_commento" @click="showHide('edit' + comment.id)">Edit</button>
+                                <div v-if="loggedUser.username == comment.creatore_commento" :id="'edit' + comment.id" style="display: none;">
+                                    <input type="text" class="textBox" v-model="commEdit" placeholder="Text" />
+                                    <button type="button" class="smaller" @click="editCommento(comment.id)">Submit</button>
+                                </div>
+                            </div>
+                            <span style="color: red;">{{ commentsOK }}</span>
+                        </div>
+                        <button type="button" class="smaller" v-if="loggedUser.token" @click="segnala(post.id)">Flag</button>
+                        <br /><br />
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="contentBox">

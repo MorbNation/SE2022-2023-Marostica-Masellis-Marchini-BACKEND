@@ -6,11 +6,13 @@ const API_URL = HOST + '/api';
 
 const posts = reactive([]);
 const postsByUser = reactive([]);
+const favoriti = reactive([]);
 
 const titolo = ref('');
 const testo = ref('');
 const tag = ref('');
 const editOK = ref('');
+const favoritiOK = ref('');
 
 async function editPost(postId, media) {
     let editBody = {
@@ -145,6 +147,61 @@ async function segnala (postId) {
     }
 }
 
+async function fetchFavoriti(postsArray) {
+    console.log(postsArray);
+    favoriti.splice(0);
+
+    for (const post of postsArray) {
+        try {
+            const res = await (fetch(API_URL + '/post/id/' + post, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                credentials: 'include'
+            }));
+
+            if(!res.ok) {
+                const data = await res.json();
+                favoritiOK.value = data.Error || "Something went wrong";
+                console.log(data.Error);
+            } else {
+                favoriti.push(await res.json());
+            }
+        } catch (err) {
+            favoriti.push({ titolo: "Netwrok error" });
+            console.log(err);
+        }
+    }
+}
+
+async function savePost(postId) {
+    let saveBody = {
+        id: postId
+    }
+
+    try {
+        const res = await (fetch(API_URL + '/post/salvaNeiFavoriti', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(saveBody),
+            credentials: 'include'
+        }));
+
+        if(!res.ok) {
+            const data = await res.json();
+            window.alert(data.Error || "Something went wrong");
+        } else {
+            console.log(res);
+        }
+    } catch (err) {
+        window.alert("Network error");
+        console.log(err);
+    }
+}
+
 export {
     posts,
     postsByUser,
@@ -152,10 +209,14 @@ export {
     titolo,
     testo,
     tag,
+    favoriti,
+    favoritiOK,
 
     fetchPosts,
     fetchPostsByUser,
     vote,
     editPost,
     segnala,
+    fetchFavoriti,
+    savePost
 }

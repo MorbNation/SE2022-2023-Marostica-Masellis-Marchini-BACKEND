@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { loggedUser } from '../states/user';
-import { vote } from '../states/posts';
+import { vote, savePost } from '../states/posts';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commento, addComment, commEdit } from '../states/post_comment';
 import { showHide } from '../states/util';
 import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPCommentsByUser, pcommento, ptitolo, addPComment, votePComment, segnalaPCommento, deletePCommento, editPCommento } from '../states/profile_comment';
@@ -126,10 +126,11 @@ async function getUser() {
             <date-format :date="new Date(post.data)"></date-format><br /><br />
             <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
             <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
+            <button class="smaller" v-if="loggedUser.token" @click="savePost(post.id)">Save</button>
             <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
             <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
                 <div v-if="loggedUser.token" name="newComment">
-                    <input type="text" class="textBox" name="commento" v-model="commento" placeholder="Comment" />
+                    <input type="text" class="textBox" name="newCommento" v-model="commento" placeholder="Comment" />
                     <button type="button" class="smaller" @click="addComment(post.id)">Submit</button>
                 </div>
                 <h3 v-if="postComments.length == 0">No comments</h3>

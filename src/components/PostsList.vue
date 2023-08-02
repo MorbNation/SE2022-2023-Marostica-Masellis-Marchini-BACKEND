@@ -1,6 +1,6 @@
 <script setup>
 import { onActivated, onMounted } from 'vue';
-import { posts, fetchPosts, vote, segnala } from '../states/posts.js'
+import { posts, fetchPosts, vote, segnala, savePost } from '../states/posts.js'
 import { loggedUser } from '../states/user';
 import { showHide } from '../states/util';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment';
@@ -32,6 +32,7 @@ onActivated(() => {
             <date-format :date="new Date(post.data)"></date-format><br /><br />
             <button class="vote" v-if="loggedUser.token" @click="vote(1, post.id)">Upvote</button>
             <button class="vote" v-if="loggedUser.token" @click="vote(-1, post.id)">Downvote</button>
+            <button class="smaller" v-if="loggedUser.token" @click="savePost(post.id)">Save</button>
             <button type="button" class="smaller" @click="showHide('commento' + post.id); fetchCommentsByPost(post.id)">Comms</button><br />
             <div class="contentBox" name="commento" :id="'commento' + post.id" style="display: none;">
                 <div v-if="loggedUser.token" name="newComment">

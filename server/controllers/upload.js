@@ -6,7 +6,7 @@ const upload = (req, res) => {
     console.log("Upload invoked");
 
     if(!req.files){
-        return res.status(500).send({ msg: "file not found" });
+        return res.status(500).send({ Error: "file not found" });
     }
 
     const file = req.files.file;
@@ -15,7 +15,7 @@ const upload = (req, res) => {
     file.mv(`${parentDir}/src/assets/${file.name}`, (err) =>{
         if(err){
             console.error(err);
-            return res.status(500).send({ msg: "Error occured" });
+            return res.status(500).send({ Error: "Error occured" });
         }
         return res.status(201).json({ name: file.name, path: `./assets/${file.name}`});
     });
