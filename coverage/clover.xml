@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692717975967" clover="3.2.0">
-  <project timestamp="1692717975967" name="All files">
-    <metrics statements="694" coveredstatements="371" conditionals="239" coveredconditionals="59" methods="90" coveredmethods="35" elements="1023" coveredelements="465" complexity="0" loc="694" ncloc="694" packages="6" files="19" classes="19"/>
+<coverage generated="1692718543517" clover="3.2.0">
+  <project timestamp="1692718543517" name="All files">
+    <metrics statements="694" coveredstatements="402" conditionals="239" coveredconditionals="86" methods="90" coveredmethods="38" elements="1023" coveredelements="526" complexity="0" loc="694" ncloc="694" packages="6" files="19" classes="19"/>
     <package name="server">
       <metrics statements="32" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
       <file name="server.js" path="/home/alessandro/Desktop/SE2022-2023-Marostica-Masellis-Marchini/server/server.js">
@@ -41,7 +41,7 @@
       </file>
     </package>
     <package name="server.controllers">
-      <metrics statements="502" coveredstatements="218" conditionals="202" coveredconditionals="55" methods="79" coveredmethods="29"/>
+      <metrics statements="502" coveredstatements="220" conditionals="202" coveredconditionals="57" methods="79" coveredmethods="29"/>
       <file name="commento_post.js" path="/home/alessandro/Desktop/SE2022-2023-Marostica-Masellis-Marchini/server/controllers/commento_post.js">
         <metrics statements="122" coveredstatements="12" conditionals="49" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="2" count="2" type="stmt"/>
@@ -300,7 +300,7 @@
         <line num="48" count="0" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
-        <line num="54" count="29" type="stmt"/>
+        <line num="54" count="38" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
         <line num="63" count="2" type="stmt"/>
         <line num="65" count="2" type="stmt"/>
@@ -433,7 +433,7 @@
         <line num="24" count="2" type="stmt"/>
       </file>
       <file name="utente.js" path="/home/alessandro/Desktop/SE2022-2023-Marostica-Masellis-Marchini/server/controllers/utente.js">
-        <metrics statements="124" coveredstatements="68" conditionals="43" coveredconditionals="13" methods="18" coveredmethods="10"/>
+        <metrics statements="124" coveredstatements="70" conditionals="43" coveredconditionals="15" methods="18" coveredmethods="10"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -448,11 +448,11 @@
         <line num="20" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="32" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="33" count="1" type="stmt"/>
         <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="38" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
@@ -710,52 +710,52 @@
       </file>
     </package>
     <package name="server.util">
-      <metrics statements="53" coveredstatements="16" conditionals="33" coveredconditionals="1" methods="6" coveredmethods="2"/>
+      <metrics statements="53" coveredstatements="45" conditionals="33" coveredconditionals="26" methods="6" coveredmethods="5"/>
       <file name="textRequirements.js" path="/home/alessandro/Desktop/SE2022-2023-Marostica-Masellis-Marchini/server/util/textRequirements.js">
-        <metrics statements="46" coveredstatements="9" conditionals="33" coveredconditionals="1" methods="5" coveredmethods="1"/>
+        <metrics statements="46" coveredstatements="38" conditionals="33" coveredconditionals="26" methods="5" coveredmethods="4"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="5" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="9" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="13" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="15" count="0" type="stmt"/>
+        <line num="5" count="14" type="cond" truecount="4" falsecount="0"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="9" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="13" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="15" count="3" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="14" type="cond" truecount="3" falsecount="1"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="cond" truecount="0" falsecount="7"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="51" count="1" type="cond" truecount="5" falsecount="2"/>
+        <line num="52" count="1" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="59" count="2" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
         <line num="64" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="65" count="1" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
         <line num="72" count="2" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="7" type="cond" truecount="3" falsecount="1"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="86" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="86" count="1" type="cond" truecount="3" falsecount="1"/>
         <line num="87" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
         <line num="94" count="2" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
         <line num="99" count="2" type="stmt"/>

@@ -28,12 +28,15 @@ beforeAll(async () => {
     newPost = res.body.Id;
 });
 
-afterAll(async (done) => {
+afterAll(async () => {
+    jest.setTimeout(30000);
     await mongoose.connection.close();
-    server.close(() => {
-        done();
+    return new Promise((resolve) => {
+        server.close(() => {
+            resolve();
+        });
     });
-})
+});
 
 // TESTS
 
@@ -221,7 +224,7 @@ describe('PUT /api/post/modifica', () => {
 
         expect(res.status).toEqual(401);
     });
-    
+
     test('PUT /api/post/modifica should return 200', async () => {
         const loginRes = await request(server)
             .put('/api/utente/login')
