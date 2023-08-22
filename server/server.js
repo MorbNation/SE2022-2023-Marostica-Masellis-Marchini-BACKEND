@@ -22,20 +22,24 @@ app.use(express.static('src/assets'));
 app.use(fileUpload());
 
 // Establish connection with the database
-mongoose.connect(
-    process.env.DB_TOKEN,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    (err) => {
-        if (err) return console.log("Error: ", err);
+async function connectToDatabase() {
+    try {
+        await mongoose.connect(
+            process.env.DB_TOKEN,
+            { useNewUrlParser: true, useUnifiedTopology: true }
+        );
         console.log("MongoDB Connection -- Ready state is: ", mongoose.connection.readyState);
+    } catch (err) {
+        console.error("Error connecting to MongoDB:", err);
     }
-);
+}
+connectToDatabase();
 
 app.get("/", (req, res) => {
     res.send(req.headers, req.originalUrl, req.method, req.body);
 });
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
     console.log(`App listening on port ${process.env.PORT}`);
 });
 
@@ -49,3 +53,5 @@ const routesUpload = require('./routes/upload');
 // Binds the APIs and the documentation module
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesUpload);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+module.exports = server;

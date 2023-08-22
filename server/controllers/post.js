@@ -11,9 +11,6 @@ const newPost = async (req, res) => {
     console.log(req.body);
     console.log('Trying to add new post, checking if a post with the same title exists...');
 
-    // Checks if a post with the same title already exists
-    let post = await Post.findOne({ titolo: req.body.titolo }).exec();
-
     const id = uuidv4();
 
     // A post cannot have both media and text, if so an error is returned
@@ -21,28 +18,22 @@ const newPost = async (req, res) => {
         return res.status(400).json({ Error: "Un post non puó avere sia media che testo."});
     }
 
-    // If no post with the same title is found create a new post object
-    if (!post) {
-        const newPost = new Post({
-            id: id,
-            titolo: req.body.titolo,
-            data: Date.now(),
-            testo: req.body.testo === '' ? null : req.body.testo,
-            media: req.body.media === '' ? null : req.body.media,
-            tag: req.body.tag,
-            associato_a_contest: req.body.associato_a_contest,
-            creatore_post: req.body.username
-        });
+    const newPost = new Post({
+        id: id,
+        titolo: req.body.titolo,
+        data: Date.now(),
+        testo: req.body.testo === '' ? null : req.body.testo,
+        media: req.body.media === '' ? null : req.body.media,
+        tag: req.body.tag,
+        associato_a_contest: req.body.associato_a_contest,
+        creatore_post: req.body.username
+    });
 
-        // Saves the new post to the databaes and returns its id
-        newPost.save((err, data) => {
-            if (err) return res.status(500).send();
-            return res.status(201).json({ Id: id });
-        });
-    } else {
-        // If a post with the same title is found returns an error
-        return res.status(400).json({ Error: "Il post esiste giá."});
-    }
+    // Saves the new post to the databaes and returns its id
+    newPost.save((err, data) => {
+        if (err) return res.status(500).send();
+        return res.status(201).json({ Id: id });
+    });
 };
 
 // Get all posts fromt he database
