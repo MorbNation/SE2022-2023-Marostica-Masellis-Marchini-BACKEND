@@ -1,10 +1,10 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const server = require('../server'); // Update the path to your server file
+const server = require('../server');
 require('dotenv').config();
 
-let cookie; // Store the authentication token
 const username = 'newUser';
+const username2 = 'oof';
 
 beforeAll(async () => {
     jest.setTimeout(10000);
@@ -22,7 +22,17 @@ beforeAll(async () => {
         favourites: []
     };
 
+    const userBody2 = {
+        username: username2,
+        email: 'oofers@studenti.unitn.it',
+        password: 'Cotoletta.123',
+        lingua: 'italiano',
+        followed_users: [],
+        favourites: []
+    };
+
     await request(server).post('/api/utente').send(userBody);
+    await request(server).post('/api/utente').send(userBody2);
 });
 
 afterAll(async () => {
@@ -123,13 +133,37 @@ describe('POST /api/utente', () => {
             .send(userBody)
         expect(res.status).toEqual(400);
     });
+
+    test('POST /api/utente should return 409 for already existing user', async () => {
+        const userBody = {
+            username: username,
+            email: 'newuser@studenti.unitn.it',
+            password: 'Cotoletta.123',
+            lingua: 'italiano',
+            followed_users: [],
+            favourites: []
+        };
+
+        const res = await request(server)
+            .post('/api/utente')
+            .send(userBody);
+        expect(res.status).toEqual(409);
+    });
 });
 
 describe('PUT /api/utente/login', () => {
+    beforeAll(async () => {
+        await request(server).put('/api/utente/logout');
+    });
+
+    afterAll(async () => {
+        await request(server).put('/api/utente/logout');
+    });
+
     test('PUT /api/utente/login should return a token', async () => {
         const res = await request(server)
             .put('/api/utente/login')
-            .send({ username: `Ilcalmissimo`, password: "Cotoletta.123" });
+            .send({ username: `${username}`, password: 'Cotoletta.123' });
         expect(res.status).toEqual(200);
         expect(res.body.token).toBeDefined();
     });
@@ -150,6 +184,10 @@ describe('PUT /api/utente/login', () => {
 });
 
 describe('DELETE /api/utente/:user', () => {
+    afterAll(async () => {
+        await request(server).put('/api/utente/logout');
+    });
+
     test('DELETE /api/utente/:user should return 401 for unauthorized user', async () => {
         const res = await request(server)
             .delete(`/api/utente/${username}`)
@@ -157,18 +195,23 @@ describe('DELETE /api/utente/:user', () => {
     });
 
     test('DELETE /api/utente/:user should delete a user', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username, password: "Cotoletta.123" });
+        let cookie = loginRes.body.token;
         const res = await request(server)
             .delete(`/api/utente/${username}`)
+            .set('Cookie', `tokenEpiOpera=${cookie}`);
         expect(res.status).toEqual(200);
     });
 });
 
 describe('PUT /api/utente/segui', () => {
+    afterAll(async () => {
+        await request(server).put('/api/utente/logout');
+    });
+
     test('PUT /api/utente/segui should return true after following a user', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: "Cotoletta.123" });
+        const cookie = loginRes.body.token;
         const res = await request(server)
             .put('/api/utente/segui')
             .send({ utenteDaSeguire: 'Ilcalmissimo' })
@@ -178,8 +221,8 @@ describe('PUT /api/utente/segui', () => {
     });
 
     test('PUT /api/utente/segui should return false after unfollowing a user', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: "Cotoletta.123" });
+        const cookie = loginRes.body.token;
         const res = await request(server)
             .put('/api/utente/segui')
             .send({ utenteDaSeguire: 'Ilcalmissimo' })
@@ -189,8 +232,8 @@ describe('PUT /api/utente/segui', () => {
     });
 
     test('PUT /api/utente/segui should return 404 for non-existing user to follow', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: "Cotoletta.123" });
+        const cookie = loginRes.body.token;
         const res = await request(server)
             .put('/api/utente/segui')
             .send({ utenteDaSeguire: 'nonexistinguser' })
@@ -202,17 +245,20 @@ describe('PUT /api/utente/segui', () => {
 describe('PUT /api/utente/logout', () => {
     test('PUT /api/utente/logout should clear the cookie', async () => {
         const res = await request(server)
-            .put('/api/utente/logout')
-            .set('Cookie', `tokenEpiOpera=${cookie}`);
+            .put('/api/utente/logout');
         expect(res.status).toEqual(200);
         expect(res.header['set-cookie']).toBeDefined();
     });
 });
 
 describe('PUT /api/utente/modificaMail', () => {
+    afterAll(async () => {
+        await request(server).put('/api/utente/logout');
+    });
+
     test('PUT /api/utente/modificaMail should update email successfully', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: "Cotoletta.123" });
+        const cookie = loginRes.body.token;
         const newEmail = 'newemail@studenti.unitn.it';
         const res = await request(server)
             .put('/api/utente/modificaMail')
@@ -223,8 +269,8 @@ describe('PUT /api/utente/modificaMail', () => {
     });
 
     test('PUT /api/utente/modificaMail should return 400 for invalid email', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
+        const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: "Cotoletta.123" });
+        const cookie = loginRes.body.token;
         const invalidEmail = 'invalidemail@ciao.it';
         const res = await request(server)
             .put('/api/utente/modificaMail')
@@ -235,6 +281,21 @@ describe('PUT /api/utente/modificaMail', () => {
 });
 
 describe('PUT /api/utente/modificaPassword', () => {
+    let cookie; // Declare the cookie variable outside the hooks
+
+    beforeAll(async () => {
+        // Log in the user and store the token in the cookie variable
+        const loginRes = await request(server)
+            .put('/api/utente/login')
+            .send({ username: username2, password: "Cotoletta.123" });
+        cookie = loginRes.body.token;
+    });
+
+    afterAll(async () => {
+        // Log out the user after each test
+        await request(server).put('/api/utente/logout');
+    });
+
     test('PUT /api/utente/modificaPassword should update password successfully', async () => {
         const newPassword = 'NewPassword123.!';
         const res = await request(server)
@@ -245,8 +306,6 @@ describe('PUT /api/utente/modificaPassword', () => {
     });
 
     test('PUT /api/utente/modificaPassword should return 400 for invalid password', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
         const invalidPassword = 'invalidpassword';
         const res = await request(server)
             .put('/api/utente/modificaPassword')
@@ -256,10 +315,24 @@ describe('PUT /api/utente/modificaPassword', () => {
     });
 });
 
+
 describe('PUT /api/utente/modificaNSFW', () => {
-    test('PUT /api/utente/modificaNSFW should update NSFW setting successfully', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
+    let cookie; // Declare the cookie variable outside the hooks
+
+    beforeAll(async () => {
+        // Log in the user and store the token in the cookie variable
+        const loginRes = await request(server)
+            .put('/api/utente/login')
+            .send({ username: username2, password: "Cotoletta.123" });
         cookie = loginRes.body.token;
+    });
+
+    afterAll(async () => {
+        // Log out the user after each test
+        await request(server).put('/api/utente/logout');
+    });
+
+    test('PUT /api/utente/modificaNSFW should update NSFW setting successfully', async () => {
         const newNSFWSetting = 'yes';
         const res = await request(server)
             .put('/api/utente/modificaNSFW')
@@ -269,13 +342,38 @@ describe('PUT /api/utente/modificaNSFW', () => {
     });
 
     test('PUT /api/utente/modificaNSFW should return 400 for invalid NSFW setting', async () => {
-        const loginRes = await request(server).put('/api/utente/login').send({ username: `${username}`, password: "Cotoletta.123" });
-        cookie = loginRes.body.token;
         const invalidNSFWSetting = 'invalid';
         const res = await request(server)
             .put('/api/utente/modificaNSFW')
             .send({ nsfw: invalidNSFWSetting })
             .set('Cookie', `tokenEpiOpera=${cookie}`);
+        expect(res.status).toEqual(400);
+    });
+});
+
+describe('PUT /api/utente/cambiaLingua', () => {
+    let cookie; // Declare the cookie variable outside the hooks
+
+    beforeAll(async () => {
+        // Log in the user and store the token in the cookie variable
+        const loginRes = await request(server)
+            .put('/api/utente/login')
+            .send({ username: username2, password: "Cotoletta.123" });
+        cookie = loginRes.body.token;
+    });
+
+    afterAll(async () => {
+        // Log out the user after each test
+        await request(server).put('/api/utente/logout');
+    });
+
+    test('PUT /api/utente/cambiaLingua should return 200', async () => {
+        const res = await request(server).put('/api/utente/cambiaLingua').send({ lingua: 'italiano' }).set('Cookie', `tokenEpiOpera=${cookie}`);
+        expect(res.status).toEqual(200);
+    });
+
+    test('PUT /api/utente/cambiaLingua should return 400 for invalid language', async () => {
+        const res = await request(server).put('/api/utente/cambiaLingua').send({ lingua: 'blab' }).set('Cookie', `tokenEpiOpera=${cookie}`);
         expect(res.status).toEqual(400);
     });
 });
