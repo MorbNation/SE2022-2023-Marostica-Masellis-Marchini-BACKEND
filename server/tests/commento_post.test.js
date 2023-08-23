@@ -14,7 +14,7 @@ beforeAll(async () => {
     );
 
     const commentBody = {
-        id_post: '093edfa2-10d8-4716-999d-7efcab5eec79',
+        id_post: 'cbef8ef6-4dec-41f8-a39f-7c512c3267c5',
         testo: 'ciaone'
     };
 
@@ -40,7 +40,7 @@ describe('POST /api/commento_post', () => {
         const cookie = loginRes.body.token;
 
         const commentBody = {
-            id_post: '093edfa2-10d8-4716-999d-7efcab5eec79',
+            id_post: 'cbef8ef6-4dec-41f8-a39f-7c512c3267c5',
             testo: 'ciaoooaoaoa'
         };
 
