@@ -323,7 +323,7 @@ describe('PUT /api/utente/modificaNSFW', () => {
         // Log in the user and store the token in the cookie variable
         const loginRes = await request(server)
             .put('/api/utente/login')
-            .send({ username: username2, password: "Cotoletta.123" });
+            .send({ username: username2, password: "NewPassword123.!" });
         cookie = loginRes.body.token;
     });
 
@@ -358,7 +358,7 @@ describe('PUT /api/utente/cambiaLingua', () => {
         // Log in the user and store the token in the cookie variable
         const loginRes = await request(server)
             .put('/api/utente/login')
-            .send({ username: username2, password: "Cotoletta.123" });
+            .send({ username: username2, password: "NewPassword123.!" });
         cookie = loginRes.body.token;
     });
 
