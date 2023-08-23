@@ -36,13 +36,16 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await request(server).put('/api/utente/logout');
+    const loginRes = await request(server).put('/api/utente/login').send({ username: username2, password: 'NewPassword123.!' });
+    const cookie = loginRes.body.token;
+    await request(server).delete(`/api/utente/${username2}`).set('Cookie', `tokenEpiOpera=${cookie}`);
+    const loginRes2 = await request(server).put('/api/utente/login').send({ username: 'newuser', password: 'NewPassword.123' });
+    const cookie2 = loginRes2.body.token;
+    await request(server).delete(`/api/utente/newuser`).set('Cookie', `tokenEpiOpera=${cookie2}`);
+
     jest.setTimeout(30000);
     await mongoose.connection.close();
-    return new Promise((resolve) => {
-        server.close(() => {
-            resolve();
-        });
-    });
 });
 
 describe('GET /api/utente/:user', () => {

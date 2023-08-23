@@ -4,6 +4,7 @@ const server = require('../server');
 require('dotenv').config();
 
 var newPost;
+var newPost2;
 
 // Behaviour
 
@@ -29,13 +30,11 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    const loginRes = await request(server).put('/api/utente/login').send({ username: "Ilcalmissimo", password: "Cotoletta.123" });
+    const cookie = loginRes.body.token;
+    await request(server).delete(`/api/post/${newPost2}`).set('Cookie', `tokenEpiOpera=${cookie}`);
     jest.setTimeout(30000);
     await mongoose.connection.close();
-    return new Promise((resolve) => {
-        server.close(() => {
-            resolve();
-        });
-    });
 });
 
 // TESTS
@@ -89,6 +88,7 @@ describe('POST /api/post', () => {
         const res = await request(server).post('/api/post').send(postBody).set('Cookie', `tokenEpiOpera=${cookie}`);
 
         expect(res.status).toEqual(201);
+        newPost2 = res.body.Id;
     });
 
     test('POST /api/post should return 400', async () => {
