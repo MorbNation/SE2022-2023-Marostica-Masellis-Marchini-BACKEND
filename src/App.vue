@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <img alt="EpiOpera logo" class="logo" src="../media/logo.png" width="150" height="150" />
+    <img alt="EpiOpera logo" class="logo" src="../../media/logo.png" width="150" height="150" />
 
     <div class="wrapper">
       <nav>
