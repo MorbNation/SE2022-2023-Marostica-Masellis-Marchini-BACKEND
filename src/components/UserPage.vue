@@ -97,7 +97,7 @@ async function getUser() {
         <div class="userBox" v-for="_user in user.values" :key="self" :style="{ backgroundImage: 'url(' + `/src/assets/` + _user.banner + ')' }">
             <h2>{{ _user.username }}</h2>
             <button v-if="loggedUser.token" type="button" class="generic" @click="follow(_user.username)">Follow/Unfollow</button><br /><br />
-            <img class="circular" :src="'../../media/' + _user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
+            <img class="circular" :src="'./media/' + _user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ _user.userscore }}</p>
             <button type="button" class="smaller" @click="showHide('commenti' + _user.username); fetchPCommentsByUser(_user.username)">Comms</button>
             <div class="contentBox" :id="'commenti' + _user.username" style="display: none;">
@@ -130,7 +130,7 @@ async function getUser() {
 
         <div v-for="post in userPosts.values" :key="post.self" class="contentBox">
             <h2>{{ post.titolo }}</h2>
-            <img :src="'../../media/' + post.media" height="500" width="500"><br />
+            <img :src="'./media/' + post.media" height="500" width="500"><br />
             <p>{{ post.testo }}</p>
             <p v-for="tag in post.tag">#{{ tag }}</p>text
             <p>Upvotes: {{ post.punteggio_post }}</p>
