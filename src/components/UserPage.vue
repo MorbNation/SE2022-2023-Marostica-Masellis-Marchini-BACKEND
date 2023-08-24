@@ -130,7 +130,7 @@ async function getUser() {
 
         <div v-for="post in userPosts.values" :key="post.self" class="contentBox">
             <h2>{{ post.titolo }}</h2>
-            <img :src="'/media/' + post.media" height="500" width="500"><br />
+            <img v-if="post.media != null" :src="'/media/' + post.media" height="500" width="500"><br />
             <p>{{ post.testo }}</p>
             <p v-for="tag in post.tag">#{{ tag }}</p>text
             <p>Upvotes: {{ post.punteggio_post }}</p>

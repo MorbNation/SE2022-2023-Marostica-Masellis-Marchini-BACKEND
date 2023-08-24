@@ -166,7 +166,7 @@ function goToUserPage(username){
                 <div :id="'favourites'" style="display: none;">
                     <div class="contentBox" v-for="post in favoriti" :key="post.self">
                         <h2>{{ post.titolo }}</h2>
-                        <img :src="'/media/' + post.media" height="500" width="500"><br />
+                        <img v-if="post.media != null" :src="'/media/' + post.media" height="500" width="500"><br />
                         <p>{{ post.testo }}</p>
                         <p v-for="tag in post.tag">#{{ tag }}</p>text
                         <p>Upvotes: {{ post.punteggio_post }}</p>
