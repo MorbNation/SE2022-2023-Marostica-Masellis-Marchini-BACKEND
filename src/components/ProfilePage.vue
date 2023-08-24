@@ -7,7 +7,7 @@ import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaComm
 import { profileComments, pcommEdit, pcommentsOK, fetchPCommentsByUser } from '../states/profile_comment';
 import { useRouter } from 'vue-router';
 
-const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080` || 'https://epiopera-5f590f42a6df.herokuapp.com/';
+const HOST = import.meta.env.VITE_API_HOST || 'https://epiopera-5f590f42a6df.herokuapp.com/';
 const API_URL = HOST + '/api';
 
 const titolo2 = ref('');

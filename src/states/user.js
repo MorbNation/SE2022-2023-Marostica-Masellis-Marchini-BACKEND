@@ -1,7 +1,7 @@
 import { ref, reactive } from "vue";
 import { fetchPostsByUser } from "./posts";
 
-const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080` || 'https://epiopera-5f590f42a6df.herokuapp.com/';
+const HOST = import.meta.env.VITE_API_HOST || 'https://epiopera-5f590f42a6df.herokuapp.com/';
 const API_URL = HOST + '/api';
 
 const username = ref('Ilcalmissimo');  /* TODO: change to empty and set placeholder for both */

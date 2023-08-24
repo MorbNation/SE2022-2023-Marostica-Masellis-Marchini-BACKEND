@@ -5,7 +5,7 @@ import { loggedUser } from '../states/user';
 import { showHide } from '../states/util';
 import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaCommento, deleteCommento, editCommento, commEdit, commento, addComment } from '../states/post_comment';
 
-const HOST = `http://localhost:8080/` || 'https://epiopera-5f590f42a6df.herokuapp.com/';
+const HOST = 'https://epiopera-5f590f42a6df.herokuapp.com/';
 const API_URL = HOST + '/api';
 
 onMounted(() => {
