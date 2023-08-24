@@ -12,6 +12,13 @@ var cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 
+// Imports the APIs routes
+const routesPost = require('./routes/post');
+const routesUtente = require('./routes/utente');
+const routesCommento_Post = require('./routes/commento_post');
+const routesCommento_Profilo = require('./routes/commento_profilo');
+const routesUpload = require('./routes/upload');
+
 // Bindings
 app.use(express.json());
 app.use(cookieParser());
@@ -21,6 +28,10 @@ app.use(cors({
 }));
 app.use(express.static('src/assets'));
 app.use(fileUpload());
+
+const server = app.listen(process.env.PORT, () => {
+    console.log(`App listening on port ${process.env.PORT}`);
+});
 
 // Establish connection with the database
 async function connectToDatabase() {
@@ -36,26 +47,16 @@ async function connectToDatabase() {
 }
 connectToDatabase();
 
-app.get("/", (req, res) => {
-    res.send(req.headers, req.originalUrl, req.method, req.body);
-});
-
-const server = app.listen(process.env.PORT, () => {
-    console.log(`App listening on port ${process.env.PORT}`);
-});
-
-// Imports the APIs routes
-const routesPost = require('./routes/post');
-const routesUtente = require('./routes/utente');
-const routesCommento_Post = require('./routes/commento_post');
-const routesCommento_Profilo = require('./routes/commento_profilo');
-const routesUpload = require('./routes/upload');
-
 // Binds the APIs and the documentation module
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesUpload);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(express.static(path.join(__dirname, 'src')));
+app.get("/", (req, res) => {
+    res.send(req.headers, req.originalUrl, req.method, req.body);
+});
+
+app.use(express.static(__dirname));
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 })
