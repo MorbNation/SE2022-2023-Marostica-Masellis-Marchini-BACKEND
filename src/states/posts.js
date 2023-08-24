@@ -1,7 +1,7 @@
 import { reactive, ref } from 'vue'
 import { loggedUser } from './user';
 
-const HOST = import.meta.env.VITE_API_HOST || `https://epiopera-4f1c76fdd577.herokuapp.com/`;
+const HOST = import.meta.env.VITE_API_HOST || `https://epiopera-4f1c76fdd577.herokuapp.com`;
 const API_URL = HOST + '/api';
 
 const posts = reactive([]);

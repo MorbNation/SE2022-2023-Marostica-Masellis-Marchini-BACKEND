@@ -1,7 +1,7 @@
 import { reactive, ref } from "vue";
 import { postComments } from "./post_comment";
 
-const HOST = import.meta.env.VITE_API_HOST || `https://epiopera-4f1c76fdd577.herokuapp.com/`;
+const HOST = import.meta.env.VITE_API_HOST || `https://epiopera-4f1c76fdd577.herokuapp.com`;
 const API_URL = HOST + '/api';
 
 const profileComments = reactive([]);
