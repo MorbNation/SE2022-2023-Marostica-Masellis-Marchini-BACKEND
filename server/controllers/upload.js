@@ -10,7 +10,7 @@ const upload = (req, res) => {
     }
 
     const file = req.files.file;
-    const parentDir = path.resolve(__dirname, '..');
+    const parentDir = path.resolve(__dirname, '../..');
     
     file.mv(`${parentDir}/media/${file.name}`, (err) =>{
         if(err){
