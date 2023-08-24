@@ -12,12 +12,12 @@ const upload = (req, res) => {
     const file = req.files.file;
     const parentDir = path.resolve(__dirname, '../..');
     
-    file.mv(`${parentDir}/dist/src/assets/${file.name}`, (err) =>{
+    file.mv(`${parentDir}/dist/assets/${file.name}`, (err) =>{
         if(err){
             console.error(err);
             return res.status(500).send({ Error: "Error occured" });
         }
-        return res.status(201).json({ name: file.name, path: `./assets/${file.name}`});
+        return res.status(201).json({ name: file.name, path: `./dist/assets/${file.name}`});
     });
 };
 
