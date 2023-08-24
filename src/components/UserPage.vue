@@ -8,7 +8,7 @@ import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPComments
 import { useRoute } from 'vue-router';
 
 const HOST = `https://epiopera-4f1c76fdd577.herokuapp.com`;
-const API_URL = HOST + 'api';
+const API_URL = HOST + '/api';
 
 const route = useRoute();
 const warning = ref('');
