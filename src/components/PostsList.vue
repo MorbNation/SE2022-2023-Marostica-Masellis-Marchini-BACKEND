@@ -25,7 +25,7 @@ onActivated(() => {
         <div v-for="post in posts.values" :key="post.self" class="contentBox">
             <h4>u/{{ post.creatore_post }}</h4>
             <h2>{{ post.titolo }}</h2>
-            <img :src="'/assets/' + post.media" height="500" width="500"><br />
+            <img :src="'../media/' + post.media" height="500" width="500"><br />
             <p>{{ post.testo }}</p>
             <p v-for="tag in post.tag">#{{ tag }}</p>
             <p>Upvotes: {{ post.punteggio_post }}</p>

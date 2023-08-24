@@ -106,7 +106,7 @@ function goToUserPage(username){
         <div class="userBox" v-for="user in userObj.values" :key="user.self" :style="{ backgroundImage: 'url(' + `/src/assets/` + user.banner + ')' }">
 
             <h2>Welcome {{ user.username }}</h2><br />
-            <img class="circular" :src="'/assets/' + user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
+            <img class="circular" :src="'../media/' + user.icona_profilo" alt="ProPic" width="100" height="100" /><br />
             <p>Userscore: {{ user.userscore }}</p>
             <button type="button" class="smaller" @click="showHide('commenti' + user.username); fetchPCommentsByUser(user.username)">Comms</button>
             <div class="contentBox" :id="'commenti' + user.username" style="display: none;">
@@ -166,7 +166,7 @@ function goToUserPage(username){
                 <div :id="'favourites'" style="display: none;">
                     <div class="contentBox" v-for="post in favoriti" :key="post.self">
                         <h2>{{ post.titolo }}</h2>
-                        <img :src="'/assets/' + post.media" height="500" width="500"><br />
+                        <img :src="'../media/' + post.media" height="500" width="500"><br />
                         <p>{{ post.testo }}</p>
                         <p v-for="tag in post.tag">#{{ tag }}</p>text
                         <p>Upvotes: {{ post.punteggio_post }}</p>
@@ -217,7 +217,7 @@ function goToUserPage(username){
 
         <div v-for="post in postsByUser.values" :key="post.self" class="contentBox">
             <h2>{{ post.titolo }}</h2>
-            <img v-if="post.media != null" :src="'/assets/' + post.media" height="500" width="500"><br />
+            <img v-if="post.media != null" :src="'../media/' + post.media" height="500" width="500"><br />
             <h3>{{ post.testo }}</h3><br />
             <p v-for="tag in post.tag">#{{ tag }}</p>
             <p>Upvotes: {{ post.punteggio_post }}</p>
