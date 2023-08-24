@@ -22,10 +22,7 @@ const routesUpload = require('./routes/upload');
 // Bindings
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
+app.use(cors());
 app.use(express.static('src/assets'));
 app.use(fileUpload());
 
