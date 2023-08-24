@@ -10,6 +10,7 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = YAML.load('./swagger.yaml');
 var cookieParser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 
 // Bindings
 app.use(express.json());
@@ -53,5 +54,10 @@ const routesUpload = require('./routes/upload');
 // Binds the APIs and the documentation module
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesUpload);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+app.use(express.static(path.join(__dirname, 'src')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+})
 
 module.exports = server;
