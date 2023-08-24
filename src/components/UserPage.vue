@@ -6,8 +6,9 @@ import { postComments, commentsOK, fetchCommentsByPost, voteComment, segnalaComm
 import { showHide } from '../states/util';
 import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPCommentsByUser, pcommento, ptitolo, addPComment, votePComment, segnalaPCommento, deletePCommento, editPCommento } from '../states/profile_comment';
 import { useRoute } from 'vue-router';
+require('dotenv').config();
 
-const HOST = `http://localhost:8080/`;
+const HOST = `http://localhost:${process.env.PORT}/`;
 const API_URL = HOST + 'api';
 
 const route = useRoute();

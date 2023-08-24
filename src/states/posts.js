@@ -1,7 +1,8 @@
 import { reactive, ref } from 'vue'
 import { loggedUser } from './user';
+require('dotenv').config();
 
-const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
+const HOST = import.meta.env.VITE_API_HOST || `http://localhost:${process.env.PORT}`;
 const API_URL = HOST + '/api';
 
 const posts = reactive([]);

@@ -1,7 +1,8 @@
 import { reactive, ref } from "vue";
 import { postComments } from "./post_comment";
+require('dotenv').config();
 
-const HOST = import.meta.env.VITE_API_HOST || `http://localhost:8080`;
+const HOST = import.meta.env.VITE_API_HOST || `http://localhost:${process.env.PORT}`;
 const API_URL = HOST + '/api';
 
 const profileComments = reactive([]);
