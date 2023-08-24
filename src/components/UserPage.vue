@@ -7,7 +7,7 @@ import { showHide } from '../states/util';
 import { profileComments, pcommentsOK, pcommEdit, pcommEditTitle, fetchPCommentsByUser, pcommento, ptitolo, addPComment, votePComment, segnalaPCommento, deletePCommento, editPCommento } from '../states/profile_comment';
 import { useRoute } from 'vue-router';
 
-const HOST = `http://localhost:${process.env.HEROKU}/`;
+const HOST = `https://epiopera-4f1c76fdd577.herokuapp.com/`;
 const API_URL = HOST + 'api';
 
 const route = useRoute();
