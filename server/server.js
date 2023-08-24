@@ -19,13 +19,15 @@ const routesCommento_Post = require('./routes/commento_post');
 const routesCommento_Profilo = require('./routes/commento_profilo');
 const routesUpload = require('./routes/upload');
 
+const corsOptions = {
+    origin: 'https://epiopera-5f590f42a6df.herokuapp.com',
+    credentials: true,
+};
+
 // Bindings
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(express.static('src/assets'));
 app.use(fileUpload());
 
@@ -52,6 +54,8 @@ app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profi
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(express.static(path.join(__dirname, '../dist')));
+
+app.options('*', cors(corsOptions));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist', 'index.html'));
