@@ -7,7 +7,7 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-host: localhost:8080
+host: https://epiopera-5f590f42a6df.herokuapp.com/
 basepath: /api/
 schemes:
   - http
