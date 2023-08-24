@@ -12,7 +12,7 @@ const upload = (req, res) => {
     const file = req.files.file;
     const parentDir = path.resolve(__dirname, '../..');
     
-    file.cp(`${parentDir}/public/${file.name}`, (err) =>{
+    file.cp(`${parentDir}/media/${file.name}`, (err) =>{
         if(err){
             console.error(err);
             return res.status(500).send({ Error: "Error occured" });
