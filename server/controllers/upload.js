@@ -17,7 +17,7 @@ const upload = (req, res) => {
             console.error(err);
             return res.status(500).send({ Error: "Error occured" });
         }
-        return res.status(201).json({ name: file.name, path: `./dist/assets/${file.name}`});
+        return res.status(201).json({ name: file.name, path: `./media/${file.name}`});
     });
 };
 
