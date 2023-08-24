@@ -52,7 +52,7 @@ app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profi
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(express.static(path.join(__dirname, '../dist')));
-app.use(express.static(path.join(__dirname, '../media')));
+app.use('/media', express.static(path.join(__dirname, '../media')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist', 'index.html'));
