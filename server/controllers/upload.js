@@ -12,8 +12,8 @@ const upload = (req, res) => {
     const file = req.files.file;
     const parentDir = path.resolve(__dirname, '../..');
     
-    file.mv(`${parentDir}/dist/assets/${file.name}`, (err) => {
-        file.cp(`${parentDir}/dist/assets/${file.name}`, (err) =>{
+    file.mv(`${parentDir}/public/${file.name}`, (err) => {
+        file.cp(`../dist/assets/${file.name}`, (err) =>{
             if(err){
                 console.error(err);
                 return res.status(500).send({ Error: "Error occured" });
