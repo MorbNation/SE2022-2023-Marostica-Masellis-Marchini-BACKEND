@@ -51,14 +51,10 @@ connectToDatabase();
 app.use('/', routesPost, routesUtente, routesCommento_Post, routesCommento_Profilo, routesUpload);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.get("/", (req, res) => {
-    res.send(req.headers, req.originalUrl, req.method, req.body);
-});
-
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 })
 
 module.exports = server;
