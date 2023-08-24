@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { postComments } from "./post_comment";
 require('dotenv').config();
 
-const HOST = import.meta.env.VITE_API_HOST || `http://localhost:${process.env.PORT}`;
+const HOST = import.meta.env.VITE_API_HOST || `http://localhost:${process.env.HEROKU}`;
 const API_URL = HOST + '/api';
 
 const profileComments = reactive([]);
