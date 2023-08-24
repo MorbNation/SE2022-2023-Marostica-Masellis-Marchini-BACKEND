@@ -23,7 +23,7 @@ const routesUpload = require('./routes/upload');
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://epiopera-4f1c76fdd577.herokuapp.com',
+    origin: 'http://localhost:8080',
     credentials: true
 }));
 app.use(express.static('src/assets'));
