@@ -12,16 +12,13 @@ const upload = (req, res) => {
     const file = req.files.file;
     const parentDir = path.resolve(__dirname, '../..');
     
-    file.mv(`${parentDir}/public/${file.name}`, (err) => {
-        file.cp(`../dist/assets/${file.name}`, (err) =>{
-            if(err){
-                console.error(err);
-                return res.status(500).send({ Error: "Error occured" });
-            }
-            return res.status(201).json({ name: file.name, path: `./dist/assets/${file.name}`});
-        });
+    file.cp(`${parentDir}/public/${file.name}`, (err) =>{
+        if(err){
+            console.error(err);
+            return res.status(500).send({ Error: "Error occured" });
+        }
+        return res.status(201).json({ name: file.name, path: `./dist/assets/${file.name}`});
     });
-
 };
 
 module.exports = { upload };
