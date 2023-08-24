@@ -22,7 +22,10 @@ const routesUpload = require('./routes/upload');
 // Bindings
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'https://epiopera-4f1c76fdd577.herokuapp.com/',
+    credentials: true
+}));
 app.use(express.static('src/assets'));
 app.use(fileUpload());
 
